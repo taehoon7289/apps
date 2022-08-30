@@ -1,62 +1,56 @@
 package com.example.app_drawer
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+import com.example.app_drawer.adapter.AppRecyclerViewAdapter
+import com.example.app_drawer.data_set.AppInfo
 import com.example.app_drawer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private var binding: ActivityMainBinding? = null
+    private var activityMainBinding: ActivityMainBinding? = null
 
+    private var recyclerView: RecyclerView? = null
+
+    @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
-        setContentView(binding!!.root)
+        setContentView(activityMainBinding!!.root)
 
-        binding!!.mainText.text = "안녕!!"
+        val mainIntent = Intent(Intent.ACTION_MAIN, null);
 
-        val packages = packageManager.getInstalledPackages(0)
-        for (p in packages) {
-            p.apply {
-                Log.d("package", "packageName $packageName")
-                val logoDrawable = packageManager.getApplicationLogo(packageName)
-                val iconDrawable = packageManager.getApplicationIcon(packageName)
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-//                val imageViewForLogo: ImageView = findViewById<ImageView>(R.id.image_logo)
-//                imageViewForLogo.setImageDrawable(logoDrawable)
-//
-//                val imageViewForIcon: ImageView = findViewById<ImageView>(R.id.image_icon)
-//                imageViewForIcon.setImageDrawable(iconDrawable)
+        // 실행 가능한 앱 리스트 가져오기
+        val resolveInfoList: List<ResolveInfo> =
+            packageManager.queryIntentActivities(mainIntent, 0);
 
-                binding!!.imageLogo.setImageDrawable(logoDrawable)
-                binding!!.imageIcon.setImageDrawable(iconDrawable)
-
-
-
-                Log.d("package", "ddd ${packageManager.getApplicationIcon(packageName)}")
-
-                Log.d("package", "versionName $versionName")
-                Log.d("package", "lastUpdateTime $lastUpdateTime")
-                applicationInfo.apply {
-                    Log.d("package applicationInfo", "firstInstallTime :: $firstInstallTime")
-                    Log.d("package applicationInfo", "targetSdkVersion :: $targetSdkVersion")
-                    Log.d("package applicationInfo", "minSdkVersion :: $minSdkVersion")
-                    Log.d("package applicationInfo", "sourceDir :: $sourceDir")
-                    Log.d("package applicationInfo", "uid :: $uid")
-                    Log.d("package applicationInfo", "label :: ${loadLabel(packageManager)}")
-                    Log.d("package applicationInfo", "processName :: $processName")
-                    Log.d("package applicationInfo", "publicSourceDir :: $publicSourceDir")
-                }
+        val appInfoList = mutableListOf<AppInfo>()
+        for (p: ResolveInfo in resolveInfoList) {
+            p.activityInfo.apply {
+                val iconDrawable = loadIcon(packageManager)
+                val packageName = "${applicationInfo.loadLabel(packageManager)}"
+                val appInfo = AppInfo(
+                    iconDrawable = iconDrawable,
+                    packageName = packageName,
+                )
+                appInfoList.add(appInfo)
             }
+
         }
 
-
+        val lastExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(appInfoList)
+        recyclerView = findViewById(R.id.last_exec_app_recycler_view)
+        recyclerView!!.adapter = lastExecAppRecyclerViewAdapter
     }
 }
