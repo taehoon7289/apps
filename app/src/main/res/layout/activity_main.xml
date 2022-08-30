@@ -9,11 +9,15 @@
 
 
     <LinearLayout
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#030305">
 
         <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="최근 실행 앱"
@@ -21,11 +25,15 @@
     </LinearLayout>
 
     <LinearLayout
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#030305">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:id="@+id/last_exec_app_recycler_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

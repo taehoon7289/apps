@@ -5,4 +5,5 @@ import android.graphics.drawable.Drawable
 class AppInfo(
     var iconDrawable: Drawable? = null,
     var packageName: String? = null,
+    var label: String? = null,
 )

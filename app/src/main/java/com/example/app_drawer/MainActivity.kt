@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.adapter.AppRecyclerViewAdapter
 import com.example.app_drawer.data_set.AppInfo
 import com.example.app_drawer.databinding.ActivityMainBinding
+import com.example.app_drawer.recycler_view.RecyclerViewDecoration
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,20 +39,28 @@ class MainActivity : AppCompatActivity() {
 
         val appInfoList = mutableListOf<AppInfo>()
         for (p: ResolveInfo in resolveInfoList) {
-            p.activityInfo.apply {
-                val iconDrawable = loadIcon(packageManager)
-                val packageName = "${applicationInfo.loadLabel(packageManager)}"
-                val appInfo = AppInfo(
-                    iconDrawable = iconDrawable,
-                    packageName = packageName,
-                )
-                appInfoList.add(appInfo)
-            }
+
+            val iconDrawable = p.activityInfo.loadIcon(packageManager)
+            val packageName = p.activityInfo.packageName
+            val label = "${p.activityInfo.applicationInfo.loadLabel(packageManager)}"
+            val appInfo = AppInfo(
+                iconDrawable = iconDrawable,
+                packageName = packageName,
+                label = label,
+            )
+            appInfoList.add(appInfo)
 
         }
 
         val lastExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(appInfoList)
         recyclerView = findViewById(R.id.last_exec_app_recycler_view)
         recyclerView!!.adapter = lastExecAppRecyclerViewAdapter
+
+//        val dividerItemDecoration = DividerItemDecoration(
+//            recyclerView!!.context,
+//            DividerItemDecoration.HORIZONTAL,
+//        )
+//        recyclerView!!.addItemDecoration(dividerItemDecoration)
+        recyclerView!!.addItemDecoration(RecyclerViewDecoration(20))
     }
 }
