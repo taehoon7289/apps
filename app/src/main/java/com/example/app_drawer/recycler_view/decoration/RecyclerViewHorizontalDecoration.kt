@@ -1,16 +1,15 @@
-package com.example.app_drawer.recycler_view
+package com.example.app_drawer.recycler_view.decoration
 
 import android.graphics.Rect
-import android.os.Parcel
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
-class RecyclerViewDecoration() : ItemDecoration() {
-    private var divWidth = 0
+class RecyclerViewHorizontalDecoration() : ItemDecoration() {
+    private var horizontalDivWidth = 0
 
     constructor(divWidth: Int) : this() {
-        this.divWidth = divWidth
+        this.horizontalDivWidth = divWidth
     }
 
     override fun getItemOffsets(
@@ -20,7 +19,7 @@ class RecyclerViewDecoration() : ItemDecoration() {
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-        outRect.right = divWidth
+        outRect.right = horizontalDivWidth
     }
 
 }

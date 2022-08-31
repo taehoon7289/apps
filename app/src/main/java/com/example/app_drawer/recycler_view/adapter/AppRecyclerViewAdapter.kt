@@ -1,6 +1,5 @@
-package com.example.app_drawer.adapter
+package com.example.app_drawer.recycler_view.adapter
 
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,61 +8,59 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.R
-import com.example.app_drawer.data_set.AppInfo
+import com.example.app_drawer.databinding.ComponentAppInfoBinding
+import com.example.app_drawer.vo.AppInfoVo
 
 
 class AppRecyclerViewAdapter(
-    private val dataSet: MutableList<AppInfo>
+    private val dataSet: MutableList<AppInfoVo>
 ) :
     RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder>() {
+
+    private val TAG = "AppRecyclerViewAdapter"
+    private lateinit var componentAppInfoBinding: ComponentAppInfoBinding
 
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        val iconImageView: ImageView
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        //        val logoImageView: ImageView
+        private val TAG = "AppRecyclerViewAdapter"
+        val iconImageView: ImageView
         val labelTextView: TextView
 
         init {
             // Define click listener for the ViewHolder's View.
             iconImageView = view.findViewById(R.id.icon_image_view)
-//            logoImageView = view.findViewById(R.id.logo_image_view)
+            iconImageView.setOnClickListener {
+                Log.d(TAG, "setOnClickListener")
+            }
             labelTextView = view.findViewById(R.id.label_text_view)
         }
 
-        override fun onClick(view: View) {
-            Log.d("dsfdsfd", "onClickonClickonClickonClick")
-            val intent = Intent(view.context, AppRecyclerViewAdapter::class.java)
-            view.getContext().startActivity(intent)
-        }
+
     }
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        // Create a new view, which defines the UI of the list item
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.component_app_info, viewGroup, false)
-
-        return ViewHolder(view)
+        Log.d(TAG, "onCreateViewHolder: ")
+        componentAppInfoBinding =
+            ComponentAppInfoBinding.inflate(LayoutInflater.from(viewGroup.context))
+        return ViewHolder(componentAppInfoBinding.root)
     }
 
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-
+        Log.d(TAG, "onBindViewHolder: ")
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.iconImageView.setImageDrawable(dataSet[position].iconDrawable)
-
-//        viewHolder.iconImageView.setOnClickListener {
-//
-//
-//            onClickViewHolder(dataSet[position].packageName)
-//        }
-//        viewHolder.logoImageView.setImageDrawable(dataSet[position].logoDrawable)
+        viewHolder.iconImageView.setOnClickListener {
+            Log.d(TAG, "onBindViewHolder: onClick!!!!")
+            viewHolder.itemView.context.startActivity(dataSet[position].execIntent)
+        }
         viewHolder.labelTextView.text = dataSet[position].label
 
         Log.d("AppRecyclerViewAdapter", "${dataSet[position].packageName}")
@@ -71,20 +68,5 @@ class AppRecyclerViewAdapter(
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
-
-//    private fun onClickViewHolder(packageName: String?) {
-//        Log.d("onClickViewHolder", "$packageName on click!!!")
-//
-//
-//        val pm: PackageManager = packageManager
-//
-//        val intent = pm.getLaunchIntentForPackage("$packageName")
-//
-//        if (intent != null) {
-//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//            startActivity(intent)
-//        }
-//
-//    }
 
 }

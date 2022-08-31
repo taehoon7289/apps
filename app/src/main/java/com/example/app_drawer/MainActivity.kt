@@ -1,66 +1,192 @@
 package com.example.app_drawer
 
-import android.annotation.SuppressLint
+import android.app.AppOpsManager
+import android.app.AppOpsManager.MODE_ALLOWED
+import android.app.AppOpsManager.OPSTR_GET_USAGE_STATS
+import android.app.usage.UsageStatsManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Bundle
+import android.os.Process.myUid
+import android.provider.Settings
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.app_drawer.adapter.AppRecyclerViewAdapter
-import com.example.app_drawer.data_set.AppInfo
 import com.example.app_drawer.databinding.ActivityMainBinding
-import com.example.app_drawer.recycler_view.RecyclerViewDecoration
+import com.example.app_drawer.recycler_view.adapter.AppRecyclerViewAdapter
+import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
+import com.example.app_drawer.vo.AppInfoVo
+import java.text.SimpleDateFormat
+import java.util.*
 
+
+/**
+ * 앱 사용정보 권한 체크
+ */
+@RequiresApi(Build.VERSION_CODES.Q)
+fun checkForPermissionUsageStats(activity: AppCompatActivity): Boolean {
+    val appOps = activity.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+    val mode = appOps.unsafeCheckOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), "com.example.app_drawer")
+    return mode == MODE_ALLOWED
+}
+
+//@RequiresApi(Build.VERSION_CODES.P)
+//fun getEventStats(activity: AppCompatActivity) {
+//    val usageStatsManager =
+//        activity.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+//    val cal = Calendar.getInstance()
+//    cal.add(Calendar.DAY_OF_MONTH, -1)
+//    val configs = usageStatsManager.queryEventStats(
+//        UsageStatsManager.INTERVAL_DAILY,
+//        cal.timeInMillis,
+//        System.currentTimeMillis()
+//    )
+//    Log.d("fsdfsdfsd", "getEventStats: $configs")
+//}
+
+fun getUsageStats(activity: AppCompatActivity) {
+    val usageStatsManager =
+        activity.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+    val cal = Calendar.getInstance()
+    cal.add(Calendar.DAY_OF_WEEK, -1)
+    val queryUsageStats = usageStatsManager.queryUsageStats(
+        UsageStatsManager.INTERVAL_DAILY,
+        cal.timeInMillis,
+        System.currentTimeMillis()
+    )
+
+    Log.d("queryUsageStats.size", "getRunnableAppInfoList: ${queryUsageStats.size}")
+
+    val simpleTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+    for (stats in queryUsageStats) {
+        Log.d("!!!!!!!!!!!!", "getRunnableAppInfoList: ${stats.packageName}")
+        Log.d(
+            "!!!!!!!!!!!!",
+            "getRunnableAppInfoList: 마지막 사용시간 : ${simpleTimeFormat.format(stats.lastTimeStamp)}"
+        )
+        Log.d(
+            "!!!!!!!!!!!!",
+            "getRunnableAppInfoList: 사용시간 : ${stats.lastTimeUsed}"
+        )
+        Log.d(
+            "!!!!!!!!!!!!",
+            "getRunnableAppInfoList: ${stats.totalTimeInForeground}"
+        )
+        Log.d(
+            "!!!!!!!!!!!!",
+            "getRunnableAppInfoList: ${simpleTimeFormat.format(stats.firstTimeStamp)}"
+        )
+        Log.d(
+            "!!!!!!!!!!!!",
+            "getRunnableAppInfoList: ${simpleTimeFormat.format(stats.lastTimeStamp)}"
+        )
+    }
+}
+
+/**
+ * 실행 가능한 앱 리스트 가져오기
+ */
+@RequiresApi(Build.VERSION_CODES.Q)
+fun getRunnableAppInfoList(activity: AppCompatActivity): MutableList<AppInfoVo> {
+
+    val packageManager = activity.packageManager
+    val mainIntent = Intent(Intent.ACTION_MAIN, null);
+
+    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+    // 자주 사용하는 앱 정보
+    if (!checkForPermissionUsageStats(activity)) {
+        Toast.makeText(
+            activity,
+            "Failed to retrieve app usage statistics. " +
+                    "You may need to enable access for this app through " +
+                    "Settings > Security > Apps with usage access",
+            Toast.LENGTH_LONG
+        ).show()
+        activity.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+    }
+
+    val resolveInfoList: List<ResolveInfo> =
+        packageManager.queryIntentActivities(mainIntent, 0);
+    val appInfoVoList = mutableListOf<AppInfoVo>()
+    for (resolveInfo: ResolveInfo in resolveInfoList) {
+
+        val iconDrawable = resolveInfo.activityInfo.loadIcon(packageManager)
+        val packageName = resolveInfo.activityInfo.packageName
+
+        val label = "${resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager)}"
+        val execIntent = packageManager.getLaunchIntentForPackage(packageName)
+        execIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val appInfoVo = AppInfoVo(
+            iconDrawable = iconDrawable,
+            packageName = packageName,
+            label = label,
+            execIntent = execIntent
+        )
+        appInfoVoList.add(appInfoVo)
+    }
+    return appInfoVoList
+}
 
 class MainActivity : AppCompatActivity() {
 
-    private var activityMainBinding: ActivityMainBinding? = null
+    private lateinit var activityMainBinding: ActivityMainBinding
+    private lateinit var recyclerView: RecyclerView
+    private val TAG = "MainActivity"
 
-    private var recyclerView: RecyclerView? = null
 
-    @SuppressLint("WrongConstant")
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(activityMainBinding.root)
 
-        setContentView(activityMainBinding!!.root)
+        // 실행가능한 앱 AppInfoVo List
+        val appInfoList = getRunnableAppInfoList(this)
 
-        val mainIntent = Intent(Intent.ACTION_MAIN, null);
+        getUsageStats(this)
 
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        // ... filtering
+        // ... filtering
 
-        // 실행 가능한 앱 리스트 가져오기
-        val resolveInfoList: List<ResolveInfo> =
-            packageManager.queryIntentActivities(mainIntent, 0);
-
-        val appInfoList = mutableListOf<AppInfo>()
-        for (p: ResolveInfo in resolveInfoList) {
-
-            val iconDrawable = p.activityInfo.loadIcon(packageManager)
-            val packageName = p.activityInfo.packageName
-            val label = "${p.activityInfo.applicationInfo.loadLabel(packageManager)}"
-            val appInfo = AppInfo(
-                iconDrawable = iconDrawable,
-                packageName = packageName,
-                label = label,
-            )
-            appInfoList.add(appInfo)
-
-        }
-
+        // 최근 실행 앱 recyclerView
         val lastExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(appInfoList)
-        recyclerView = findViewById(R.id.last_exec_app_recycler_view)
-        recyclerView!!.adapter = lastExecAppRecyclerViewAdapter
-
-//        val dividerItemDecoration = DividerItemDecoration(
-//            recyclerView!!.context,
-//            DividerItemDecoration.HORIZONTAL,
-//        )
-//        recyclerView!!.addItemDecoration(dividerItemDecoration)
-        recyclerView!!.addItemDecoration(RecyclerViewDecoration(20))
+        recyclerView = activityMainBinding.lastExecAppRecyclerView
+        recyclerView.adapter = lastExecAppRecyclerViewAdapter
+        // item 사이 간격
+        recyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
     }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: ")
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume: ")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause: ")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop: ")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy: ")
+    }
+
+
 }

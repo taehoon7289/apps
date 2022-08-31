@@ -1,9 +1,11 @@
-package com.example.app_drawer.data_set
+package com.example.app_drawer.vo
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 
-class AppInfo(
+data class AppInfoVo(
     var iconDrawable: Drawable? = null,
     var packageName: String? = null,
     var label: String? = null,
+    var execIntent: Intent? = null,
 )
