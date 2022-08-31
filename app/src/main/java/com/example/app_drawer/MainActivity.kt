@@ -13,24 +13,25 @@ import android.os.Process.myUid
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.recycler_view.adapter.AppRecyclerViewAdapter
 import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
 import com.example.app_drawer.vo.AppInfoVo
-import java.text.SimpleDateFormat
 import java.util.*
 
 
 /**
  * 앱 사용정보 권한 체크
  */
-@RequiresApi(Build.VERSION_CODES.Q)
 fun checkForPermissionUsageStats(activity: AppCompatActivity): Boolean {
     val appOps = activity.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-    val mode = appOps.unsafeCheckOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), "com.example.app_drawer")
+    val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        appOps.unsafeCheckOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), "com.example.app_drawer")
+    } else {
+        return false
+    }
     return mode == MODE_ALLOWED
 }
 
@@ -48,50 +49,44 @@ fun checkForPermissionUsageStats(activity: AppCompatActivity): Boolean {
 //    Log.d("fsdfsdfsd", "getEventStats: $configs")
 //}
 
-fun getUsageStats(activity: AppCompatActivity) {
+// 앱 정보 리스트 가져오기
+fun getUsageStats(
+    activity: AppCompatActivity,
+    appInfoVoList: MutableList<AppInfoVo>
+): MutableList<AppInfoVo> {
     val usageStatsManager =
         activity.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
     val cal = Calendar.getInstance()
-    cal.add(Calendar.DAY_OF_WEEK, -1)
+    cal.add(Calendar.DAY_OF_YEAR, -7)
     val queryUsageStats = usageStatsManager.queryUsageStats(
         UsageStatsManager.INTERVAL_DAILY,
         cal.timeInMillis,
         System.currentTimeMillis()
     )
-
-    Log.d("queryUsageStats.size", "getRunnableAppInfoList: ${queryUsageStats.size}")
-
-    val simpleTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-
+//    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     for (stats in queryUsageStats) {
-        Log.d("!!!!!!!!!!!!", "getRunnableAppInfoList: ${stats.packageName}")
-        Log.d(
-            "!!!!!!!!!!!!",
-            "getRunnableAppInfoList: 마지막 사용시간 : ${simpleTimeFormat.format(stats.lastTimeStamp)}"
-        )
-        Log.d(
-            "!!!!!!!!!!!!",
-            "getRunnableAppInfoList: 사용시간 : ${stats.lastTimeUsed}"
-        )
-        Log.d(
-            "!!!!!!!!!!!!",
-            "getRunnableAppInfoList: ${stats.totalTimeInForeground}"
-        )
-        Log.d(
-            "!!!!!!!!!!!!",
-            "getRunnableAppInfoList: ${simpleTimeFormat.format(stats.firstTimeStamp)}"
-        )
-        Log.d(
-            "!!!!!!!!!!!!",
-            "getRunnableAppInfoList: ${simpleTimeFormat.format(stats.lastTimeStamp)}"
-        )
+        stats.apply {
+            val appInfoVo = appInfoVoList.find { it.packageName == packageName }
+            appInfoVo?.apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    lastTimeForegroundServiceUsed = stats.lastTimeForegroundServiceUsed
+                    lastTimeVisible = stats.lastTimeVisible
+                    totalTimeForegroundServiceUsed = stats.totalTimeForegroundServiceUsed
+                }
+
+                firstTimeStamp = stats.firstTimeStamp
+                lastTimeStamp = stats.lastTimeStamp
+                lastTimeUsed = stats.lastTimeUsed
+                totalTimeInForeground = stats.totalTimeInForeground
+            }
+        }
     }
+    return appInfoVoList
 }
 
 /**
  * 실행 가능한 앱 리스트 가져오기
  */
-@RequiresApi(Build.VERSION_CODES.Q)
 fun getRunnableAppInfoList(activity: AppCompatActivity): MutableList<AppInfoVo> {
 
     val packageManager = activity.packageManager
@@ -133,10 +128,15 @@ fun getRunnableAppInfoList(activity: AppCompatActivity): MutableList<AppInfoVo> 
     return appInfoVoList
 }
 
+fun reloadAppInfoList(activity: AppCompatActivity) {
+
+}
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recentExecutedRecyclerView: RecyclerView
+    private lateinit var unExecutedRecyclerView: RecyclerView
     private val TAG = "MainActivity"
 
 
@@ -146,20 +146,46 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
-        // 실행가능한 앱 AppInfoVo List
-        val appInfoList = getRunnableAppInfoList(this)
-
-        getUsageStats(this)
+        // 실행가능한 앱 & 사용정보 AppInfoVo List
+        val appInfoList = getUsageStats(this, getRunnableAppInfoList(this))
 
         // ... filtering
+        val recentExecutedAppList =
+            appInfoList.filter {
+                it.packageName != "com.example.app_drawer" && it.packageName?.contains(
+                    "com.google."
+                ) == false
+            }
+                .filter {
+                    (it.lastTimeStamp ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp
+                }.sortedByDescending { it.lastTimeStamp }
+                .subList(0, 10)
+                .toMutableList()
+        val unExecutedAppList =
+            appInfoList.filter {
+                it.packageName != "com.example.app_drawer" && it.packageName?.contains(
+                    "com.google."
+                ) == false
+            }
+                .filter {
+                    (it.lastTimeStamp ?: 0L) == 0L
+                }
+                .toMutableList()
         // ... filtering
 
         // 최근 실행 앱 recyclerView
-        val lastExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(appInfoList)
-        recyclerView = activityMainBinding.lastExecAppRecyclerView
-        recyclerView.adapter = lastExecAppRecyclerViewAdapter
+        val lastExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(recentExecutedAppList)
+        recentExecutedRecyclerView = activityMainBinding.lastExecAppRecyclerView
+        recentExecutedRecyclerView.adapter = lastExecAppRecyclerViewAdapter
         // item 사이 간격
-        recyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
+        recentExecutedRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
+
+        // 아직 실행하지 않은 앱 recyclerView
+        val unExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(unExecutedAppList)
+        unExecutedRecyclerView = activityMainBinding.unExecAppRecyclerView
+        unExecutedRecyclerView.adapter = unExecAppRecyclerViewAdapter
+        // item 사이 간격
+        unExecutedRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
     }
 
     override fun onStart() {
