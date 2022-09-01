@@ -77,4 +77,39 @@
 
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#030305"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="실행가능한 앱"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#030305"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <GridView
+            android:id="@+id/runnable_app_grid_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="10dp"
+            android:numColumns="6"
+            android:stretchMode="columnWidth">
+
+        </GridView>
+    </LinearLayout>
 </LinearLayout>

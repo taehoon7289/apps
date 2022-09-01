@@ -2,9 +2,11 @@ package com.example.app_drawer
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.GridView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.ActivityMainBinding
+import com.example.app_drawer.grid_view.adapter.AppGridViewAdapter
 import com.example.app_drawer.recycler_view.adapter.AppRecyclerViewAdapter
 import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
 import com.example.app_drawer.state.AppInfoState
@@ -16,12 +18,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var recentExecutedRecyclerView: RecyclerView
     private lateinit var unExecutedRecyclerView: RecyclerView
+    private lateinit var runnableGridView: GridView
 
     private lateinit var appInfoState: AppInfoState
 
     private lateinit var appInfoList: MutableList<AppInfoVo>
     private lateinit var recentExecutedAppList: MutableList<AppInfoVo>
     private lateinit var unExecutedAppList: MutableList<AppInfoVo>
+    private lateinit var runnableAppList: MutableList<AppInfoVo>
     private var isPermission: Boolean = false
 
 
@@ -56,11 +60,16 @@ class MainActivity : AppCompatActivity() {
         }.filter {
             (it.lastTimeStamp ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp
         }.sortedByDescending { it.lastTimeStamp }.take(10).toMutableList()
+
         unExecutedAppList = appInfoList.filter {
             it.packageName != this.packageName
         }.filter {
             (it.lastTimeStamp ?: 0L) == 0L
         }.toMutableList()
+
+        runnableAppList = appInfoList.filter {
+            it.packageName != this.packageName
+        }.sortedBy { it.label }.toMutableList()
         // ... filtering
     }
 
@@ -89,9 +98,11 @@ class MainActivity : AppCompatActivity() {
             unExecutedRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
         }
 
-        // 실행가능한 앱 recyclerView
+        // 실행가능한 앱 gridView
         if (appInfoList.size > 0) {
-            // 그리드 뷰 생각중
+            val runnableGridViewAdapter = AppGridViewAdapter(runnableAppList)
+            runnableGridView = activityMainBinding.runnableAppGridView
+            runnableGridView.adapter = runnableGridViewAdapter
         }
 
     }
