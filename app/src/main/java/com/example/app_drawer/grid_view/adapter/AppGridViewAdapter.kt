@@ -27,9 +27,7 @@ class AppGridViewAdapter(
 
     override fun getView(position: Int, view: View, viewGroup: ViewGroup): View {
         runnableAppInfoBinding =
-            RunnableAppInfoBinding.inflate(
-                LayoutInflater.from(viewGroup.context)
-            )
+            RunnableAppInfoBinding.inflate(LayoutInflater.from(viewGroup.context))
         runnableAppInfoBinding.iconImageView.setImageDrawable(dataSet[position].iconDrawable)
         runnableAppInfoBinding.iconImageView.setOnClickListener {
             view.context.startActivity(dataSet[position].execIntent)
