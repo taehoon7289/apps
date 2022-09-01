@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.ActivityMainBinding
-import com.example.app_drawer.`object`.AppInfoState
 import com.example.app_drawer.recycler_view.adapter.AppRecyclerViewAdapter
 import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
+import com.example.app_drawer.state.AppInfoState
 import com.example.app_drawer.vo.AppInfoVo
 
 class MainActivity : AppCompatActivity() {
@@ -66,24 +66,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun createView() {
         // 최근 실행 앱 recyclerView
-        val lastExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(recentExecutedAppList)
-        recentExecutedRecyclerView = activityMainBinding.lastExecAppRecyclerView
-        recentExecutedRecyclerView.adapter = lastExecAppRecyclerViewAdapter
-        // item 사이 간격
-        if (recentExecutedRecyclerView.itemDecorationCount > 0) {
-            recentExecutedRecyclerView.removeItemDecorationAt(0)
+        if (recentExecutedAppList.size > 0) {
+            val lastExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(recentExecutedAppList)
+            recentExecutedRecyclerView = activityMainBinding.lastExecAppRecyclerView
+            recentExecutedRecyclerView.adapter = lastExecAppRecyclerViewAdapter
+            // item 사이 간격
+            if (recentExecutedRecyclerView.itemDecorationCount > 0) {
+                recentExecutedRecyclerView.removeItemDecorationAt(0)
+            }
+            recentExecutedRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
         }
-        recentExecutedRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
 
         // 아직 실행하지 않은 앱 recyclerView
-        val unExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(unExecutedAppList)
-        unExecutedRecyclerView = activityMainBinding.unExecAppRecyclerView
-        unExecutedRecyclerView.adapter = unExecAppRecyclerViewAdapter
-        // item 사이 간격
-        if (unExecutedRecyclerView.itemDecorationCount > 0) {
-            unExecutedRecyclerView.removeItemDecorationAt(0)
+        if (unExecutedAppList.size > 0) {
+            val unExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(unExecutedAppList)
+            unExecutedRecyclerView = activityMainBinding.unExecAppRecyclerView
+            unExecutedRecyclerView.adapter = unExecAppRecyclerViewAdapter
+            // item 사이 간격
+            if (unExecutedRecyclerView.itemDecorationCount > 0) {
+                unExecutedRecyclerView.removeItemDecorationAt(0)
+            }
+            unExecutedRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
         }
-        unExecutedRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
+
+        // 실행가능한 앱 recyclerView
+        if (appInfoList.size > 0) {
+            // 그리드 뷰 생각중
+        }
+
     }
 
 
