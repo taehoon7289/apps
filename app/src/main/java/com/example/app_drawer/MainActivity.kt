@@ -85,7 +85,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createView() {
-
         with(activityMainBinding) {
             this@MainActivity.recentExecutedAppLinearLayout = recentExecutedAppLinearLayout
             this@MainActivity.recentExecutedAppTextView = recentExecutedAppTextView
@@ -97,7 +96,6 @@ class MainActivity : AppCompatActivity() {
             this@MainActivity.runnableAppGridView = runnableAppGridView
             this@MainActivity.runnableAppTextView = runnableAppTextView
         }
-
         // 최근 실행된 앱 recyclerView
         if (recentExecutedAppList.size > 0) {
             val lastExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(recentExecutedAppList)
@@ -111,7 +109,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             recentExecutedAppLinearLayout.isGone = true
         }
-
         // 아직 실행하지 않은 앱 recyclerView
         if (unExecutedAppList.size > 0) {
             val unExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(unExecutedAppList)
@@ -125,7 +122,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             unExecutedAppLinearLayout.isGone = true
         }
-
         // 실행가능한 앱 gridView
         if (runnableAppList.size > 0) {
             val runnableGridViewAdapter = AppGridViewAdapter(runnableAppList)
@@ -134,7 +130,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             recentExecutedAppLinearLayout.isGone = true
         }
-
     }
 
 
