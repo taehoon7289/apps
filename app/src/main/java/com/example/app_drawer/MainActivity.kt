@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: ")
-
     }
 
     private fun createState() {
@@ -104,6 +103,7 @@ class MainActivity : AppCompatActivity() {
             this@MainActivity.runnableAppGridView = runnableAppGridView
             this@MainActivity.runnableAppTextView = runnableAppTextView
         }
+
         // 최근 실행된 앱 recyclerView
         if (recentExecutedAppList.size > 0) {
             val lastExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(recentExecutedAppList)

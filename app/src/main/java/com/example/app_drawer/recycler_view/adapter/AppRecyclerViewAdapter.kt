@@ -1,5 +1,6 @@
 package com.example.app_drawer.recycler_view.adapter
 
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +57,16 @@ class AppRecyclerViewAdapter(
         viewHolder.iconImageView.setOnClickListener {
             viewHolder.itemView.context.startActivity(dataSet[position].execIntent)
         }
-        viewHolder.labelTextView.text = dataSet[position].label
+        with(viewHolder.labelTextView) {
+            text = dataSet[position].label
+
+            isSelected = true
+            isSingleLine = true
+            marqueeRepeatLimit = -1
+            ellipsize = TextUtils.TruncateAt.MARQUEE
+        }
+
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -1,5 +1,6 @@
 package com.example.app_drawer.grid_view.adapter
 
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +34,13 @@ class AppGridViewAdapter(
         runnableAppInfoBinding.iconImageView.setOnClickListener {
             view!!.context.startActivity(dataSet[position].execIntent)
         }
-        runnableAppInfoBinding.labelTextView.text = dataSet[position].label
+        with(runnableAppInfoBinding.labelTextView) {
+            text = dataSet[position].label
+            isSelected = true
+            isSingleLine = true
+            marqueeRepeatLimit = -1
+            ellipsize = TextUtils.TruncateAt.MARQUEE
+        }
         return runnableAppInfoBinding.root
     }
 }
