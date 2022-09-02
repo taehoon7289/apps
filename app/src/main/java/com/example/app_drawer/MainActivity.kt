@@ -135,6 +135,8 @@ class MainActivity : AppCompatActivity() {
             val runnableGridViewAdapter = AppGridViewAdapter(runnableAppList)
             runnableAppTextView.text = "실행 가능한 앱"
             runnableAppGridView.adapter = runnableGridViewAdapter
+            // 스크롤 안보이게 하는 효과남
+            runnableAppGridView.isVerticalScrollBarEnabled = false
         } else {
             recentExecutedAppLinearLayout.isGone = true
         }
