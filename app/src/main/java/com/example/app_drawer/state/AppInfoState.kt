@@ -18,7 +18,6 @@ import java.util.*
 
 class AppInfoState(
     private val activity: AppCompatActivity,
-    private val activityView: View,
 ) {
 
     private val TAG = "AppInfoState"
@@ -56,13 +55,6 @@ class AppInfoState(
                         val intent = Intent(activity, MainActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                         activity.applicationContext.startActivity(intent)
-
-                        val snackbar = Snackbar.make(
-                            activityView,
-                            "성공!!!!",
-                            Snackbar.LENGTH_SHORT
-                        )
-                        snackbar.show()
 
                     }
 

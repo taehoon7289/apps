@@ -3,113 +3,103 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
     <LinearLayout
+        android:id="@+id/recent_executed_app_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:background="#030305"
+        android:orientation="vertical"
         android:paddingTop="5dp"
         android:paddingBottom="5dp">
 
         <TextView
+            android:id="@+id/recent_executed_app_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="최근 실행 앱"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:textColor="#ffffff" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#030305"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/last_exec_app_recycler_view"
+            android:id="@+id/recent_executed_app_recycler_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
         </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/un_executed_app_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:background="#030305"
+        android:orientation="vertical"
         android:paddingTop="5dp"
         android:paddingBottom="5dp">
 
         <TextView
+            android:id="@+id/un_executed_app_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="아직 실행하지 않은 앱"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:textColor="#ffffff" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#030305"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/un_exec_app_recycler_view"
+            android:id="@+id/un_executed_app_recycler_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
         </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/runnable_app_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:background="#030305"
+        android:orientation="vertical"
         android:paddingTop="5dp"
         android:paddingBottom="5dp">
 
         <TextView
+            android:id="@+id/runnable_app_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="실행가능한 앱"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:textColor="#ffffff" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#030305"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
 
         <GridView
             android:id="@+id/runnable_app_grid_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:horizontalSpacing="10dp"
-            android:verticalSpacing="10dp"
             android:numColumns="6"
-            android:stretchMode="columnWidth">
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="10dp">
 
         </GridView>
+
     </LinearLayout>
 </LinearLayout>

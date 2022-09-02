@@ -3,7 +3,10 @@ package com.example.app_drawer
 import android.os.Bundle
 import android.util.Log
 import android.widget.GridView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.grid_view.adapter.AppGridViewAdapter
@@ -16,9 +19,17 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
     private lateinit var activityMainBinding: ActivityMainBinding
-    private lateinit var recentExecutedRecyclerView: RecyclerView
-    private lateinit var unExecutedRecyclerView: RecyclerView
-    private lateinit var runnableGridView: GridView
+    private lateinit var recentExecutedAppLinearLayout: LinearLayout
+    private lateinit var recentExecutedAppTextView: TextView
+    private lateinit var recentExecutedAppRecyclerView: RecyclerView
+
+    private lateinit var unExecutedAppLinearLayout: LinearLayout
+    private lateinit var unExecutedAppTextView: TextView
+    private lateinit var unExecutedAppRecyclerView: RecyclerView
+
+    private lateinit var runnableAppLinearLayout: LinearLayout
+    private lateinit var runnableAppTextView: TextView
+    private lateinit var runnableAppGridView: GridView
 
     private lateinit var appInfoState: AppInfoState
 
@@ -33,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
-        appInfoState = AppInfoState(activity = this, activityView = activityMainBinding.root)
+        appInfoState = AppInfoState(this)
         isPermission = appInfoState.isOpenSettingIntent()
     }
 
@@ -74,35 +85,54 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createView() {
-        // 최근 실행 앱 recyclerView
+
+        with(activityMainBinding) {
+            this@MainActivity.recentExecutedAppLinearLayout = recentExecutedAppLinearLayout
+            this@MainActivity.recentExecutedAppTextView = recentExecutedAppTextView
+            this@MainActivity.recentExecutedAppRecyclerView = recentExecutedAppRecyclerView
+            this@MainActivity.unExecutedAppLinearLayout = unExecutedAppLinearLayout
+            this@MainActivity.unExecutedAppRecyclerView = unExecutedAppRecyclerView
+            this@MainActivity.unExecutedAppTextView = unExecutedAppTextView
+            this@MainActivity.runnableAppLinearLayout = runnableAppLinearLayout
+            this@MainActivity.runnableAppGridView = runnableAppGridView
+            this@MainActivity.runnableAppTextView = runnableAppTextView
+        }
+
+        // 최근 실행된 앱 recyclerView
         if (recentExecutedAppList.size > 0) {
             val lastExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(recentExecutedAppList)
-            recentExecutedRecyclerView = activityMainBinding.lastExecAppRecyclerView
-            recentExecutedRecyclerView.adapter = lastExecAppRecyclerViewAdapter
+            recentExecutedAppTextView.text = "최근 실행 앱"
+            recentExecutedAppRecyclerView.adapter = lastExecAppRecyclerViewAdapter
             // item 사이 간격
-            if (recentExecutedRecyclerView.itemDecorationCount > 0) {
-                recentExecutedRecyclerView.removeItemDecorationAt(0)
+            if (recentExecutedAppRecyclerView.itemDecorationCount > 0) {
+                recentExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
-            recentExecutedRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
+            recentExecutedAppRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
+        } else {
+            recentExecutedAppLinearLayout.isGone = true
         }
 
         // 아직 실행하지 않은 앱 recyclerView
         if (unExecutedAppList.size > 0) {
             val unExecAppRecyclerViewAdapter = AppRecyclerViewAdapter(unExecutedAppList)
-            unExecutedRecyclerView = activityMainBinding.unExecAppRecyclerView
-            unExecutedRecyclerView.adapter = unExecAppRecyclerViewAdapter
+            unExecutedAppTextView.text = "아직 미실행 앱"
+            unExecutedAppRecyclerView.adapter = unExecAppRecyclerViewAdapter
             // item 사이 간격
-            if (unExecutedRecyclerView.itemDecorationCount > 0) {
-                unExecutedRecyclerView.removeItemDecorationAt(0)
+            if (unExecutedAppRecyclerView.itemDecorationCount > 0) {
+                unExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
-            unExecutedRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
+            unExecutedAppRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
+        } else {
+            unExecutedAppLinearLayout.isGone = true
         }
 
         // 실행가능한 앱 gridView
-        if (appInfoList.size > 0) {
+        if (runnableAppList.size > 0) {
             val runnableGridViewAdapter = AppGridViewAdapter(runnableAppList)
-            runnableGridView = activityMainBinding.runnableAppGridView
-            runnableGridView.adapter = runnableGridViewAdapter
+            runnableAppTextView.text = "실행 가능한 앱"
+            runnableAppGridView.adapter = runnableGridViewAdapter
+        } else {
+            recentExecutedAppLinearLayout.isGone = true
         }
 
     }
