@@ -6,6 +6,7 @@ import android.widget.GridView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.ActivityMainBinding
@@ -41,11 +42,18 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { true }
         super.onCreate(savedInstanceState)
+
+
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
         appInfoState = AppInfoState(this)
         isPermission = appInfoState.isOpenSettingIntent()
+
+        splashScreen.setKeepOnScreenCondition { false }
     }
 
     override fun onStart() {
