@@ -57,20 +57,19 @@ class AppGridViewAdapter(
         }
 
         runnableAppInfoBinding.iconImageView.setOnLongClickListener {
-            val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
+            var calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
             TimePickerDialog(viewGroup.context, { _, hourOfDay, minute ->
 //                // datepicker 확인 눌렀을 경우 동작
                 val nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
                 calendar.apply {
-                    if (calendar.get(Calendar.HOUR_OF_DAY) == nowDate.get(Calendar.HOUR_OF_DAY) &&
-                        calendar.get(Calendar.MINUTE) == nowDate.get(Calendar.MINUTE)
+                    if (hourOfDay == nowDate.get(Calendar.HOUR_OF_DAY) &&
+                        minute == nowDate.get(Calendar.MINUTE)
                     ) {
-                        set(Calendar.HOUR_OF_DAY, hourOfDay)
-                        set(Calendar.MINUTE, nowDate.get(Calendar.MINUTE).plus(1))
-                        set(Calendar.SECOND, 0)
+                        calendar = nowDate
+                        calendar.set(Calendar.SECOND, 0)
                     } else {
-                        set(Calendar.HOUR_OF_DAY, nowDate.get(Calendar.HOUR_OF_DAY))
-                        set(Calendar.MINUTE, nowDate.get(Calendar.MINUTE))
+                        set(Calendar.HOUR_OF_DAY, hourOfDay)
+                        set(Calendar.MINUTE, minute)
                         set(Calendar.SECOND, 0)
                     }
                 }

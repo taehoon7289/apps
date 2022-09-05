@@ -41,7 +41,7 @@ class ExecuteAlarmBroadCastReceiver : BroadcastReceiver() {
             val packageName = it?.getString("packageName")
             val reservationDate = it?.get("reservationDate") as Calendar
 
-            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            val sdf = SimpleDateFormat("MM-dd HH:mm")
             val intent =
                 context.applicationContext.packageManager.getLaunchIntentForPackage(packageName!!)
             intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -73,8 +73,8 @@ class ExecuteAlarmBroadCastReceiver : BroadcastReceiver() {
 
                 val notification = NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("$label 실행 예약됨")
-                    .setContentText("${sdf.format(reservationDate.time)} 예약시간")
+                    .setContentTitle("예약시간이예요.")
+                    .setContentText("> 클릭시 $label 앱 실행 ${sdf.format(reservationDate.time)} 예약")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
