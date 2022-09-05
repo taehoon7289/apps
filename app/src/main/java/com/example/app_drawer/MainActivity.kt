@@ -1,17 +1,10 @@
 package com.example.app_drawer
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.GridView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
@@ -19,9 +12,9 @@ import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.grid_view.adapter.AppGridViewAdapter
 import com.example.app_drawer.recycler_view.adapter.AppRecyclerViewAdapter
 import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
+import com.example.app_drawer.state.AppGuideState
 import com.example.app_drawer.state.AppInfoState
 import com.example.app_drawer.vo.AppInfoVo
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,12 +33,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var runnableAppGridView: GridView
 
     private lateinit var appInfoState: AppInfoState
+    private lateinit var appGuideState: AppGuideState
 
     private lateinit var appInfoList: MutableList<AppInfoVo>
     private lateinit var recentExecutedAppList: MutableList<AppInfoVo>
     private lateinit var unExecutedAppList: MutableList<AppInfoVo>
     private lateinit var runnableAppList: MutableList<AppInfoVo>
     private var isPermission: Boolean = false
+
+    private lateinit var guideTypeTextView: TextView
+    private lateinit var guideTitleTextView: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,12 +52,17 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
         appInfoState = AppInfoState(this)
+        appGuideState = AppGuideState(this)
+
         isPermission = appInfoState.isOpenSettingIntent()
     }
 
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: ")
+        appGuideState.let {
+            createGuideView()
+        }
         if (isPermission) {
             createState()
             createView()
@@ -159,6 +161,17 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy: ")
+    }
+
+    private fun createGuideView() {
+        val guides = appGuideState.getGuides()
+        val guideInfoVo = guides.get(0)
+        with(activityMainBinding) {
+            guideTypeTextView = this.guideType
+            guideTitleTextView = this.guideTitle
+        }
+        guideTypeTextView.text = "[${guideInfoVo.type?.label}]"
+        guideTitleTextView.text = guideInfoVo.title
     }
 
 }

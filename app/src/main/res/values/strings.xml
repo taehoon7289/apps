@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">app_drawer</string>
+    <string name="app_label">앱서랍</string>
 </resources>
