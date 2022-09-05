@@ -13,6 +13,7 @@
     <!-- 스케쥴 정확한 시간 권한 -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -36,6 +37,11 @@
             android:exported="true">
 
         </activity>
+
+        <receiver
+            android:name=".ExecuteAlarmBroadCastReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -1,10 +1,17 @@
 package com.example.app_drawer
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.GridView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +21,7 @@ import com.example.app_drawer.recycler_view.adapter.AppRecyclerViewAdapter
 import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
 import com.example.app_drawer.state.AppInfoState
 import com.example.app_drawer.vo.AppInfoVo
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -152,6 +160,5 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Log.d(TAG, "onDestroy: ")
     }
-
 
 }
