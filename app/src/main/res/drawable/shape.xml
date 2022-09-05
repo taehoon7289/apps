@@ -8,10 +8,10 @@
         android:color="#EEEEEE"></stroke>
 
     <padding
-        android:bottom="10dp"
+        android:bottom="5dp"
         android:left="10dp"
         android:right="10dp"
-        android:top="10dp"></padding>
+        android:top="5dp"></padding>
 
     <corners android:radius="11dp"></corners>
 

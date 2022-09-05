@@ -6,7 +6,6 @@ import android.os.Build
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -66,19 +65,19 @@ class AppRecyclerViewAdapter(
         viewHolder.iconImageView.setImageDrawable(data.iconDrawable)
 
         // touch 시 이벤트 동작 확인용
-        viewHolder.iconImageView.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    Log.d(TAG, "onBindViewHolder: MotionEvent.ACTION_DOWN")
-                    false
-                }
-                MotionEvent.ACTION_UP -> {
-                    Log.d(TAG, "onBindViewHolder: ACTION_UP")
-                    false
-                }
-                else -> false
-            }
-        }
+//        viewHolder.iconImageView.setOnTouchListener { _, event ->
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    Log.d(TAG, "onBindViewHolder: MotionEvent.ACTION_DOWN")
+//                    false
+//                }
+//                MotionEvent.ACTION_UP -> {
+//                    Log.d(TAG, "onBindViewHolder: ACTION_UP")
+//                    false
+//                }
+//                else -> false
+//            }
+//        }
 
         viewHolder.iconImageView.setOnLongClickListener {
             Log.d(TAG, "onBindViewHolder: setOnLongClickListener")

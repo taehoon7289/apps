@@ -41,20 +41,20 @@ class AppGridViewAdapter(
 
         runnableAppInfoBinding.iconImageView.setImageDrawable(data.iconDrawable)
 
-        // touch 시 이벤트 동작 확인용
-        runnableAppInfoBinding.iconImageView.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    Log.d(TAG, "getView: MotionEvent.ACTION_DOWN")
-                    false
-                }
-                MotionEvent.ACTION_UP -> {
-                    Log.d(TAG, "getView: ACTION_UP")
-                    false
-                }
-                else -> false
-            }
-        }
+//        // touch 시 이벤트 동작 확인용
+//        runnableAppInfoBinding.iconImageView.setOnTouchListener { _, event ->
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    Log.d(TAG, "getView: MotionEvent.ACTION_DOWN")
+//                    false
+//                }
+//                MotionEvent.ACTION_UP -> {
+//                    Log.d(TAG, "getView: ACTION_UP")
+//                    false
+//                }
+//                else -> false
+//            }
+//        }
 
         runnableAppInfoBinding.iconImageView.setOnLongClickListener {
             var calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))

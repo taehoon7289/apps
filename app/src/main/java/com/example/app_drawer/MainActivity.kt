@@ -8,41 +8,51 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.grid_view.adapter.AppGridViewAdapter
 import com.example.app_drawer.recycler_view.adapter.AppRecyclerViewAdapter
 import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
-import com.example.app_drawer.state.AppGuideState
 import com.example.app_drawer.state.AppInfoState
+import com.example.app_drawer.state.AppNotificationState
+import com.example.app_drawer.view_pager2.adapter.AppNotificationViewPagerAdapter
 import com.example.app_drawer.vo.AppInfoVo
 
 class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
     private lateinit var activityMainBinding: ActivityMainBinding
+
+    // 패키지 매니저 앱 정보
+    // 앱 정보 상태 관리
+    private lateinit var appInfoState: AppInfoState
+    private lateinit var appInfoList: MutableList<AppInfoVo>
+
+    // 최근 실행 앱
     private lateinit var recentExecutedAppLinearLayout: LinearLayout
     private lateinit var recentExecutedAppTextView: TextView
     private lateinit var recentExecutedAppRecyclerView: RecyclerView
+    private lateinit var recentExecutedAppList: MutableList<AppInfoVo>
 
+    // 미실행 앱
     private lateinit var unExecutedAppLinearLayout: LinearLayout
     private lateinit var unExecutedAppTextView: TextView
     private lateinit var unExecutedAppRecyclerView: RecyclerView
+    private lateinit var unExecutedAppList: MutableList<AppInfoVo>
 
+    // 실행가능 앱
     private lateinit var runnableAppLinearLayout: LinearLayout
     private lateinit var runnableAppTextView: TextView
     private lateinit var runnableAppGridView: GridView
-
-    private lateinit var appInfoState: AppInfoState
-    private lateinit var appGuideState: AppGuideState
-
-    private lateinit var appInfoList: MutableList<AppInfoVo>
-    private lateinit var recentExecutedAppList: MutableList<AppInfoVo>
-    private lateinit var unExecutedAppList: MutableList<AppInfoVo>
     private lateinit var runnableAppList: MutableList<AppInfoVo>
-    private var isPermission: Boolean = false
 
-    private lateinit var guideTypeTextView: TextView
-    private lateinit var guideTitleTextView: TextView
+    // 앱 알림정보
+    private lateinit var appNotificationState: AppNotificationState
+    private lateinit var appNotificationInfoViewPager: ViewPager2
+    private lateinit var appNotificationViewPagerAdapter: AppNotificationViewPagerAdapter
+
+    // 앱 사용정보 권한
+    private var isPermission: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
         appInfoState = AppInfoState(this)
-        appGuideState = AppGuideState(this)
+        appNotificationState = AppNotificationState(this)
 
         isPermission = appInfoState.isOpenSettingIntent()
     }
@@ -60,8 +70,8 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: ")
-        appGuideState.let {
-            createGuideView()
+        appNotificationState.let {
+            createNotificationView()
         }
         if (isPermission) {
             createState()
@@ -163,15 +173,13 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onDestroy: ")
     }
 
-    private fun createGuideView() {
-        val guides = appGuideState.getGuides()
-        val guideInfoVo = guides.get(0)
+    private fun createNotificationView() {
         with(activityMainBinding) {
-            guideTypeTextView = this.guideType
-            guideTitleTextView = this.guideTitle
+            this@MainActivity.appNotificationInfoViewPager = appNotificationInfoViewPager
         }
-        guideTypeTextView.text = "[${guideInfoVo.type?.label}]"
-        guideTitleTextView.text = guideInfoVo.title
+        val list = appNotificationState.getNotifications()
+        appNotificationViewPagerAdapter = AppNotificationViewPagerAdapter(list)
+        appNotificationInfoViewPager.adapter = appNotificationViewPagerAdapter
     }
 
 }

@@ -5,16 +5,15 @@
       <map>
         <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.185" />
         <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/drawable/ic_launcher_background.xml" value="0.185" />
+        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/drawable/shape.xml" value="0.1145" />
         <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/activity_main.xml" value="0.3619791666666667" />
         <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/activity_splash.xml" value="0.17239583333333333" />
         <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/component_app_info.xml" value="0.18489583333333334" />
+        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/notification_info.xml" value="0.18489583333333334" />
         <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/runnable_app_info.xml" value="0.1671195652173913" />
         <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/sample_my_view.xml" value="0.1578125" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/spinner_time_picker.xml" value="0.13255547054322878" />
         <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/splash_view.xml" value="0.17239583333333333" />
         <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/topic_app_info.xml" value="0.1671195652173913" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.181" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.193" />
       </map>
     </option>
   </component>
