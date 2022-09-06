@@ -39,7 +39,7 @@ class AppNotificationViewPagerAdapter(
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val data = dataSet[position]
-        viewHolder.appNotificationTypeTextView.text = data.type!!.label
+        viewHolder.appNotificationTypeTextView.text = "[${data.type!!.label}]"
         viewHolder.appNotificationTitleTextView.text = data.title
     }
 

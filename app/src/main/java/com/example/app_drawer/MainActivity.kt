@@ -190,12 +190,6 @@ class MainActivity : AppCompatActivity() {
         val list = appNotificationState.getNotifications()
         appNotificationViewPagerAdapter = AppNotificationViewPagerAdapter(list)
         appNotificationInfoViewPager.adapter = appNotificationViewPagerAdapter
-
-        Log.d(
-            TAG,
-            "createNotificationView: appNotificationInfoViewPager.currentItem ${appNotificationInfoViewPager.currentItem}"
-        )
-
         appNotificationInfoViewPagerTextView.text =
             "${appNotificationInfoViewPager.currentItem + 1}/${list.size}"
         appNotificationInfoViewPager.registerOnPageChangeCallback(object :
