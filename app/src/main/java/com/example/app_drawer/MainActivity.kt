@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity() {
     private var intervalFlag = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate: ###############################3")
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -87,6 +86,7 @@ class MainActivity : AppCompatActivity() {
 
         appInfoState = AppInfoState(this)
         appNotificationState = AppNotificationState(this)
+        appNotificationState.getNotifications()
 
         isPermission = appInfoState.isOpenSettingIntent()
     }
@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createNotificationView() {
 
-        val list = appNotificationState.getNotifications()
+        val list = appNotificationState.getList()
         appNotificationViewPagerAdapter = AppNotificationViewPagerAdapter(list)
         appNotificationInfoViewPager.adapter = appNotificationViewPagerAdapter
         appNotificationInfoViewPagerTextView.text =
