@@ -26,7 +26,7 @@ class AppNotificationState(
         var results = JSONArray()
 //        val list = mutableListOf<AppNotificationInfoVo>()
         val databaseKey = "d4d7fc5b3e2e452ebf2269495aa424eb"
-        val notionApiKey = "secret_7bZz1bsybczodqK8pC2dCkhVoHer7DJNfLH0zntaK36"
+        val notionApiKey = "-----"
         list.add(
             AppNotificationInfoVo(
                 type = AppNotificationType.NOTICE,
