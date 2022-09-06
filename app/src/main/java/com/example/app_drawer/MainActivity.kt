@@ -208,7 +208,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startIntervalPostDelayed(time: Long = 2000) {
-        intervalFlag = true
+        if (intervalFlag) {
+            stopIntervalPostDelayed()
+        } else {
+            intervalFlag = true
+        }
         intervalPostDelayed(time)
     }
 

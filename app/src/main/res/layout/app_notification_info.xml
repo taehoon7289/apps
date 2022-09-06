@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/view_pager_item"
+    android:id="@+id/app_notification_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 

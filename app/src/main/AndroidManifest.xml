@@ -5,14 +5,12 @@
     <!-- 실행가능 앱 리스트 조회 권한 -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
-    <!-- 앱 사용 상태 조회 권한 -->
+        tools:ignore="QueryAllPackagesPermission" /> <!-- 앱 사용 상태 조회 권한 -->
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" />
-    <!-- 스케쥴 정확한 시간 권한 -->
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-
+        tools:ignore="ProtectedPermissions" /> <!-- 스케쥴 정확한 시간 권한 -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" /> <!-- 인터넷 관련 권한 추가 -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -23,20 +21,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App_drawer"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".NotionWebViewActivity"
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
 
         <receiver
             android:name=".ExecuteAlarmBroadCastReceiver"
