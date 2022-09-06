@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
     private lateinit var activityMainBinding: ActivityMainBinding
+//    private lateinit var activityMainHorizontalBinding: ActivityMainHorizontalBinding
 
     // 패키지 매니저 앱 정보
     // 앱 정보 상태 관리
@@ -65,9 +66,25 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-
+        Log.d(TAG, "onCreate: ###############################3")
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
+
+        with(activityMainBinding) {
+            this@MainActivity.recentExecutedAppLinearLayout = recentExecutedAppLinearLayout
+            this@MainActivity.recentExecutedAppTextView = recentExecutedAppTextView
+            this@MainActivity.recentExecutedAppRecyclerView = recentExecutedAppRecyclerView
+            this@MainActivity.unExecutedAppLinearLayout = unExecutedAppLinearLayout
+            this@MainActivity.unExecutedAppRecyclerView = unExecutedAppRecyclerView
+            this@MainActivity.unExecutedAppTextView = unExecutedAppTextView
+            this@MainActivity.runnableAppLinearLayout = runnableAppLinearLayout
+            this@MainActivity.runnableAppGridView = runnableAppGridView
+            this@MainActivity.runnableAppTextView = runnableAppTextView
+            this@MainActivity.appNotificationInfoViewPager = appNotificationInfoViewPager
+            this@MainActivity.appNotificationInfoViewPagerTextView =
+                appNotificationInfoViewPagerTextView
+        }
+
         appInfoState = AppInfoState(this)
         appNotificationState = AppNotificationState(this)
 
@@ -115,17 +132,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createView() {
-        with(activityMainBinding) {
-            this@MainActivity.recentExecutedAppLinearLayout = recentExecutedAppLinearLayout
-            this@MainActivity.recentExecutedAppTextView = recentExecutedAppTextView
-            this@MainActivity.recentExecutedAppRecyclerView = recentExecutedAppRecyclerView
-            this@MainActivity.unExecutedAppLinearLayout = unExecutedAppLinearLayout
-            this@MainActivity.unExecutedAppRecyclerView = unExecutedAppRecyclerView
-            this@MainActivity.unExecutedAppTextView = unExecutedAppTextView
-            this@MainActivity.runnableAppLinearLayout = runnableAppLinearLayout
-            this@MainActivity.runnableAppGridView = runnableAppGridView
-            this@MainActivity.runnableAppTextView = runnableAppTextView
-        }
+
 
         // 최근 실행된 앱 recyclerView
         if (recentExecutedAppList.size > 0) {
@@ -182,11 +189,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createNotificationView() {
-        with(activityMainBinding) {
-            this@MainActivity.appNotificationInfoViewPager = appNotificationInfoViewPager
-            this@MainActivity.appNotificationInfoViewPagerTextView =
-                appNotificationInfoViewPagerTextView
-        }
+
         val list = appNotificationState.getNotifications()
         appNotificationViewPagerAdapter = AppNotificationViewPagerAdapter(list)
         appNotificationInfoViewPager.adapter = appNotificationViewPagerAdapter
