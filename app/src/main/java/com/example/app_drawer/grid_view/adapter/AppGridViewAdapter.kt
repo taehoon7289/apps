@@ -2,9 +2,7 @@ package com.example.app_drawer.grid_view.adapter
 
 import android.app.TimePickerDialog
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -14,15 +12,13 @@ import com.example.app_drawer.vo.AppInfoVo
 import java.util.*
 
 class AppGridViewAdapter(
-    private val dataSet: MutableList<AppInfoVo>
+    private val items: MutableList<AppInfoVo>
 ) : BaseAdapter() {
 
     private lateinit var runnableAppInfoBinding: RunnableAppInfoBinding
     private val TAG = "AppGridViewAdapter"
 
-    override fun getCount(): Int {
-        return dataSet.size
-    }
+    override fun getCount() = items.size
 
     override fun getItem(position: Int): Any {
         return position
@@ -34,57 +30,45 @@ class AppGridViewAdapter(
 
     override fun getView(position: Int, view: View?, viewGroup: ViewGroup?): View {
 
-        val data = dataSet[position]
-
         runnableAppInfoBinding =
-            RunnableAppInfoBinding.inflate(LayoutInflater.from(viewGroup!!.context))
+            RunnableAppInfoBinding.inflate(
+                LayoutInflater.from(viewGroup!!.context),
+                viewGroup,
+                false
+            )
+        val item = items[position]
+        runnableAppInfoBinding.model = item
 
-        runnableAppInfoBinding.iconImageView.setImageDrawable(data.iconDrawable)
-
-//        // touch 시 이벤트 동작 확인용
-//        runnableAppInfoBinding.iconImageView.setOnTouchListener { _, event ->
-//            when (event.action) {
-//                MotionEvent.ACTION_DOWN -> {
-//                    Log.d(TAG, "getView: MotionEvent.ACTION_DOWN")
-//                    false
-//                }
-//                MotionEvent.ACTION_UP -> {
-//                    Log.d(TAG, "getView: ACTION_UP")
-//                    false
-//                }
-//                else -> false
-//            }
-//        }
-
-        runnableAppInfoBinding.iconImageView.setOnLongClickListener {
-            var calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
-            TimePickerDialog(viewGroup.context, { _, hourOfDay, minute ->
+        with(runnableAppInfoBinding.iconImageView) {
+            setOnLongClickListener {
+                var calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
+                TimePickerDialog(viewGroup.context, { _, hourOfDay, minute ->
 //                // datepicker 확인 눌렀을 경우 동작
-                val nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
-                calendar.apply {
-                    if (hourOfDay == nowDate.get(Calendar.HOUR_OF_DAY) &&
-                        minute == nowDate.get(Calendar.MINUTE)
-                    ) {
-                        calendar = nowDate
-                        calendar.set(Calendar.SECOND, 0)
-                    } else {
-                        set(Calendar.HOUR_OF_DAY, hourOfDay)
-                        set(Calendar.MINUTE, minute)
-                        set(Calendar.SECOND, 0)
+                    val nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
+                    calendar.apply {
+                        if (hourOfDay == nowDate.get(Calendar.HOUR_OF_DAY) &&
+                            minute == nowDate.get(Calendar.MINUTE)
+                        ) {
+                            calendar = nowDate
+                            calendar.set(Calendar.SECOND, 0)
+                        } else {
+                            set(Calendar.HOUR_OF_DAY, hourOfDay)
+                            set(Calendar.MINUTE, minute)
+                            set(Calendar.SECOND, 0)
+                        }
                     }
-                }
-                val alarmInfo = AlarmInfo(viewGroup.context)
-                alarmInfo.createExecuteAlarm(data, calendar)
+                    val alarmInfo = AlarmInfo(viewGroup.context)
+                    alarmInfo.createExecuteAlarm(item, calendar)
 
-            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
-            true
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
+                true
+            }
+            setOnClickListener {
+                view!!.context.startActivity(item.execIntent)
+            }
         }
 
-        runnableAppInfoBinding.iconImageView.setOnClickListener {
-            view!!.context.startActivity(data.execIntent)
-        }
         with(runnableAppInfoBinding.labelTextView) {
-            text = data.label
             isSelected = true
             isSingleLine = true
             marqueeRepeatLimit = -1

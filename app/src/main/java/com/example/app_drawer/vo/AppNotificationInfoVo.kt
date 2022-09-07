@@ -1,6 +1,6 @@
 package com.example.app_drawer.vo
 
-import com.example.app_drawer.enum.AppNotificationType
+import com.example.app_drawer.enum_code.AppNotificationType
 
 data class AppNotificationInfoVo(
     var type: AppNotificationType? = null,

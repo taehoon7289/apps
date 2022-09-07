@@ -6,7 +6,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.example.app_drawer.enum.AppNotificationType
+import com.example.app_drawer.enum_code.AppNotificationType
 import com.example.app_drawer.vo.AppNotificationInfoVo
 import org.json.JSONArray
 import org.json.JSONObject
