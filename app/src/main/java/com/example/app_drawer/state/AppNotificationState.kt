@@ -1,6 +1,8 @@
 package com.example.app_drawer.state
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import com.android.volley.AuthFailureError
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -19,26 +21,27 @@ class AppNotificationState(
     private val TAG = "AppNotificationState"
 
     private lateinit var requestQueue: RequestQueue
-    private val list: MutableList<AppNotificationInfoVo> =
-        mutableListOf<AppNotificationInfoVo>()
+    private val list: MutableLiveData<MutableList<AppNotificationInfoVo>> =
+        MutableLiveData(mutableListOf())
 
     fun getNotifications() {
         var results = JSONArray()
 //        val list = mutableListOf<AppNotificationInfoVo>()
         val databaseKey = "d4d7fc5b3e2e452ebf2269495aa424eb"
-        val notionApiKey = "-----"
-        list.add(
+        val notionApiKey = "secret_7bZz1bsybczodqK8pC2dCkhVoHer7DJNfLH0zntaK36"
+
+        list.value?.add(
             AppNotificationInfoVo(
                 type = AppNotificationType.NOTICE,
                 title = "앱서랍 사용방법",
-                createDate = "1.원하는 앱을 선택하여 터치한다."
+                createDate = "2022-08-16"
             )
         )
-        list.add(
+        list.value?.add(
             AppNotificationInfoVo(
                 type = AppNotificationType.NOTICE,
                 title = "앱 실행 예약방법",
-                createDate = "1.원하는 앱을 선택하여 길게 터치한다.\n2.원하는 예약시간을 선택한다.\n3.기다린다"
+                createDate = "2022-08-17"
             )
         )
         requestQueue = Volley.newRequestQueue(activity)
@@ -51,7 +54,7 @@ class AppNotificationState(
                 println("응답 -> $response")
                 results = JSONObject(response).getJSONArray("results")
                 var i = 0
-                list.clear()
+                list.value?.clear()
                 while (i < results.length()) {
                     val result = results[i] as JSONObject
                     val properties =
@@ -68,7 +71,7 @@ class AppNotificationState(
                         title = title,
                         createDate = createDate,
                     )
-                    list.add(appNotificationInfoVo)
+                    list.value?.add(appNotificationInfoVo)
                     i++
                 }
             },
@@ -96,8 +99,27 @@ class AppNotificationState(
         requestQueue.add(request);
         println("요청 보냄.");
 
+        Log.d(TAG, "getNotifications: listlistlist ${list.value?.size}")
+
     }
 
     fun getList() = list
+
+//    private fun createNotificationView() {
+//
+//        val list = appNotificationState.getList()
+//        val appNotificationViewPagerAdapter = AppNotificationViewPagerAdapter(list)
+//        appNotificationInfoViewPager.adapter = appNotificationViewPagerAdapter
+//        appNotificationInfoViewPagerTextView.text =
+//            "${appNotificationInfoViewPager.currentItem + 1}/${list.size}"
+//        appNotificationInfoViewPager.registerOnPageChangeCallback(object :
+//            ViewPager2.OnPageChangeCallback() {
+//            override fun onPageSelected(position: Int) {
+//                super.onPageSelected(position)
+//                appNotificationInfoViewPagerTextView.text = "${position + 1}/${list.size}"
+//            }
+//        })
+//
+//    }
 
 }

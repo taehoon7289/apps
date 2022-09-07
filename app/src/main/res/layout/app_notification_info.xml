@@ -31,5 +31,14 @@
             android:textColor="#2e2e2e"
             android:textSize="15dp" />
 
+        <TextView
+            android:id="@+id/app_notification_create_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="@{model.createDate}"
+            android:textColor="#2e2e2e"
+            android:textSize="10dp" />
+
     </LinearLayout>
 </layout>
