@@ -2,13 +2,14 @@ package com.example.app_drawer.state
 
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import com.android.volley.AuthFailureError
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.app_drawer.enum_code.AppNotificationType
+import com.example.app_drawer.view_pager2.adapter.view_model.AppNotificationViewPagerViewModel
 import com.example.app_drawer.vo.AppNotificationInfoVo
 import org.json.JSONArray
 import org.json.JSONObject
@@ -21,8 +22,7 @@ class AppNotificationState(
     private val TAG = "AppNotificationState"
 
     private lateinit var requestQueue: RequestQueue
-    private val list: MutableLiveData<MutableList<AppNotificationInfoVo>> =
-        MutableLiveData(mutableListOf())
+    private val list: AppNotificationViewPagerViewModel = AppNotificationViewPagerViewModel()
 
     fun getNotifications() {
         var results = JSONArray()
@@ -30,20 +30,20 @@ class AppNotificationState(
         val databaseKey = "d4d7fc5b3e2e452ebf2269495aa424eb"
         val notionApiKey = "secret_7bZz1bsybczodqK8pC2dCkhVoHer7DJNfLH0zntaK36"
 
-        list.value?.add(
-            AppNotificationInfoVo(
-                type = AppNotificationType.NOTICE,
-                title = "앱서랍 사용방법",
-                createDate = "2022-08-16"
-            )
-        )
-        list.value?.add(
-            AppNotificationInfoVo(
-                type = AppNotificationType.NOTICE,
-                title = "앱 실행 예약방법",
-                createDate = "2022-08-17"
-            )
-        )
+//        list.add(
+//            AppNotificationInfoVo(
+//                type = AppNotificationType.NOTICE,
+//                title = "앱서랍 사용방법",
+//                createDate = "2022-08-16"
+//            )
+//        )
+//        list.add(
+//            AppNotificationInfoVo(
+//                type = AppNotificationType.NOTICE,
+//                title = "앱 실행 예약방법",
+//                createDate = "2022-08-17"
+//            )
+//        )
         requestQueue = Volley.newRequestQueue(activity)
         val url = "https://api.notion.com/v1/databases/$databaseKey/query"
         val request: StringRequest = object : StringRequest(
@@ -54,7 +54,7 @@ class AppNotificationState(
                 println("응답 -> $response")
                 results = JSONObject(response).getJSONArray("results")
                 var i = 0
-                list.value?.clear()
+                list.clear()
                 while (i < results.length()) {
                     val result = results[i] as JSONObject
                     val properties =
@@ -66,12 +66,18 @@ class AppNotificationState(
                         .get(0) as JSONObject).getString("plain_text")
                     val createDate = properties.getJSONObject("createDate").getJSONObject("date")
                         .getString("start")
-                    val appNotificationInfoVo = AppNotificationInfoVo(
-                        type = AppNotificationType.valueOf(type),
-                        title = title,
-                        createDate = createDate,
-                    )
-                    list.value?.add(appNotificationInfoVo)
+
+                    val appNotificationInfoVo =
+                        ViewModelProvider(activity).get(AppNotificationInfoVo::class.java)
+                    appNotificationInfoVo.type.value = AppNotificationType.valueOf(type)
+                    appNotificationInfoVo.title.value = title
+                    appNotificationInfoVo.createDate.value = createDate
+//                    val appNotificationInfoVo = AppNotificationInfoVo(
+//                        type = AppNotificationType.valueOf(type),
+//                        title = title,
+//                        createDate = createDate,
+//                    )
+                    list.add(appNotificationInfoVo)
                     i++
                 }
             },
@@ -99,7 +105,7 @@ class AppNotificationState(
         requestQueue.add(request);
         println("요청 보냄.");
 
-        Log.d(TAG, "getNotifications: listlistlist ${list.value?.size}")
+        Log.d(TAG, "getNotifications: listlistlist ${list.itemList.value!!.size}")
 
     }
 
