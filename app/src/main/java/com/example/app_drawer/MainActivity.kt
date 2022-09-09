@@ -5,8 +5,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.grid_view.adapter.AppGridViewAdapter
@@ -16,6 +14,7 @@ import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDec
 import com.example.app_drawer.state.AppInfoState
 import com.example.app_drawer.state.AppNotificationState
 import com.example.app_drawer.view_pager2.adapter.AppNotificationViewPagerAdapter
+import com.example.app_drawer.view_pager2.adapter.view_model.AppNotificationViewPagerViewModel
 import com.example.app_drawer.vo.AppInfoVo
 import com.example.app_drawer.vo.AppNotificationInfoVo
 import kotlin.math.abs
@@ -50,8 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private var intervalFlag = false
 
-    private var list: MutableLiveData<MutableList<AppNotificationInfoVo>> =
-        MutableLiveData(mutableListOf())
+    private lateinit var list: AppNotificationViewPagerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: ")
-
+        createNotificationView()
         if (isPermission) {
             createState()
             createView()
@@ -76,12 +74,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: ")
-
-        list = appNotificationState.getList()
-        list.observe(this@MainActivity, Observer {
-            Log.d(TAG, "onStart: @@@@@@@@@@@@@@@@@@@@@@@@@@")
-            createNotificationView()
-        })
         activityMainBinding.appNotificationInfoViewPager.requestLayout()
 
     }
@@ -171,19 +163,17 @@ class MainActivity : AppCompatActivity() {
 
         with(activityMainBinding) {
             appNotificationState.getNotifications()
-
-
-            val appNotificationViewPagerAdapter = AppNotificationViewPagerAdapter(list.value!!)
+            list = appNotificationState.getList()
+            val appNotificationViewPagerAdapter = AppNotificationViewPagerAdapter(list.itemList)
             appNotificationInfoViewPager.adapter = appNotificationViewPagerAdapter
             appNotificationInfoViewPagerTextView.text =
-                "${appNotificationInfoViewPager.currentItem + 1}/${list.value!!.size}"
-
+                "${appNotificationInfoViewPager.currentItem + 1}/${list.itemList.value!!.size}"
             appNotificationInfoViewPager.registerOnPageChangeCallback(object :
                 ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     appNotificationInfoViewPagerTextView.text =
-                        "${position + 1}/${list.value!!.size}"
+                        "${position + 1}/${list.size}"
                 }
             })
             startIntervalPostDelayed(5000)
