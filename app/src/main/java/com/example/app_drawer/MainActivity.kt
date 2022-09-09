@@ -177,6 +177,7 @@ class MainActivity : AppCompatActivity() {
             appNotificationInfoViewPager.adapter = appNotificationViewPagerAdapter
             appNotificationInfoViewPagerTextView.text =
                 "${appNotificationInfoViewPager.currentItem + 1}/${list.value!!.size}"
+
             appNotificationInfoViewPager.registerOnPageChangeCallback(object :
                 ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
