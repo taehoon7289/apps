@@ -205,6 +205,7 @@ class MainActivity : AppCompatActivity() {
             if (!intervalFlag) {
                 return
             }
+
             appNotificationInfoViewPager.postDelayed({
                 Log.d(TAG, "run: dkdjfskdfjdsjlfjld")
                 appNotificationInfoViewPager.currentItem =
