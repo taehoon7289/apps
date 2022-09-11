@@ -1,6 +1,7 @@
 package com.example.app_drawer.view_pager2.adapter
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,9 @@ class AppNotificationViewPagerAdapter(
     inner class ViewHolder(private val binding: AppNotificationInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AppNotificationInfoVo) {
+            Log.d(TAG, "bind: item type ${item.type.value}")
+            Log.d(TAG, "bind: item title ${item.title.value}")
+            Log.d(TAG, "bind: item createDate ${item.createDate.value}")
             binding.model = item
             with(binding.appNotificationLinearLayout) {
                 setOnClickListener {
@@ -40,6 +44,7 @@ class AppNotificationViewPagerAdapter(
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        Log.d(TAG, "onBindViewHolder: position $position")
         viewHolder.bind(items[position])
     }
 
