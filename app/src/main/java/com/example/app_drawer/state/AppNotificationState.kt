@@ -1,6 +1,9 @@
 package com.example.app_drawer.state
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.ViewDataBinding
+import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.AuthFailureError
 import com.android.volley.RequestQueue
 import com.android.volley.Response

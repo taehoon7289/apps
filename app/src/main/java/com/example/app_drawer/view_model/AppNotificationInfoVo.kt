@@ -1,8 +1,8 @@
-package com.example.app_drawer.vo
+package com.example.app_drawer.view_model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.app_drawer.enum_code.AppNotificationType
+import com.example.app_drawer.code.AppNotificationType
 
 data class AppNotificationInfoVo(
     private val _type: AppNotificationType,

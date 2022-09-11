@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.NotionWebViewActivity
 import com.example.app_drawer.databinding.AppNotificationInfoBinding
-import com.example.app_drawer.vo.AppNotificationInfoVo
+import com.example.app_drawer.view_model.AppNotificationInfoVo
 
 class AppNotificationViewPagerAdapter(
     private val items: MutableList<AppNotificationInfoVo>

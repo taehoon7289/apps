@@ -1,4 +1,4 @@
-package com.example.app_drawer.enum_code
+package com.example.app_drawer.code
 
 enum class AppNotificationType(
     val label: String

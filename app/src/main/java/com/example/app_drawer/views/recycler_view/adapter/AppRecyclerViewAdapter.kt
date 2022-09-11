@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.TopicAppInfoBinding
 import com.example.app_drawer.register.AlarmInfo
-import com.example.app_drawer.vo.AppInfoVo
+import com.example.app_drawer.view_model.AppUsageStatsViewModel
 import java.util.*
 
 
 class AppRecyclerViewAdapter(
-    private val items: MutableList<AppInfoVo>
+    private val items: MutableList<AppUsageStatsViewModel>
 ) :
     RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder>() {
 
@@ -21,11 +21,11 @@ class AppRecyclerViewAdapter(
     inner class ViewHolder(private val binding: TopicAppInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: AppInfoVo) {
+        fun bind(item: AppUsageStatsViewModel) {
             binding.model = item
             binding.iconImageView.apply {
                 setOnClickListener {
-                    this.context.startActivity(item.execIntent)
+                    this.context.startActivity(item.execIntent.value)
                 }
                 setOnLongClickListener {
                     var calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))

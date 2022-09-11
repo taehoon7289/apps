@@ -4,7 +4,7 @@
 
         <variable
             name="model"
-            type="com.example.app_drawer.vo.AppInfoVo" />
+            type="com.example.app_drawer.view_model.AppUsageStatsViewModel" />
     </data>
 
     <LinearLayout

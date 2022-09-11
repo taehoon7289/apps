@@ -3,7 +3,7 @@ package com.example.app_drawer.view_pager2.adapter.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.app_drawer.vo.AppNotificationInfoVo
+import com.example.app_drawer.view_model.AppNotificationInfoVo
 
 class AppNotificationViewPagerViewModel : ViewModel() {
     private val list = mutableListOf<AppNotificationInfoVo>()

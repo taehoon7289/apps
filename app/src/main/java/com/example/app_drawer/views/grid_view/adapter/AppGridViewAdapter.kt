@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.example.app_drawer.databinding.RunnableAppInfoBinding
 import com.example.app_drawer.register.AlarmInfo
-import com.example.app_drawer.vo.AppInfoVo
+import com.example.app_drawer.view_model.AppUsageStatsViewModel
 import java.util.*
 
 class AppGridViewAdapter(
-    private val items: MutableList<AppInfoVo>
+    private val items: MutableList<AppUsageStatsViewModel>
 ) : BaseAdapter() {
 
     private lateinit var runnableAppInfoBinding: RunnableAppInfoBinding
@@ -64,7 +64,7 @@ class AppGridViewAdapter(
                 true
             }
             setOnClickListener {
-                view!!.context.startActivity(item.execIntent)
+                view!!.context.startActivity(item.execIntent.value)
             }
         }
 

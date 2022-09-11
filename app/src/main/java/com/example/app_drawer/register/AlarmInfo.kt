@@ -13,7 +13,7 @@ import androidx.core.app.NotificationCompat
 import com.example.app_drawer.ExecuteAlarmBroadCastReceiver
 import com.example.app_drawer.R
 import com.example.app_drawer.SplashActivity
-import com.example.app_drawer.vo.AppInfoVo
+import com.example.app_drawer.view_model.AppUsageStatsViewModel
 import java.util.*
 
 class AlarmInfo(
@@ -89,7 +89,7 @@ class AlarmInfo(
 
     }
 
-    fun createExecuteAlarm(data: AppInfoVo, calendar: Calendar) {
+    fun createExecuteAlarm(data: AppUsageStatsViewModel, calendar: Calendar) {
         val alarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -102,8 +102,8 @@ class AlarmInfo(
                 context,
                 ExecuteAlarmBroadCastReceiver::class.java
             )
-            intent.putExtra("label", data.label)
-            intent.putExtra("packageName", data.packageName)
+            intent.putExtra("label", data.label.value)
+            intent.putExtra("packageName", data.packageName.value)
             intent.putExtra("reservationDate", calendar)
 
             val pendingIntent = PendingIntent.getBroadcast(
