@@ -1,5 +1,6 @@
 package com.example.app_drawer
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -91,14 +92,31 @@ class MainActivity : AppCompatActivity() {
                         appNotificationInfoList.add(appNotificationInfoVo)
                         i++
                     }
-
-                    Log.d(TAG, "success: final $appNotificationInfoList")
                 }
 
+                @SuppressLint("NotifyDataSetChanged")
                 override fun failed(error: VolleyError) {
                     Log.d(TAG, "failed: $error")
+                    // 더미
+                    appNotificationInfoList.clear()
+                    appNotificationInfoList.add(
+                        AppNotificationInfoVo(
+                            _type = AppNotificationType.NOTICE,
+                            _title = "앱서랍 사용방법",
+                            _createDate = "2022-08-16"
+                        )
+                    )
+                    appNotificationInfoList.add(
+                        AppNotificationInfoVo(
+                            _type = AppNotificationType.NOTICE,
+                            _title = "앱 실행 예약방법",
+                            _createDate = "2022-08-17"
+                        )
+                    )
+                    activityMainBinding.appNotificationInfoViewPager.adapter?.notifyDataSetChanged()
                 }
 
+                @SuppressLint("NotifyDataSetChanged")
                 override fun completed() {
                     Log.d(TAG, "completed: ")
                     if (!appNotificationInfoList.isEmpty()) {
@@ -216,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                 AppNotificationViewPagerAdapter(appNotificationInfoList)
             appNotificationInfoViewPager.adapter = appNotificationViewPagerAdapter
             appNotificationInfoViewPagerTextView.text =
-                "${appNotificationInfoViewPager.currentItem + 1}/${appNotificationInfoList.size}"
+                "${appNotificationInfoViewPager.currentItem.plus(1)}/${appNotificationInfoList.size}"
             appNotificationInfoViewPager.registerOnPageChangeCallback(object :
                 ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
