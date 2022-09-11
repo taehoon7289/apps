@@ -89,7 +89,11 @@ class AlarmInfo(
 
     }
 
-    fun createExecuteAlarm(data: AppUsageStatsViewModel, calendar: Calendar) {
+    fun createExecuteAlarm(
+        data: AppUsageStatsViewModel,
+        calendar: Calendar,
+        immediatelyFlag: Boolean
+    ) {
         val alarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -112,6 +116,15 @@ class AlarmInfo(
                 intent,
                 PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
+            if (immediatelyFlag) {
+                val immediatelyIntent =
+                    context.packageManager.getLaunchIntentForPackage(data.packageName.value!!)
+                immediatelyIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.context.startActivity(immediatelyIntent)
+                Toast.makeText(context, "바로 시작!!!!!!!!", Toast.LENGTH_LONG).show()
+                return
+            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmManager.setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,

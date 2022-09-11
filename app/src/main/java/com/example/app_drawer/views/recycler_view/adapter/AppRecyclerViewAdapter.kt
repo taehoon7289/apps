@@ -1,6 +1,7 @@
 package com.example.app_drawer.recycler_view.adapter
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -34,12 +35,15 @@ class AppRecyclerViewAdapter(
                         { _, hourOfDay, minute ->
                             // datepicker 확인 눌렀을 경우 동작
                             val nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
+                            var immediatelyFlag = false
                             calendar.apply {
                                 if (hourOfDay == nowDate.get(Calendar.HOUR_OF_DAY) &&
                                     minute == nowDate.get(Calendar.MINUTE)
                                 ) {
                                     calendar = nowDate
                                     calendar.set(Calendar.SECOND, 0)
+                                    immediatelyFlag = true
+
                                 } else {
                                     set(Calendar.HOUR_OF_DAY, hourOfDay)
                                     set(Calendar.MINUTE, minute)
@@ -47,7 +51,7 @@ class AppRecyclerViewAdapter(
                                 }
                             }
                             val alarmInfo = AlarmInfo(this.context)
-                            alarmInfo.createExecuteAlarm(item, calendar)
+                            alarmInfo.createExecuteAlarm(item, calendar, immediatelyFlag)
 
                         },
                         calendar.get(Calendar.HOUR_OF_DAY),

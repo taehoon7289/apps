@@ -93,11 +93,32 @@ class MainActivity :
                 )
             )
             recentExecutedItems.observe(this@MainActivity, Observer {
-                Log.d(TAG, "createView: recentExecutedItems.observe ${recentExecutedItems}")
-                Log.d(TAG, "createView: recentExecutedItems.observe ${recentExecutedItems.value}")
                 recentExecutedAppLinearLayout.isGone = recentExecutedItems.value?.isEmpty() == true
                 recentExecutedAppRecyclerView.adapter?.notifyDataSetChanged()
             })
+
+            // 자주 실행하는 앱
+            val oftenExecutedItems =
+                appUsageStatsData.oftenExecutedAppUsageStatsListViewModel.items
+            val oftenExecAppRecyclerViewAdapter =
+                AppRecyclerViewAdapter(oftenExecutedItems.value!!)
+            oftenExecutedAppTextView.text = "자주 실행하는 앱"
+            oftenExecutedAppRecyclerView.adapter = oftenExecAppRecyclerViewAdapter
+
+            // item 사이 간격
+            if (oftenExecutedAppRecyclerView.itemDecorationCount > 0) {
+                oftenExecutedAppRecyclerView.removeItemDecorationAt(0)
+            }
+            oftenExecutedAppRecyclerView.addItemDecoration(
+                RecyclerViewHorizontalDecoration(
+                    20
+                )
+            )
+            recentExecutedItems.observe(this@MainActivity, Observer {
+                oftenExecutedAppLinearLayout.isGone = oftenExecutedItems.value?.isEmpty() == true
+                oftenExecutedAppRecyclerView.adapter?.notifyDataSetChanged()
+            })
+
             // 아직 실행하지 않은 앱 recyclerView
             val unExecutedItems = appUsageStatsData.unExecutedAppUsageStatsListViewModel.items
 

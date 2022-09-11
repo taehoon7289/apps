@@ -52,4 +52,11 @@ class AppUsageStatsViewModel : ViewModel() {
     val totalTimeInForeground: LiveData<Long?>
         get() = _totalTimeInForeground
 
+    var _totalTimeVisible: MutableLiveData<Long?> = MutableLiveData(null)
+    val totalTimeVisible: LiveData<Long?>
+        get() = _totalTimeVisible
+
+    var _launchCount: MutableLiveData<Long?> = MutableLiveData(null)
+    val launchCount: LiveData<Long?>
+        get() = _launchCount
 }

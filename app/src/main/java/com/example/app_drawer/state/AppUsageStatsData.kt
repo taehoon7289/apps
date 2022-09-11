@@ -1,6 +1,7 @@
 package com.example.app_drawer.state
 
 import android.app.AppOpsManager
+import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
@@ -11,6 +12,7 @@ import android.provider.Settings
 import com.example.app_drawer.MainActivity
 import com.example.app_drawer.view_model.AppUsageStatsListViewModel
 import com.example.app_drawer.view_model.AppUsageStatsViewModel
+import java.lang.reflect.Field
 import java.util.*
 
 
@@ -28,6 +30,8 @@ class AppUsageStatsData(
         "Failed to retrieve app usage statistics. You may need to enable access for this app through Settings > Security > Apps with usage access"
 
     var recentExecutedAppUsageStatsListViewModel: AppUsageStatsListViewModel =
+        AppUsageStatsListViewModel()
+    var oftenExecutedAppUsageStatsListViewModel: AppUsageStatsListViewModel =
         AppUsageStatsListViewModel()
     var unExecutedAppUsageStatsListViewModel: AppUsageStatsListViewModel =
         AppUsageStatsListViewModel()
@@ -114,6 +118,11 @@ class AppUsageStatsData(
                         _lastTimeForegroundServiceUsed.value = stats.lastTimeForegroundServiceUsed
                         _lastTimeVisible.value = stats.lastTimeVisible
                         _totalTimeForegroundServiceUsed.value = stats.totalTimeForegroundServiceUsed
+                        _totalTimeVisible.value = stats.totalTimeVisible
+                        val mLaunchCount: Field =
+                            UsageStats::class.java.getDeclaredField("mLaunchCount")
+                        val launchCount = mLaunchCount.get(stats)
+                        _launchCount.value = launchCount.toString().toLong()
                     }
 
                     _firstTimeStamp.value = stats.firstTimeStamp
@@ -170,6 +179,16 @@ class AppUsageStatsData(
         }.sortedByDescending { it.lastTimeStamp.value }.take(10).toMutableList()
         recentExecutedAppUsageStatsListViewModel.clear()
         recentExecutedAppUsageStatsListViewModel.addAllItems(recentItems)
+
+        val oftenItems: MutableList<AppUsageStatsViewModel> = items.filter {
+            it.packageName.value != context.packageName
+        }.filter {
+            (it.lastTimeStamp.value
+                ?: 0L) > 0L && it.firstTimeStamp.value != it.lastTimeStamp.value && (it.launchCount.value
+                ?: 0L) > 0
+        }.sortedByDescending { it.launchCount.value }.take(10).toMutableList()
+        oftenExecutedAppUsageStatsListViewModel.clear()
+        oftenExecutedAppUsageStatsListViewModel.addAllItems(oftenItems)
 
         val unExecutedItems: MutableList<AppUsageStatsViewModel> = items.filter {
             it.packageName.value != context.packageName
