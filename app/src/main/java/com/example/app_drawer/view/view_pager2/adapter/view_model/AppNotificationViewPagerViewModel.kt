@@ -3,14 +3,14 @@ package com.example.app_drawer.view_pager2.adapter.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.app_drawer.view_model.AppNotificationInfoVo
+import com.example.app_drawer.view_model.AppNotificationInfoViewModel
 
 class AppNotificationViewPagerViewModel : ViewModel() {
-    private val list = mutableListOf<AppNotificationInfoVo>()
+    private val list = mutableListOf<AppNotificationInfoViewModel>()
 
-    private val _itemList = MutableLiveData<List<AppNotificationInfoVo>>()
+    private val _itemList = MutableLiveData<List<AppNotificationInfoViewModel>>()
 
-    val itemList: LiveData<List<AppNotificationInfoVo>> = _itemList
+    val itemList: LiveData<List<AppNotificationInfoViewModel>> = _itemList
 
     init {
         _itemList.value = list
@@ -21,7 +21,7 @@ class AppNotificationViewPagerViewModel : ViewModel() {
         _itemList.value = list
     }
 
-    fun add(item: AppNotificationInfoVo) {
+    fun add(item: AppNotificationInfoViewModel) {
         list.add(item)
         _itemList.value = list
     }

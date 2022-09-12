@@ -1,20 +1,25 @@
-package com.example.app_drawer
+package com.example.app_drawer.view.activity
 
 import android.util.Log
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
+import androidx.databinding.DataBindingUtil
+import com.example.app_drawer.R
 import com.example.app_drawer.databinding.ActivityNotionWebViewBinding
 
-class NotionWebViewActivity :
-    BindActivity<ActivityNotionWebViewBinding>(R.layout.activity_notion_web_view) {
+class NotionWebViewActivity : AppCompatActivity() {
 
     private lateinit var notionWewView: WebView
     private val TAG = "NotionWebViewActivity"
+    private lateinit var binding: ActivityNotionWebViewBinding
 
     override fun onStart() {
         super.onStart()
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_notion_web_view)
+        binding.lifecycleOwner = this
         notionWewView = binding.notionWebView
         notionWewView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {

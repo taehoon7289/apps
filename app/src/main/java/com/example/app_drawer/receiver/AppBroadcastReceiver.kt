@@ -1,4 +1,4 @@
-package com.example.app_drawer
+package com.example.app_drawer.receiver
 
 import android.app.*
 import android.content.BroadcastReceiver
@@ -8,11 +8,12 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.example.app_drawer.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ExecuteAlarmBroadCastReceiver : BroadcastReceiver() {
-    private val TAG = "AlarmBroadCastReceiver"
+class AppBroadcastReceiver : BroadcastReceiver() {
+    private val TAG = "AppBroadcastReceiver"
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context, receiveIntent: Intent) {

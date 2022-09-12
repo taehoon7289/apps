@@ -10,7 +10,7 @@ import android.os.Build
 import android.os.Process
 import android.provider.Settings
 import com.example.app_drawer.App
-import com.example.app_drawer.MainActivity
+import com.example.app_drawer.view.activity.MainActivity
 import com.example.app_drawer.view_model.AppUsageStatsListViewModel
 import com.example.app_drawer.view_model.AppUsageStatsViewModel
 import java.lang.reflect.Field

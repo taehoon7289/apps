@@ -9,7 +9,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import com.example.app_drawer.App
-import com.example.app_drawer.ExecuteAlarmBroadCastReceiver
+import com.example.app_drawer.receiver.AppBroadcastReceiver
 import com.example.app_drawer.view_model.AppAlarmListViewModel
 import com.example.app_drawer.view_model.AppAlarmViewModel
 import com.example.app_drawer.view_model.AppUsageStatsViewModel
@@ -44,7 +44,7 @@ class AppAlarmState {
             // BroadCastReceiver 로 인텐트 전달
             val intent = Intent(
                 App.instance,
-                ExecuteAlarmBroadCastReceiver::class.java
+                AppBroadcastReceiver::class.java
             )
             intent.putExtra("label", data.label.value)
             intent.putExtra("packageName", data.packageName.value)

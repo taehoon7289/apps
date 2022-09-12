@@ -25,10 +25,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".NotionWebViewActivity"
+            android:name=".view.activity.NotionWebViewActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".view.activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,11 +37,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".view.activity.MainActivity"
             android:exported="false"></activity>
 
         <receiver
-            android:name=".ExecuteAlarmBroadCastReceiver"
+            android:name=".receiver.AppBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
     </application>

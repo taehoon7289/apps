@@ -1,4 +1,4 @@
-package com.example.app_drawer
+package com.example.app_drawer.view.activity
 
 import android.annotation.SuppressLint
 import android.app.AppOpsManager
@@ -8,6 +8,8 @@ import androidx.core.view.isGone
 import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.VolleyError
+import com.example.app_drawer.BindActivity
+import com.example.app_drawer.R
 import com.example.app_drawer.code.AppNotificationType
 import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.grid_view.adapter.AppGridViewAdapter
@@ -17,7 +19,7 @@ import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDec
 import com.example.app_drawer.state.AppAlarmState
 import com.example.app_drawer.state.AppNotificationState
 import com.example.app_drawer.state.AppUsageStatsState
-import com.example.app_drawer.view_model.AppNotificationInfoVo
+import com.example.app_drawer.view_model.AppNotificationInfoViewModel
 import com.example.app_drawer.view_pager2.adapter.AppNotificationViewPagerAdapter
 import org.json.JSONObject
 import kotlin.math.abs
@@ -42,7 +44,7 @@ class MainActivity :
 
     private var intervalFlag = false
 
-    private var appNotificationInfoList: MutableList<AppNotificationInfoVo> = mutableListOf()
+    private var appNotificationInfoList: MutableList<AppNotificationInfoViewModel> = mutableListOf()
 
 //    private val recentExecutedViewModel: AppUsageStatsListViewModel by viewModels()
 
@@ -88,7 +90,7 @@ class MainActivity :
                         properties.getJSONObject("createDate").getJSONObject("date")
                             .getString("start")
 
-                    val appNotificationInfoVo = AppNotificationInfoVo(
+                    val appNotificationInfoViewModel = AppNotificationInfoViewModel(
                         _type = AppNotificationType.valueOf(type),
                         _title = title,
                         _createDate = createDate,
@@ -98,7 +100,7 @@ class MainActivity :
                     Log.d(TAG, "success: title: $title")
                     Log.d(TAG, "success: createDate: $createDate")
 
-                    appNotificationInfoList.add(appNotificationInfoVo)
+                    appNotificationInfoList.add(appNotificationInfoViewModel)
                     i++
                 }
             }
@@ -109,14 +111,14 @@ class MainActivity :
                 // 더미
                 appNotificationInfoList.clear()
                 appNotificationInfoList.add(
-                    AppNotificationInfoVo(
+                    AppNotificationInfoViewModel(
                         _type = AppNotificationType.NOTICE,
                         _title = "앱서랍 사용방법",
                         _createDate = "2022-08-16"
                     )
                 )
                 appNotificationInfoList.add(
-                    AppNotificationInfoVo(
+                    AppNotificationInfoViewModel(
                         _type = AppNotificationType.NOTICE,
                         _title = "앱 실행 예약방법",
                         _createDate = "2022-08-17"
