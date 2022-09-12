@@ -17,7 +17,7 @@ class UnExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsageSt
     init {
         _items = MutableLiveData(
             appUsageStatsState.getAppInfoState(
-                AppTopicType.RECENT
+                AppTopicType.UN
             )
         )
     }
@@ -50,7 +50,7 @@ class UnExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsageSt
 
     fun reCall() {
         val items = appUsageStatsState.getAppInfoState(
-            AppTopicType.RECENT
+            AppTopicType.UN
         )
         _items.value = items
         _items.value = _items.value

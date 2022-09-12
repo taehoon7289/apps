@@ -16,7 +16,7 @@ class OftenExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsag
     init {
         _items = MutableLiveData(
             appUsageStatsState.getAppInfoState(
-                AppTopicType.UN
+                AppTopicType.OFTEN
             )
         )
     }
@@ -49,7 +49,7 @@ class OftenExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsag
 
     fun reCall() {
         val items = appUsageStatsState.getAppInfoState(
-            AppTopicType.UN
+            AppTopicType.OFTEN
         )
         _items.value = items
         _items.value = _items.value
