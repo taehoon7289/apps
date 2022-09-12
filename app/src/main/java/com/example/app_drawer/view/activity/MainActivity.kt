@@ -10,8 +10,7 @@ import com.example.app_drawer.BindActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.grid_view.adapter.AppGridViewAdapter
-import com.example.app_drawer.recycler_view.adapter.AppAlarmRecyclerViewAdapter
-import com.example.app_drawer.recycler_view.adapter.AppRecyclerViewAdapter
+import com.example.app_drawer.recycler_view.adapter.*
 import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
 import com.example.app_drawer.state.AppNotificationState
 import com.example.app_drawer.state.AppUsageStatsState
@@ -42,9 +41,9 @@ class MainActivity :
     @Inject
     lateinit var appAlarmRecyclerViewAdapter: AppAlarmRecyclerViewAdapter
 
-    @Inject
-    @Named("recent")
-    lateinit var appRecentRecyclerViewAdapter: AppRecyclerViewAdapter
+//    @Inject
+//    @Named("recent")
+//    lateinit var appRecentRecyclerViewAdapter: AppRecyclerViewAdapter
 
     @Inject
     @Named("often")
@@ -206,8 +205,9 @@ class MainActivity :
         with(binding) {
             // 최근 실행된 앱 recyclerView
             recentExecutedAppTextView.text = "최근 실행 앱"
+            val appRecentRecyclerViewAdapter =
+                AppRecentRecyclerViewAdapter(recentExecutedListViewModel)
             recentExecutedAppRecyclerView.adapter = appRecentRecyclerViewAdapter
-
             // item 사이 간격
             if (recentExecutedAppRecyclerView.itemDecorationCount > 0) {
                 recentExecutedAppRecyclerView.removeItemDecorationAt(0)
@@ -217,21 +217,18 @@ class MainActivity :
                     20
                 )
             )
-            appRecentRecyclerViewAdapter.clearItems()
-            appRecentRecyclerViewAdapter.addItems(recentExecutedListViewModel!!.items.value!!)
-
-            recentExecutedListViewModel!!.items.observe(this@MainActivity) {
-                Log.d(TAG, "createAppView: 여기 들어오나????")
+            recentExecutedListViewModel.items.observe(this@MainActivity) {
                 appRecentRecyclerViewAdapter.clearItems()
                 appRecentRecyclerViewAdapter.addItems(recentExecutedListViewModel!!.items.value!!)
-//                recentExecutedListViewModel.reload()
                 recentExecutedAppLinearLayout.isGone =
                     recentExecutedListViewModel!!.items.value?.isEmpty() == true
-                recentExecutedAppRecyclerView.adapter?.notifyDataSetChanged()
+                appRecentRecyclerViewAdapter.notifyDataSetChanged()
             }
 
             // 자주 실행하는 앱
             oftenExecutedAppTextView.text = "자주 실행하는 앱"
+            val appOftenRecyclerViewAdapter =
+                AppOftenRecyclerViewAdapter(oftenExecutedListViewModel)
             oftenExecutedAppRecyclerView.adapter = appOftenRecyclerViewAdapter
 
             // item 사이 간격
@@ -248,11 +245,13 @@ class MainActivity :
                 appOftenRecyclerViewAdapter.addItems(oftenExecutedListViewModel!!.items.value!!)
                 oftenExecutedAppLinearLayout.isGone =
                     oftenExecutedListViewModel!!.items.value?.isEmpty() == true
-                oftenExecutedAppRecyclerView.adapter?.notifyDataSetChanged()
+                appOftenRecyclerViewAdapter.notifyDataSetChanged()
             }
 
             // 아직 실행하지 않은 앱 recyclerView
             unExecutedAppTextView.text = "아직 미실행 앱"
+            val appUnRecyclerViewAdapter =
+                AppUnRecyclerViewAdapter(unExecutedListViewModel)
             unExecutedAppRecyclerView.adapter = appUnRecyclerViewAdapter
 
             // item 사이 간격
@@ -265,7 +264,7 @@ class MainActivity :
                 appUnRecyclerViewAdapter.addItems(unExecutedListViewModel!!.items.value!!)
                 unExecutedAppLinearLayout.isGone =
                     unExecutedListViewModel!!.items.value?.isEmpty() == true
-                unExecutedAppRecyclerView.adapter?.notifyDataSetChanged()
+                appUnRecyclerViewAdapter.notifyDataSetChanged()
             }
             // 실행가능한 앱 gridView
             runnableAppTextView.text = "실행 가능한 앱"

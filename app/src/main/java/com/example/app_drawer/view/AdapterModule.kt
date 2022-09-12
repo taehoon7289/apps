@@ -23,10 +23,10 @@ class AdapterModule {
     @Singleton
     fun providerAlarmRecyclerViewAdapter() = AppAlarmRecyclerViewAdapter()
 
-    @Provides
-    @Singleton
-    @Named("recent")
-    fun providerRecentRecyclerViewAdapter() = AppRecyclerViewAdapter()
+//    @Provides
+//    @Singleton
+//    @Named("recent")
+//    fun providerRecentRecyclerViewAdapter() = AppRecyclerViewAdapter()
 
     @Provides
     @Singleton

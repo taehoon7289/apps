@@ -11,8 +11,19 @@ import javax.inject.Inject
 @HiltViewModel
 class OftenExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsageStatsState) :
     ViewModel() {
-    private val _items: MutableLiveData<MutableList<AppUsageStatsViewModel>> =
-        MutableLiveData(appUsageStatsState.getAppInfoState(AppTopicType.OFTEN))
+    private var _items: MutableLiveData<MutableList<AppUsageStatsViewModel>>
+
+    init {
+        _items = MutableLiveData(
+            appUsageStatsState.getAppInfoState(
+                AppTopicType.UN
+            )
+        )
+    }
+
+    @Inject
+    lateinit var appUsageStatsState: AppUsageStatsState
+
     val items: LiveData<MutableList<AppUsageStatsViewModel>>
         get() = _items
 
@@ -33,6 +44,14 @@ class OftenExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsag
 
     fun removeItem(item: AppUsageStatsViewModel) {
         _items.value?.remove(item)
+        _items.value = _items.value
+    }
+
+    fun reCall() {
+        val items = appUsageStatsState.getAppInfoState(
+            AppTopicType.UN
+        )
+        _items.value = items
         _items.value = _items.value
     }
 

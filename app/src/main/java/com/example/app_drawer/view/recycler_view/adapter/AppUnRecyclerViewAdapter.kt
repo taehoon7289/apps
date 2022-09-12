@@ -8,14 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.TopicAppInfoBinding
 import com.example.app_drawer.state.AppAlarmState
 import com.example.app_drawer.view_model.AppUsageStatsViewModel
+import com.example.app_drawer.view_model.UnExecutedListViewModel
 import java.util.*
-import javax.inject.Inject
 
 
-class AppRecyclerViewAdapter @Inject constructor() :
-    RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder>() {
+class AppUnRecyclerViewAdapter(
+    private val viewModel: UnExecutedListViewModel
+) :
+    RecyclerView.Adapter<AppUnRecyclerViewAdapter.ViewHolder>() {
 
-    private val TAG = "AppRecyclerViewAdapter"
+    private val TAG = "AppUnRecyclerViewAdapte"
     private val items: MutableList<AppUsageStatsViewModel> = mutableListOf()
 
     inner class ViewHolder(private val binding: TopicAppInfoBinding) :
@@ -26,6 +28,10 @@ class AppRecyclerViewAdapter @Inject constructor() :
             binding.iconImageView.apply {
                 setOnClickListener {
                     this.context.startActivity(item.execIntent.value)
+                    postDelayed({
+                        viewModel.reCall()
+                    }, 500)
+
                 }
                 setOnLongClickListener {
                     var calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
