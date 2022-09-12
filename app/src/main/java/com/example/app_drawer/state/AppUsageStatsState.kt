@@ -9,9 +9,10 @@ import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Process
 import android.provider.Settings
+import android.util.Log
 import com.example.app_drawer.App
+import com.example.app_drawer.code.AppTopicType
 import com.example.app_drawer.view.activity.MainActivity
-import com.example.app_drawer.view_model.AppUsageStatsListViewModel
 import com.example.app_drawer.view_model.AppUsageStatsViewModel
 import java.lang.reflect.Field
 import java.util.*
@@ -23,19 +24,10 @@ class AppUsageStatsState {
 
     //    private val toastMessageKR =
 //        "앱 사용 통계를 검색하지 못했습니다. 설정 > 보안 > 사용 액세스 권한이 있는 앱을 통해 이 앱에 대한 액세스를 활성화해야 할 수 있습니다."
-    private val toastMessageKR =
-        "설정 > 보안 > 사용 액세스 권한이 있는 앱을 통해 이 앱에 대한 액세스를 활성화해야 할 수 있습니다."
-    private val toastMessageEn =
-        "Failed to retrieve app usage statistics. You may need to enable access for this app through Settings > Security > Apps with usage access"
-
-    var recentExecutedAppUsageStatsListViewModel: AppUsageStatsListViewModel =
-        AppUsageStatsListViewModel()
-    var oftenExecutedAppUsageStatsListViewModel: AppUsageStatsListViewModel =
-        AppUsageStatsListViewModel()
-    var unExecutedAppUsageStatsListViewModel: AppUsageStatsListViewModel =
-        AppUsageStatsListViewModel()
-    var runnableAppUsageStatsListViewModel: AppUsageStatsListViewModel =
-        AppUsageStatsListViewModel()
+//    private val toastMessageKR =
+//        "설정 > 보안 > 사용 액세스 권한이 있는 앱을 통해 이 앱에 대한 액세스를 활성화해야 할 수 있습니다."
+//    private val toastMessageEn =
+//        "Failed to retrieve app usage statistics. You may need to enable access for this app through Settings > Security > Apps with usage access"
 
     /**
      * 앱 사용정보 권한 체크
@@ -79,21 +71,6 @@ class AppUsageStatsState {
             })
         App.instance.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
     }
-
-
-//@RequiresApi(Build.VERSION_CODES.P)
-//fun getEventStats(activity: AppCompatActivity) {
-//    val usageStatsManager =
-//        activity.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-//    val cal = Calendar.getInstance()
-//    cal.add(Calendar.DAY_OF_MONTH, -1)
-//    val configs = usageStatsManager.queryEventStats(
-//        UsageStatsManager.INTERVAL_DAILY,
-//        cal.timeInMillis,
-//        System.currentTimeMillis()
-//    )
-//    Log.d("fsdfsdfsd", "getEventStats: $configs")
-//}
 
     /**
      * 앱 정보 리스트 가져오기
@@ -169,41 +146,42 @@ class AppUsageStatsState {
     /**
      * 주제별 앱 리스트 생성
      */
-    fun getAppInfoState() {
+    fun getAppInfoState(type: AppTopicType): MutableList<AppUsageStatsViewModel> {
+        Log.d(TAG, "getAppInfoState: 실행됨!!! $")
         val items = getUsageStats(getRunnableAppInfoList())
-        // ... filtering
-        val recentItems: MutableList<AppUsageStatsViewModel> = items.filter {
-            it.packageName.value != App.instance.packageName
-        }.filter {
-            (it.lastTimeStamp.value ?: 0L) > 0L && it.firstTimeStamp.value != it.lastTimeStamp.value
-        }.sortedByDescending { it.lastTimeStamp.value }.take(10)
-            .toMutableList()
-        recentExecutedAppUsageStatsListViewModel.clear()
-        recentExecutedAppUsageStatsListViewModel.addAllItems(recentItems)
 
-        val oftenItems: MutableList<AppUsageStatsViewModel> = items.filter {
-            it.packageName.value != App.instance.packageName
-        }.filter {
-            (it.lastTimeStamp.value
-                ?: 0L) > 0L && it.firstTimeStamp.value != it.lastTimeStamp.value && (it.launchCount.value
-                ?: 0L) > 0
-        }.sortedByDescending { it.launchCount.value }.take(10).toMutableList()
-        oftenExecutedAppUsageStatsListViewModel.clear()
-        oftenExecutedAppUsageStatsListViewModel.addAllItems(oftenItems)
-
-        val unExecutedItems: MutableList<AppUsageStatsViewModel> = items.filter {
-            it.packageName.value != App.instance.packageName
-        }.filter {
-            (it.lastTimeStamp.value ?: 0L) == 0L
-        }.toMutableList()
-        unExecutedAppUsageStatsListViewModel.clear()
-        unExecutedAppUsageStatsListViewModel.addAllItems(unExecutedItems)
-
-        val runnableItems = items.filter {
-            it.packageName.value != App.instance.packageName
-        }.sortedBy { it.label.value }.toMutableList()
-        runnableAppUsageStatsListViewModel.clear()
-        runnableAppUsageStatsListViewModel.addAllItems(runnableItems)
+        return when (type) {
+            AppTopicType.RECENT -> {
+                items.filter {
+                    it.packageName.value != App.instance.packageName
+                }.filter {
+                    (it.lastTimeStamp.value
+                        ?: 0L) > 0L && it.firstTimeStamp.value != it.lastTimeStamp.value
+                }.sortedByDescending { it.lastTimeStamp.value }.take(10)
+                    .toMutableList()
+            }
+            AppTopicType.OFTEN -> {
+                items.filter {
+                    it.packageName.value != App.instance.packageName
+                }.filter {
+                    (it.lastTimeStamp.value
+                        ?: 0L) > 0L && it.firstTimeStamp.value != it.lastTimeStamp.value && (it.launchCount.value
+                        ?: 0L) > 0
+                }.sortedByDescending { it.launchCount.value }.take(10).toMutableList()
+            }
+            AppTopicType.UN -> {
+                items.filter {
+                    it.packageName.value != App.instance.packageName
+                }.filter {
+                    (it.lastTimeStamp.value ?: 0L) == 0L
+                }.toMutableList()
+            }
+            AppTopicType.RUNNABLE -> {
+                items.filter {
+                    it.packageName.value != App.instance.packageName
+                }.sortedBy { it.label.value }.toMutableList()
+            }
+        }
     }
 
 }

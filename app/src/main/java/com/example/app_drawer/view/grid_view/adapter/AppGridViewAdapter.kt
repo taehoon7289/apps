@@ -10,13 +10,13 @@ import com.example.app_drawer.databinding.RunnableAppInfoBinding
 import com.example.app_drawer.state.AppAlarmState
 import com.example.app_drawer.view_model.AppUsageStatsViewModel
 import java.util.*
+import javax.inject.Inject
 
-class AppGridViewAdapter(
-    private val items: MutableList<AppUsageStatsViewModel>
-) : BaseAdapter() {
+class AppGridViewAdapter @Inject constructor() : BaseAdapter() {
 
     private lateinit var runnableAppInfoBinding: RunnableAppInfoBinding
     private val TAG = "AppGridViewAdapter"
+    private val items: MutableList<AppUsageStatsViewModel> = mutableListOf()
 
     override fun getCount() = items.size
 
@@ -78,4 +78,13 @@ class AppGridViewAdapter(
         }
         return runnableAppInfoBinding.root
     }
+
+    fun addItems(items: MutableList<AppUsageStatsViewModel>) {
+        this.items.addAll(items)
+    }
+
+    fun clearItems() {
+        this.items.clear()
+    }
+
 }

@@ -9,14 +9,14 @@ import com.example.app_drawer.databinding.TopicAppInfoBinding
 import com.example.app_drawer.state.AppAlarmState
 import com.example.app_drawer.view_model.AppUsageStatsViewModel
 import java.util.*
+import javax.inject.Inject
 
 
-class AppRecyclerViewAdapter(
-    private val items: MutableList<AppUsageStatsViewModel>
-) :
+class AppRecyclerViewAdapter @Inject constructor() :
     RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder>() {
 
     private val TAG = "AppRecyclerViewAdapter"
+    private val items: MutableList<AppUsageStatsViewModel> = mutableListOf()
 
     inner class ViewHolder(private val binding: TopicAppInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -82,5 +82,13 @@ class AppRecyclerViewAdapter(
     }
 
     override fun getItemCount() = items.size
+
+    fun addItems(items: MutableList<AppUsageStatsViewModel>) {
+        this.items.addAll(items)
+    }
+
+    fun clearItems() {
+        this.items.clear()
+    }
 
 }

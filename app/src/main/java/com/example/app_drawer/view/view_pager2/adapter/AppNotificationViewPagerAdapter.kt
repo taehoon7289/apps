@@ -5,16 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.app_drawer.view.activity.NotionWebViewActivity
 import com.example.app_drawer.databinding.AppNotificationInfoBinding
+import com.example.app_drawer.view.activity.NotionWebViewActivity
 import com.example.app_drawer.view_model.AppNotificationInfoViewModel
+import javax.inject.Inject
 
-class AppNotificationViewPagerAdapter(
-    private val items: MutableList<AppNotificationInfoViewModel>
-) : RecyclerView.Adapter<AppNotificationViewPagerAdapter.ViewHolder>() {
+
+class AppNotificationViewPagerAdapter @Inject constructor() :
+    RecyclerView.Adapter<AppNotificationViewPagerAdapter.ViewHolder>() {
 
     private val TAG = "AppNotificationViewPage"
     private lateinit var appNotificationInfoBinding: AppNotificationInfoBinding
+    private val items = mutableListOf<AppNotificationInfoViewModel>()
 
     inner class ViewHolder(private val binding: AppNotificationInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -49,6 +51,14 @@ class AppNotificationViewPagerAdapter(
     }
 
     override fun getItemCount() = items.size
+
+    fun addItems(items: MutableList<AppNotificationInfoViewModel>) {
+        items.addAll(items)
+    }
+
+    fun clearItems() {
+        items.clear()
+    }
 
 
 }

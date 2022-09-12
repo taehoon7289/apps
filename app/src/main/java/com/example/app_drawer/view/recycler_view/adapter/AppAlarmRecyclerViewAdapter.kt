@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.AlarmAppInfoBinding
 import com.example.app_drawer.view_model.AppAlarmViewModel
+import javax.inject.Inject
 
 
-class AppAlarmRecyclerViewAdapter(
-    private val items: MutableList<AppAlarmViewModel>
-) :
+class AppAlarmRecyclerViewAdapter @Inject constructor() :
     RecyclerView.Adapter<AppAlarmRecyclerViewAdapter.ViewHolder>() {
 
     private val TAG = "AppAlarmRecyclerViewAda"
+    private val items: MutableList<AppAlarmViewModel> = mutableListOf()
 
     inner class ViewHolder(private val binding: AlarmAppInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -35,5 +35,13 @@ class AppAlarmRecyclerViewAdapter(
     }
 
     override fun getItemCount() = items.size
+
+    fun addItems(items: MutableList<AppAlarmViewModel>) {
+        items.addAll(items)
+    }
+
+    fun clearItems() {
+        items.clear()
+    }
 
 }
