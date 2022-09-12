@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.example.app_drawer.databinding.RunnableAppInfoBinding
-import com.example.app_drawer.register.AlarmInfo
+import com.example.app_drawer.state.AppAlarmState
 import com.example.app_drawer.view_model.AppUsageStatsViewModel
 import java.util.*
 
@@ -59,8 +59,8 @@ class AppGridViewAdapter(
                             set(Calendar.SECOND, 0)
                         }
                     }
-                    val alarmInfo = AlarmInfo(viewGroup.context)
-                    alarmInfo.createExecuteAlarm(item, calendar, immediatelyFlag)
+                    val appAlarmState = AppAlarmState()
+                    appAlarmState.createExecuteAlarm(item, calendar, immediatelyFlag)
 
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
                 true

@@ -44,7 +44,7 @@
                     android:textSize="10dp" />
             </LinearLayout>
 
-            <!-- 최근실행앱 & 미실행앱 -->
+            <!-- 알림리스트 && 최근실행앱 & 자주 실행된앱 & 미실행앱 -->
             <LinearLayout
                 android:id="@+id/app_topic_linear_layout"
                 android:layout_width="wrap_content"
@@ -54,6 +54,39 @@
                 app:layout_constraintEnd_toStartOf="@id/runnable_app_linear_layout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/notification_linear_layout">
+                <!-- 알림리스트 -->
+                <LinearLayout
+                    android:id="@+id/alarm_linear_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#030305"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/alarm_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:textColor="#ffffff" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/alarm_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </LinearLayout>
+
                 <!-- 최근 실행앱 -->
                 <LinearLayout
                     android:id="@+id/recent_executed_app_linear_layout"

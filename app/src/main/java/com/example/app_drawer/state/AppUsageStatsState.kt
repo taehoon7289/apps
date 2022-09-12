@@ -9,6 +9,7 @@ import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Process
 import android.provider.Settings
+import com.example.app_drawer.App
 import com.example.app_drawer.MainActivity
 import com.example.app_drawer.view_model.AppUsageStatsListViewModel
 import com.example.app_drawer.view_model.AppUsageStatsViewModel
@@ -16,9 +17,7 @@ import java.lang.reflect.Field
 import java.util.*
 
 
-class AppUsageStatsData(
-    private val context: Context,
-) {
+class AppUsageStatsState {
 
     private val TAG = "AppInfoState"
 
@@ -42,10 +41,10 @@ class AppUsageStatsData(
      * 앱 사용정보 권한 체크
      */
     fun checkForPermissionUsageStats(): Int {
-        val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val appOps = App.instance.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             appOps.unsafeCheckOpNoThrow(
-                AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), context.packageName
+                AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), App.instance.packageName
             )
         } else {
             return AppOpsManager.MODE_DEFAULT
@@ -57,28 +56,28 @@ class AppUsageStatsData(
      * 설정 activity 실행
      */
     fun isOpenSettingIntent() {
-        val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val appOps = App.instance.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         appOps.startWatchingMode(AppOpsManager.OPSTR_GET_USAGE_STATS,
-            context.applicationContext.packageName,
+            App.instance.applicationContext.packageName,
             object : AppOpsManager.OnOpChangedListener {
                 override fun onOpChanged(op: String, packageName: String) {
                     val mode = appOps.checkOpNoThrow(
                         AppOpsManager.OPSTR_GET_USAGE_STATS,
                         Process.myUid(),
-                        context.packageName
+                        App.instance.packageName
                     )
                     if (mode != AppOpsManager.MODE_ALLOWED) {
                         return
                     }
                     appOps.stopWatchingMode(this)
-                    val intent = Intent(context, MainActivity::class.java)
+                    val intent = Intent(App.instance, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    context.applicationContext.startActivity(intent)
+                    App.instance.applicationContext.startActivity(intent)
 
                 }
 
             })
-        context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+        App.instance.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
     }
 
 
@@ -103,7 +102,7 @@ class AppUsageStatsData(
         items: MutableList<AppUsageStatsViewModel>
     ): MutableList<AppUsageStatsViewModel> {
         val usageStatsManager =
-            context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+            App.instance.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         val cal = Calendar.getInstance()
         cal.add(Calendar.DAY_OF_YEAR, -7) // 최근 일주일
         val queryUsageStats = usageStatsManager.queryUsageStats(
@@ -140,7 +139,7 @@ class AppUsageStatsData(
      */
     private fun getRunnableAppInfoList(): MutableList<AppUsageStatsViewModel> {
 
-        val packageManager = context.packageManager
+        val packageManager = App.instance.packageManager
         val mainIntent = Intent(Intent.ACTION_MAIN, null);
 
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -166,22 +165,24 @@ class AppUsageStatsData(
         return items
     }
 
+
     /**
      * 주제별 앱 리스트 생성
      */
-    fun getAppInfoState() = run {
+    fun getAppInfoState() {
         val items = getUsageStats(getRunnableAppInfoList())
         // ... filtering
         val recentItems: MutableList<AppUsageStatsViewModel> = items.filter {
-            it.packageName.value != context.packageName
+            it.packageName.value != App.instance.packageName
         }.filter {
             (it.lastTimeStamp.value ?: 0L) > 0L && it.firstTimeStamp.value != it.lastTimeStamp.value
-        }.sortedByDescending { it.lastTimeStamp.value }.take(10).toMutableList()
+        }.sortedByDescending { it.lastTimeStamp.value }.take(10)
+            .toMutableList()
         recentExecutedAppUsageStatsListViewModel.clear()
         recentExecutedAppUsageStatsListViewModel.addAllItems(recentItems)
 
         val oftenItems: MutableList<AppUsageStatsViewModel> = items.filter {
-            it.packageName.value != context.packageName
+            it.packageName.value != App.instance.packageName
         }.filter {
             (it.lastTimeStamp.value
                 ?: 0L) > 0L && it.firstTimeStamp.value != it.lastTimeStamp.value && (it.launchCount.value
@@ -191,7 +192,7 @@ class AppUsageStatsData(
         oftenExecutedAppUsageStatsListViewModel.addAllItems(oftenItems)
 
         val unExecutedItems: MutableList<AppUsageStatsViewModel> = items.filter {
-            it.packageName.value != context.packageName
+            it.packageName.value != App.instance.packageName
         }.filter {
             (it.lastTimeStamp.value ?: 0L) == 0L
         }.toMutableList()
@@ -199,7 +200,7 @@ class AppUsageStatsData(
         unExecutedAppUsageStatsListViewModel.addAllItems(unExecutedItems)
 
         val runnableItems = items.filter {
-            it.packageName.value != context.packageName
+            it.packageName.value != App.instance.packageName
         }.sortedBy { it.label.value }.toMutableList()
         runnableAppUsageStatsListViewModel.clear()
         runnableAppUsageStatsListViewModel.addAllItems(runnableItems)

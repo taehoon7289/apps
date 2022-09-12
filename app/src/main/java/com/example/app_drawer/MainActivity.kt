@@ -11,10 +11,12 @@ import com.android.volley.VolleyError
 import com.example.app_drawer.code.AppNotificationType
 import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.grid_view.adapter.AppGridViewAdapter
+import com.example.app_drawer.recycler_view.adapter.AppAlarmRecyclerViewAdapter
 import com.example.app_drawer.recycler_view.adapter.AppRecyclerViewAdapter
 import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
+import com.example.app_drawer.state.AppAlarmState
 import com.example.app_drawer.state.AppNotificationState
-import com.example.app_drawer.state.AppUsageStatsData
+import com.example.app_drawer.state.AppUsageStatsState
 import com.example.app_drawer.view_model.AppNotificationInfoVo
 import com.example.app_drawer.view_pager2.adapter.AppNotificationViewPagerAdapter
 import org.json.JSONObject
@@ -27,10 +29,13 @@ class MainActivity :
 
     // 패키지 매니저 앱 정보
     // 앱 정보 상태 관리
-    private lateinit var appUsageStatsData: AppUsageStatsData
+    private lateinit var appUsageStatsState: AppUsageStatsState
 
     // 앱 알림정보
     private lateinit var appNotificationState: AppNotificationState
+
+    // 앱 알람 정보
+    private lateinit var appAlarmState: AppAlarmState
 
     // 앱 사용정보 권한
     private var isPermission: Boolean = false
@@ -39,30 +44,119 @@ class MainActivity :
 
     private var appNotificationInfoList: MutableList<AppNotificationInfoVo> = mutableListOf()
 
+//    private val recentExecutedViewModel: AppUsageStatsListViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: ####")
         super.onCreate(savedInstanceState)
         // 각 인스턴스 생성
-        appNotificationState = createAppNoticeStateInstance()
-        appUsageStatsData = createAppInfoInstance()
-        // 각 인스턴스 동작
-        appNotificationState.getNotifications()
-        val mode = appUsageStatsData.checkForPermissionUsageStats()
+        appNotificationState = createAppNotificationStateInstance()
+        appUsageStatsState = createAppUsageStateInstance()
+        appAlarmState = createAppAlarmInstance()
+//        appAlarmState.clearAlarm()
+        createNotificationView()
+        createAlarmListView()
+        createAppView()
+        val mode = appUsageStatsState.checkForPermissionUsageStats()
         if (mode != AppOpsManager.MODE_ALLOWED) {
-            appUsageStatsData.isOpenSettingIntent()
+            appUsageStatsState.isOpenSettingIntent()
         } else {
             isPermission = true
+
         }
     }
 
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: ####")
-        createNotificationView()
+        // 각 인스턴스 데이터바인딩 시작
+        appNotificationState.getNotifications(object : AppNotificationState.VolleyCallBack<String> {
+            override fun success(response: String) {
+                val results = JSONObject(response).getJSONArray("results")
+                var i = 0
+                appNotificationInfoList.clear()
+                while (i < results.length()) {
+                    val result = results[i] as JSONObject
+                    val properties =
+                        result["properties"] as JSONObject
+
+                    val type = (properties.getJSONObject("type").getJSONArray("title")
+                        .get(0) as JSONObject).getString("plain_text")
+                    val title = (properties.getJSONObject("title").getJSONArray("rich_text")
+                        .get(0) as JSONObject).getString("plain_text")
+                    val createDate =
+                        properties.getJSONObject("createDate").getJSONObject("date")
+                            .getString("start")
+
+                    val appNotificationInfoVo = AppNotificationInfoVo(
+                        _type = AppNotificationType.valueOf(type),
+                        _title = title,
+                        _createDate = createDate,
+                    )
+
+                    Log.d(TAG, "success: type: $type")
+                    Log.d(TAG, "success: title: $title")
+                    Log.d(TAG, "success: createDate: $createDate")
+
+                    appNotificationInfoList.add(appNotificationInfoVo)
+                    i++
+                }
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun failed(error: VolleyError) {
+                Log.d(TAG, "failed: $error")
+                // 더미
+                appNotificationInfoList.clear()
+                appNotificationInfoList.add(
+                    AppNotificationInfoVo(
+                        _type = AppNotificationType.NOTICE,
+                        _title = "앱서랍 사용방법",
+                        _createDate = "2022-08-16"
+                    )
+                )
+                appNotificationInfoList.add(
+                    AppNotificationInfoVo(
+                        _type = AppNotificationType.NOTICE,
+                        _title = "앱 실행 예약방법",
+                        _createDate = "2022-08-17"
+                    )
+                )
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun completed() {
+                Log.d(TAG, "completed: ")
+                if (!appNotificationInfoList.isEmpty()) {
+                    appNotificationInfoList.sortByDescending { it.createDate.value }
+                }
+                binding.appNotificationInfoViewPager.adapter?.notifyDataSetChanged()
+            }
+
+        })
+        appAlarmState.getAlarmList()
         if (isPermission) {
-            appUsageStatsData.getAppInfoState()
-            createView()
+            appUsageStatsState.getAppInfoState()
+//            recentExecutedViewModel.clear()
+//            recentExecutedViewModel.addAllItems(appUsageStatsData.recentExecutedAppUsageStatsListViewModel.items.value!!)
         }
+
+//        Log.d(TAG, "onStart: appAlarmListViewModel.value ${appAlarmListViewModel.value}")
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun createAlarmListView() {
+        with(binding) {
+            val alarmItems = appAlarmState.appAlarmListViewModel.items
+            val appAlarmRecyclerViewAdapter = AppAlarmRecyclerViewAdapter(alarmItems.value!!)
+            alarmRecyclerView.adapter = appAlarmRecyclerViewAdapter
+            alarmItems.observe(this@MainActivity) {
+                Log.d(TAG, "createAlarmListView: %%%%%%%%%%%%%%%%%%%%%%")
+                alarmRecyclerView.adapter?.notifyDataSetChanged()
+            }
+        }
+
+
     }
 
     override fun onResume() {
@@ -72,16 +166,16 @@ class MainActivity :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun createView() {
+    private fun createAppView() {
 
         with(binding) {
             // 최근 실행된 앱 recyclerView
             val recentExecutedItems =
-                appUsageStatsData.recentExecutedAppUsageStatsListViewModel.items
-            val lastExecAppRecyclerViewAdapter =
+                appUsageStatsState.recentExecutedAppUsageStatsListViewModel.items
+            val recentExecutedAppRecyclerViewAdapter =
                 AppRecyclerViewAdapter(recentExecutedItems.value!!)
             recentExecutedAppTextView.text = "최근 실행 앱"
-            recentExecutedAppRecyclerView.adapter = lastExecAppRecyclerViewAdapter
+            recentExecutedAppRecyclerView.adapter = recentExecutedAppRecyclerViewAdapter
 
             // item 사이 간격
             if (recentExecutedAppRecyclerView.itemDecorationCount > 0) {
@@ -92,14 +186,15 @@ class MainActivity :
                     20
                 )
             )
-            recentExecutedItems.observe(this@MainActivity, Observer {
-                recentExecutedAppLinearLayout.isGone = recentExecutedItems.value?.isEmpty() == true
+            recentExecutedItems.observe(this@MainActivity) {
+                recentExecutedAppLinearLayout.isGone =
+                    recentExecutedItems.value?.isEmpty() == true
                 recentExecutedAppRecyclerView.adapter?.notifyDataSetChanged()
-            })
+            }
 
             // 자주 실행하는 앱
             val oftenExecutedItems =
-                appUsageStatsData.oftenExecutedAppUsageStatsListViewModel.items
+                appUsageStatsState.oftenExecutedAppUsageStatsListViewModel.items
             val oftenExecAppRecyclerViewAdapter =
                 AppRecyclerViewAdapter(oftenExecutedItems.value!!)
             oftenExecutedAppTextView.text = "자주 실행하는 앱"
@@ -114,13 +209,13 @@ class MainActivity :
                     20
                 )
             )
-            recentExecutedItems.observe(this@MainActivity, Observer {
+            oftenExecutedItems.observe(this@MainActivity, Observer {
                 oftenExecutedAppLinearLayout.isGone = oftenExecutedItems.value?.isEmpty() == true
                 oftenExecutedAppRecyclerView.adapter?.notifyDataSetChanged()
             })
 
             // 아직 실행하지 않은 앱 recyclerView
-            val unExecutedItems = appUsageStatsData.unExecutedAppUsageStatsListViewModel.items
+            val unExecutedItems = appUsageStatsState.unExecutedAppUsageStatsListViewModel.items
 
             val unExecAppRecyclerViewAdapter =
                 AppRecyclerViewAdapter(unExecutedItems.value!!)
@@ -137,7 +232,7 @@ class MainActivity :
                 unExecutedAppRecyclerView.adapter?.notifyDataSetChanged()
             })
             // 실행가능한 앱 gridView
-            val runnableItems = appUsageStatsData.runnableAppUsageStatsListViewModel.items
+            val runnableItems = appUsageStatsState.runnableAppUsageStatsListViewModel.items
             val runnableGridViewAdapter = AppGridViewAdapter(runnableItems.value!!)
             runnableAppTextView.text = "실행 가능한 앱"
             runnableAppGridView.adapter = runnableGridViewAdapter
@@ -197,77 +292,16 @@ class MainActivity :
         }
     }
 
-    private fun createAppInfoInstance(): AppUsageStatsData {
-        return AppUsageStatsData(this)
+    private fun createAppUsageStateInstance(): AppUsageStatsState {
+        return AppUsageStatsState()
     }
 
-    private fun createAppNoticeStateInstance(): AppNotificationState {
-        return AppNotificationState(
-            activity = this,
-            volleyCallBack = object : AppNotificationState.VolleyCallBack<String> {
-                override fun success(response: String) {
-                    val results = JSONObject(response).getJSONArray("results")
-                    var i = 0
-                    appNotificationInfoList.clear()
-                    while (i < results.length()) {
-                        val result = results[i] as JSONObject
-                        val properties =
-                            result["properties"] as JSONObject
+    private fun createAppAlarmInstance(): AppAlarmState {
+        return AppAlarmState()
+    }
 
-                        val type = (properties.getJSONObject("type").getJSONArray("title")
-                            .get(0) as JSONObject).getString("plain_text")
-                        val title = (properties.getJSONObject("title").getJSONArray("rich_text")
-                            .get(0) as JSONObject).getString("plain_text")
-                        val createDate =
-                            properties.getJSONObject("createDate").getJSONObject("date")
-                                .getString("start")
-
-                        val appNotificationInfoVo = AppNotificationInfoVo(
-                            _type = AppNotificationType.valueOf(type),
-                            _title = title,
-                            _createDate = createDate,
-                        )
-
-                        Log.d(TAG, "success: type: $type")
-                        Log.d(TAG, "success: title: $title")
-                        Log.d(TAG, "success: createDate: $createDate")
-
-                        appNotificationInfoList.add(appNotificationInfoVo)
-                        i++
-                    }
-                }
-
-                @SuppressLint("NotifyDataSetChanged")
-                override fun failed(error: VolleyError) {
-                    Log.d(TAG, "failed: $error")
-                    // 더미
-                    appNotificationInfoList.clear()
-                    appNotificationInfoList.add(
-                        AppNotificationInfoVo(
-                            _type = AppNotificationType.NOTICE,
-                            _title = "앱서랍 사용방법",
-                            _createDate = "2022-08-16"
-                        )
-                    )
-                    appNotificationInfoList.add(
-                        AppNotificationInfoVo(
-                            _type = AppNotificationType.NOTICE,
-                            _title = "앱 실행 예약방법",
-                            _createDate = "2022-08-17"
-                        )
-                    )
-                }
-
-                @SuppressLint("NotifyDataSetChanged")
-                override fun completed() {
-                    Log.d(TAG, "completed: ")
-                    if (!appNotificationInfoList.isEmpty()) {
-                        appNotificationInfoList.sortByDescending { it.createDate.value }
-                    }
-                    binding.appNotificationInfoViewPager.adapter?.notifyDataSetChanged()
-                }
-
-            })
+    private fun createAppNotificationStateInstance(): AppNotificationState {
+        return AppNotificationState()
     }
 
     private fun createNotificationView() {

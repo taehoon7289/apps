@@ -4,19 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class AppUsageStatsListViewModel : ViewModel() {
-    private val _items: MutableLiveData<MutableList<AppUsageStatsViewModel>> = MutableLiveData(
+class AppAlarmListViewModel : ViewModel() {
+    private val _items: MutableLiveData<MutableList<AppAlarmViewModel>> = MutableLiveData(
         mutableListOf()
     )
-    val items: LiveData<MutableList<AppUsageStatsViewModel>>
+    val items: LiveData<MutableList<AppAlarmViewModel>>
         get() = _items
 
-    fun addItem(item: AppUsageStatsViewModel) {
+    fun addItem(item: AppAlarmViewModel) {
         _items.value?.add(item)
         _items.value = _items.value
     }
 
-    fun addAllItems(items: List<AppUsageStatsViewModel>) {
+    fun addAllItems(items: List<AppAlarmViewModel>) {
         _items.value?.addAll(items)
         _items.value = _items.value
     }
@@ -26,7 +26,7 @@ class AppUsageStatsListViewModel : ViewModel() {
         _items.value = _items.value
     }
 
-    fun removeItem(item: AppUsageStatsViewModel) {
+    fun removeItem(item: AppAlarmViewModel) {
         _items.value?.remove(item)
         _items.value = _items.value
     }

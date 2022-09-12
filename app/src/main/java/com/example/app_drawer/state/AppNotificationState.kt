@@ -1,21 +1,15 @@
 package com.example.app_drawer.state
 
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.ViewDataBinding
-import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.AuthFailureError
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.app_drawer.App
 
 
-class AppNotificationState(
-    private val activity: AppCompatActivity,
-    private val volleyCallBack: VolleyCallBack<String>,
-) {
+class AppNotificationState {
 
     interface VolleyCallBack<T> {
         fun success(response: T)
@@ -27,10 +21,10 @@ class AppNotificationState(
 
     private lateinit var requestQueue: RequestQueue
 
-    fun getNotifications() {
+    fun getNotifications(volleyCallBack: VolleyCallBack<String>) {
         val databaseKey = "d4d7fc5b3e2e452ebf2269495aa424eb"
         val notionApiKey = "secret_7bZz1bsybczodqK8pC2dCkhVoHer7DJNfLH0zntaK36"
-        requestQueue = Volley.newRequestQueue(activity)
+        requestQueue = Volley.newRequestQueue(App.instance)
         val url = "https://api.notion.com/v1/databases/$databaseKey/query"
         val request: StringRequest = object : StringRequest(
             Method.POST,

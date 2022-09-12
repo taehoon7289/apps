@@ -24,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(activitySplashBinding.root)
 
-        splashTextView.text = "App Drawer"
+        splashTextView.text = "Apps"
 
         lottieAnimationView.speed = 2.0f
         lottieAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
