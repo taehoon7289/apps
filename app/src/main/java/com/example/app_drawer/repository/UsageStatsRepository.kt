@@ -23,6 +23,11 @@ class UsageStatsRepository {
         private const val TAG = "UsageStatsRepository"
     }
 
+    private lateinit var items: MutableList<AppInfoVo>
+
+    init {
+        createAppInfoList()
+    }
 
     /**
      * 앱 사용정보 권한 체크
@@ -139,14 +144,16 @@ class UsageStatsRepository {
         return items
     }
 
+    fun createAppInfoList() {
+        items = mergeUsageStats(getLauncherAppList())
+    }
 
     /**
      * 타입별 앱 정보 생성
      */
     fun getAppInfoByType(type: ListViewType): MutableList<AppInfoVo> {
-        var items = mergeUsageStats(getLauncherAppList())
         // 현재 패키지 제외
-        items = items.filter {
+        val items = items.filter {
             it.packageName != App.instance.packageName
         }.toMutableList()
         return when (type) {

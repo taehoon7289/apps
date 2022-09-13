@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.AlarmAppInfoBinding
-import com.example.app_drawer.view_model.AlarmInfoVo
+import com.example.app_drawer.vo.AlarmInfoVo
 import javax.inject.Inject
 
 

@@ -5,7 +5,7 @@
 
         <variable
             name="model"
-            type="com.example.app_drawer.view_model.AlarmInfoVo" />
+            type="com.example.app_drawer.vo.AlarmInfoVo" />
     </data>
 
     <LinearLayout

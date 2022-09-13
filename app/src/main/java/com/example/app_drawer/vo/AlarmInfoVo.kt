@@ -1,4 +1,4 @@
-package com.example.app_drawer.view_model
+package com.example.app_drawer.vo
 
 import android.graphics.drawable.Drawable
 import com.example.app_drawer.code.AlarmPeriodType

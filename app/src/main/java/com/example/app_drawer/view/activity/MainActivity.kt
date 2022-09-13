@@ -42,6 +42,7 @@ class MainActivity :
     private var isPermission: Boolean = false
 
 
+    private val
     private val recentUsedAppListViewModel: RecentUsedAppListViewModel by viewModels()
     private val oftenUsedAppListViewModel: OftenUsedAppListViewModel by viewModels()
     private val unUsedAppListViewModel: UnUsedAppListViewModel by viewModels()

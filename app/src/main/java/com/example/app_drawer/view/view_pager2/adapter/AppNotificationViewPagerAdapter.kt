@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.AppNotificationInfoBinding
 import com.example.app_drawer.view.activity.NotionWebViewActivity
-import com.example.app_drawer.view_model.AppNotificationInfoViewModel
+import com.example.app_drawer.vo.NotificationInfoVo
 import javax.inject.Inject
 
 
@@ -16,11 +16,11 @@ class AppNotificationViewPagerAdapter @Inject constructor() :
 
     private val TAG = "AppNotificationViewPage"
     private lateinit var appNotificationInfoBinding: AppNotificationInfoBinding
-    private val items = mutableListOf<AppNotificationInfoViewModel>()
+    private val items = mutableListOf<NotificationInfoVo>()
 
     inner class ViewHolder(private val binding: AppNotificationInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: AppNotificationInfoViewModel) {
+        fun bind(item: NotificationInfoVo) {
             Log.d(TAG, "bind: item type ${item.type.value}")
             Log.d(TAG, "bind: item title ${item.title.value}")
             Log.d(TAG, "bind: item createDate ${item.createDate.value}")
@@ -52,7 +52,7 @@ class AppNotificationViewPagerAdapter @Inject constructor() :
 
     override fun getItemCount() = items.size
 
-    fun addItems(items: MutableList<AppNotificationInfoViewModel>) {
+    fun addItems(items: MutableList<NotificationInfoVo>) {
         items.addAll(items)
     }
 

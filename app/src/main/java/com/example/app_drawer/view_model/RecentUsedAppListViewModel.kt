@@ -42,11 +42,10 @@ class RecentUsedAppListViewModel @Inject constructor(usageStatsRepository: Usage
 //        _items.value = _items.value
     }
 
-    fun reCall() {
-        val items = mUsageStatsRepository.getAppInfoByType(
+    fun reload() {
+        _items.value = mUsageStatsRepository.getAppInfoByType(
             ListViewType.RECENT_USED
         )
-        _items.value = items
 //        _items.value = _items.value
     }
 

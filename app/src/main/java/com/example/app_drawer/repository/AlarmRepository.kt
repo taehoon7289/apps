@@ -16,7 +16,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.app_drawer.App
 import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.receiver.AppBroadcastReceiver
-import com.example.app_drawer.view_model.AlarmInfoVo
+import com.example.app_drawer.vo.AlarmInfoVo
 import com.example.app_drawer.vo.AppInfoVo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

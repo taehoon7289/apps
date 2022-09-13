@@ -43,11 +43,10 @@ class UnUsedAppListViewModel @Inject constructor(usageStatsRepository: UsageStat
 //        _items.value = _items.value
     }
 
-    fun reCall() {
-        val items = mUsageStatsRepository.getAppInfoByType(
+    fun reload() {
+        _items.value = mUsageStatsRepository.getAppInfoByType(
             ListViewType.UN_USED
         )
-        _items.value = items
 //        _items.value = _items.value
     }
 }

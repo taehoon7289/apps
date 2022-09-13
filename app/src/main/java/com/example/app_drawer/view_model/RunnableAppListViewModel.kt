@@ -42,11 +42,10 @@ class RunnableAppListViewModel @Inject constructor(usageStatsRepository: UsageSt
 //        _items.value = _items.value
     }
 
-    fun reCall() {
-        val items = mUsageStatsRepository.getAppInfoByType(
+    fun reload() {
+        _items.value = mUsageStatsRepository.getAppInfoByType(
             ListViewType.RUNNABLE
         )
-        _items.value = items
 //        _items.value = _items.value
     }
 
