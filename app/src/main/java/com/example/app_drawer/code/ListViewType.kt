@@ -1,6 +1,6 @@
 package com.example.app_drawer.code
 
-enum class AppTopicType(
+enum class ListViewType(
     val label: String
 ) {
     RECENT("최근실행"),

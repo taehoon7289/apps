@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.TopicAppInfoBinding
-import com.example.app_drawer.state.AppAlarmState
+import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.view_model.AppUsageStatsViewModel
 import com.example.app_drawer.view_model.UnExecutedListViewModel
 import java.util.*
@@ -55,8 +55,8 @@ class AppUnRecyclerViewAdapter(
                                     set(Calendar.SECOND, 0)
                                 }
                             }
-                            val appAlarmState = AppAlarmState()
-                            appAlarmState.createExecuteAlarm(item, calendar, immediatelyFlag)
+                            val alarmRepository = AlarmRepository()
+                            alarmRepository.register(item, calendar, immediatelyFlag)
 
                         },
                         calendar.get(Calendar.HOUR_OF_DAY),

@@ -1,4 +1,4 @@
-package com.example.app_drawer.state
+package com.example.app_drawer.repository
 
 import com.android.volley.AuthFailureError
 import com.android.volley.RequestQueue
@@ -9,7 +9,7 @@ import com.android.volley.toolbox.Volley
 import com.example.app_drawer.App
 
 
-class AppNotificationState {
+class AppNotificationRepository {
 
     interface VolleyCallBack<T> {
         fun success(response: T)

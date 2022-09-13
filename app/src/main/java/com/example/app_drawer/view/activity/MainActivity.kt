@@ -12,8 +12,8 @@ import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.grid_view.adapter.AppGridViewAdapter
 import com.example.app_drawer.recycler_view.adapter.*
 import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
-import com.example.app_drawer.state.AppNotificationState
-import com.example.app_drawer.state.AppUsageStatsState
+import com.example.app_drawer.repository.AppNotificationRepository
+import com.example.app_drawer.repository.UsageStatsRepository
 import com.example.app_drawer.view_model.OftenExecutedListViewModel
 import com.example.app_drawer.view_model.RecentExecutedListViewModel
 import com.example.app_drawer.view_model.RunnableListViewModel
@@ -33,7 +33,7 @@ class MainActivity :
     // 패키지 매니저 앱 정보
     // 앱 정보 상태 관리
     @Inject
-    lateinit var appUsageStatsState: AppUsageStatsState
+    lateinit var usageStatsRepository: UsageStatsRepository
 
     @Inject
     lateinit var appGridViewAdapter: AppGridViewAdapter
@@ -58,7 +58,7 @@ class MainActivity :
 
     // 앱 알림정보
     @Inject
-    lateinit var appNotificationState: AppNotificationState
+    lateinit var appNotificationRepository: AppNotificationRepository
 //
 //    // 앱 알람 정보
 //    @Inject
@@ -91,9 +91,9 @@ class MainActivity :
 //        createNotificationView()
 //        createAlarmListView()
         createAppView()
-        val mode = appUsageStatsState.checkForPermissionUsageStats()
+        val mode = usageStatsRepository.checkForPermissionUsageStats()
         if (mode != AppOpsManager.MODE_ALLOWED) {
-            appUsageStatsState.isOpenSettingIntent()
+            usageStatsRepository.isOpenSettingIntent()
         } else {
             isPermission = true
 

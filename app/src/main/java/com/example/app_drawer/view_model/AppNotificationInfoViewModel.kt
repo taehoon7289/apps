@@ -2,14 +2,14 @@ package com.example.app_drawer.view_model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.app_drawer.code.AppNotificationType
+import com.example.app_drawer.code.NotificationType
 
 data class AppNotificationInfoViewModel(
-    private val _type: AppNotificationType,
+    private val _type: NotificationType,
     private val _title: String,
     private val _createDate: String,
 ) : ViewModel() {
-    var type: MutableLiveData<AppNotificationType> = MutableLiveData()
+    var type: MutableLiveData<NotificationType> = MutableLiveData()
     var title: MutableLiveData<String> = MutableLiveData()
     var createDate: MutableLiveData<String> = MutableLiveData()
 

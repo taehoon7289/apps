@@ -3,27 +3,29 @@ package com.example.app_drawer.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.app_drawer.code.AppTopicType
-import com.example.app_drawer.state.AppUsageStatsState
+import com.example.app_drawer.code.ListViewType
+import com.example.app_drawer.repository.UsageStatsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class UnExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsageStatsState) :
+class UnExecutedListViewModel @Inject constructor(usageStatsRepository: UsageStatsRepository) :
     ViewModel() {
 
     private var _items: MutableLiveData<MutableList<AppUsageStatsViewModel>>
 
+    private val mAppUsageStatsState = usageStatsRepository
+
     init {
         _items = MutableLiveData(
-            appUsageStatsState.getAppInfoState(
-                AppTopicType.UN
+            usageStatsRepository.getAppInfoByType(
+                ListViewType.UN
             )
         )
     }
 
-    @Inject
-    lateinit var appUsageStatsState: AppUsageStatsState
+//    @Inject
+//    lateinit var appUsageStatsState: AppUsageStatsState
 
     val items: LiveData<MutableList<AppUsageStatsViewModel>>
         get() = _items
@@ -49,8 +51,8 @@ class UnExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsageSt
     }
 
     fun reCall() {
-        val items = appUsageStatsState.getAppInfoState(
-            AppTopicType.UN
+        val items = mAppUsageStatsState.getAppInfoByType(
+            ListViewType.UN
         )
         _items.value = items
         _items.value = _items.value

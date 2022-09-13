@@ -5,18 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class AppAlarmListViewModel : ViewModel() {
-    private val _items: MutableLiveData<MutableList<AppAlarmViewModel>> = MutableLiveData(
+    private val _items: MutableLiveData<MutableList<AlarmInfoVo>> = MutableLiveData(
         mutableListOf()
     )
-    val items: LiveData<MutableList<AppAlarmViewModel>>
+    val items: LiveData<MutableList<AlarmInfoVo>>
         get() = _items
 
-    fun addItem(item: AppAlarmViewModel) {
+    fun addItem(item: AlarmInfoVo) {
         _items.value?.add(item)
         _items.value = _items.value
     }
 
-    fun addAllItems(items: List<AppAlarmViewModel>) {
+    fun addAllItems(items: List<AlarmInfoVo>) {
         _items.value?.addAll(items)
         _items.value = _items.value
     }
@@ -26,7 +26,7 @@ class AppAlarmListViewModel : ViewModel() {
         _items.value = _items.value
     }
 
-    fun removeItem(item: AppAlarmViewModel) {
+    fun removeItem(item: AlarmInfoVo) {
         _items.value?.remove(item)
         _items.value = _items.value
     }

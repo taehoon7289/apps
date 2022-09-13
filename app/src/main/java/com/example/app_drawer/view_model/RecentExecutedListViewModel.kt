@@ -3,26 +3,26 @@ package com.example.app_drawer.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.app_drawer.code.AppTopicType
-import com.example.app_drawer.state.AppUsageStatsState
+import com.example.app_drawer.code.ListViewType
+import com.example.app_drawer.repository.UsageStatsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class RecentExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsageStatsState) :
+class RecentExecutedListViewModel @Inject constructor(usageStatsRepository: UsageStatsRepository) :
     ViewModel() {
     private var _items: MutableLiveData<MutableList<AppUsageStatsViewModel>>
 
     init {
         _items = MutableLiveData(
-            appUsageStatsState.getAppInfoState(
-                AppTopicType.RECENT
+            usageStatsRepository.getAppInfoByType(
+                ListViewType.RECENT
             )
         )
     }
 
     @Inject
-    lateinit var appUsageStatsState: AppUsageStatsState
+    lateinit var usageStatsRepository: UsageStatsRepository
 
     val items: LiveData<MutableList<AppUsageStatsViewModel>>
         get() = _items
@@ -48,8 +48,8 @@ class RecentExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsa
     }
 
     fun reCall() {
-        val items = appUsageStatsState.getAppInfoState(
-            AppTopicType.RECENT
+        val items = usageStatsRepository.getAppInfoByType(
+            ListViewType.RECENT
         )
         _items.value = items
         _items.value = _items.value

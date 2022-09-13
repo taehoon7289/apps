@@ -3,17 +3,17 @@ package com.example.app_drawer.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.app_drawer.code.AppTopicType
-import com.example.app_drawer.state.AppUsageStatsState
+import com.example.app_drawer.code.ListViewType
+import com.example.app_drawer.repository.UsageStatsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class RunnableListViewModel @Inject constructor(appUsageStatsState: AppUsageStatsState) :
+class RunnableListViewModel @Inject constructor(usageStatsRepository: UsageStatsRepository) :
     ViewModel() {
     private val _items: MutableLiveData<MutableList<AppUsageStatsViewModel>> = MutableLiveData(
-        appUsageStatsState.getAppInfoState(
-            AppTopicType.RUNNABLE
+        usageStatsRepository.getAppInfoByType(
+            ListViewType.RUNNABLE
         )
     )
     val items: LiveData<MutableList<AppUsageStatsViewModel>>

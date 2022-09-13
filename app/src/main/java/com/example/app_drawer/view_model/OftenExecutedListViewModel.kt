@@ -3,26 +3,26 @@ package com.example.app_drawer.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.app_drawer.code.AppTopicType
-import com.example.app_drawer.state.AppUsageStatsState
+import com.example.app_drawer.code.ListViewType
+import com.example.app_drawer.repository.UsageStatsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class OftenExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsageStatsState) :
+class OftenExecutedListViewModel @Inject constructor(usageStatsRepository: UsageStatsRepository) :
     ViewModel() {
     private var _items: MutableLiveData<MutableList<AppUsageStatsViewModel>>
 
     init {
         _items = MutableLiveData(
-            appUsageStatsState.getAppInfoState(
-                AppTopicType.OFTEN
+            usageStatsRepository.getAppInfoByType(
+                ListViewType.OFTEN
             )
         )
     }
 
     @Inject
-    lateinit var appUsageStatsState: AppUsageStatsState
+    lateinit var usageStatsRepository: UsageStatsRepository
 
     val items: LiveData<MutableList<AppUsageStatsViewModel>>
         get() = _items
@@ -48,8 +48,8 @@ class OftenExecutedListViewModel @Inject constructor(appUsageStatsState: AppUsag
     }
 
     fun reCall() {
-        val items = appUsageStatsState.getAppInfoState(
-            AppTopicType.OFTEN
+        val items = usageStatsRepository.getAppInfoByType(
+            ListViewType.OFTEN
         )
         _items.value = items
         _items.value = _items.value

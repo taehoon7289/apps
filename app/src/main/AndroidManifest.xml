@@ -5,7 +5,8 @@
     <!-- 실행가능 앱 리스트 조회 권한 -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" /> <!-- 앱 사용 상태 조회 권한 -->
+        tools:ignore="QueryAllPackagesPermission" />
+    <!-- 앱 사용 상태 조회 권한 -->
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" /> <!-- 스케쥴 정확한 시간 권한 -->

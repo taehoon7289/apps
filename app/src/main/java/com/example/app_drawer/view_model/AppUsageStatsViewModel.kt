@@ -5,7 +5,9 @@ import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class AppUsageStatsViewModel : ViewModel() {
 
     var _iconDrawable: MutableLiveData<Drawable?> = MutableLiveData(null)

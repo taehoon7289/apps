@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.AlarmAppInfoBinding
-import com.example.app_drawer.view_model.AppAlarmViewModel
+import com.example.app_drawer.view_model.AlarmInfoVo
 import javax.inject.Inject
 
 
@@ -12,12 +12,12 @@ class AppAlarmRecyclerViewAdapter @Inject constructor() :
     RecyclerView.Adapter<AppAlarmRecyclerViewAdapter.ViewHolder>() {
 
     private val TAG = "AppAlarmRecyclerViewAda"
-    private val items: MutableList<AppAlarmViewModel> = mutableListOf()
+    private val items: MutableList<AlarmInfoVo> = mutableListOf()
 
     inner class ViewHolder(private val binding: AlarmAppInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: AppAlarmViewModel) {
+        fun bind(item: AlarmInfoVo) {
             binding.model = item
         }
 
@@ -36,7 +36,7 @@ class AppAlarmRecyclerViewAdapter @Inject constructor() :
 
     override fun getItemCount() = items.size
 
-    fun addItems(items: MutableList<AppAlarmViewModel>) {
+    fun addItems(items: MutableList<AlarmInfoVo>) {
         items.addAll(items)
     }
 

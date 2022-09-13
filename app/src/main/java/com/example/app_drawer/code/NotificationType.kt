@@ -1,6 +1,6 @@
 package com.example.app_drawer.code
 
-enum class AppNotificationType(
+enum class NotificationType(
     val label: String
 ) {
     NOTICE("공지사항"),
