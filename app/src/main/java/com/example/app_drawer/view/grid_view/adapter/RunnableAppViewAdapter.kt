@@ -14,7 +14,7 @@ import com.example.app_drawer.vo.AppInfoVo
 import java.util.*
 import javax.inject.Inject
 
-class AppGridViewAdapter @Inject constructor() : BaseAdapter() {
+class RunnableAppViewAdapter @Inject constructor() : BaseAdapter() {
 
     private lateinit var runnableAppInfoBinding: RunnableAppInfoBinding
     private val TAG = "AppGridViewAdapter"

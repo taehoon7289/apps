@@ -9,20 +9,19 @@ import androidx.core.view.isGone
 import com.example.app_drawer.BindActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.ActivityMainBinding
-import com.example.app_drawer.grid_view.adapter.AppGridViewAdapter
-import com.example.app_drawer.recycler_view.adapter.*
-import com.example.app_drawer.recycler_view.decoration.RecyclerViewHorizontalDecoration
+import com.example.app_drawer.grid_view.adapter.RunnableAppViewAdapter
+import com.example.app_drawer.recycler_view.adapter.OftenUsedAppViewAdapter
+import com.example.app_drawer.recycler_view.adapter.RecentUsedAppViewAdapter
+import com.example.app_drawer.recycler_view.adapter.UnUsedAppViewAdapter
+import com.example.app_drawer.recycler_view.decoration.HorizontalDecoration
 import com.example.app_drawer.repository.AppNotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
-import com.example.app_drawer.view_model.OftenExecutedListViewModel
-import com.example.app_drawer.view_model.RecentExecutedListViewModel
-import com.example.app_drawer.view_model.RunnableListViewModel
-import com.example.app_drawer.view_model.UnExecutedListViewModel
-import com.example.app_drawer.view_pager2.adapter.AppNotificationViewPagerAdapter
+import com.example.app_drawer.view_model.OftenUsedAppListViewModel
+import com.example.app_drawer.view_model.RecentUsedAppListViewModel
+import com.example.app_drawer.view_model.RunnableAppListViewModel
+import com.example.app_drawer.view_model.UnUsedAppListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import javax.inject.Named
-import kotlin.math.abs
 
 @AndroidEntryPoint
 class MainActivity :
@@ -35,61 +34,22 @@ class MainActivity :
     @Inject
     lateinit var usageStatsRepository: UsageStatsRepository
 
-    @Inject
-    lateinit var appGridViewAdapter: AppGridViewAdapter
-
-    @Inject
-    lateinit var appAlarmRecyclerViewAdapter: AppAlarmRecyclerViewAdapter
-
-//    @Inject
-//    @Named("recent")
-//    lateinit var appRecentRecyclerViewAdapter: AppRecyclerViewAdapter
-
-    @Inject
-    @Named("often")
-    lateinit var appOftenRecyclerViewAdapter: AppRecyclerViewAdapter
-
-    @Inject
-    @Named("un")
-    lateinit var appUnRecyclerViewAdapter: AppRecyclerViewAdapter
-
-    @Inject
-    lateinit var appNotificationViewPagerAdapter: AppNotificationViewPagerAdapter
-
     // 앱 알림정보
     @Inject
     lateinit var appNotificationRepository: AppNotificationRepository
-//
-//    // 앱 알람 정보
-//    @Inject
-//    private lateinit var appAlarmState: AppAlarmState
 
     // 앱 사용정보 권한
     private var isPermission: Boolean = false
 
-    private var intervalFlag = false
 
-//    private var appNotificationInfoList: MutableList<AppNotificationInfoViewModel> = mutableListOf()
-
-
-    private val recentExecutedListViewModel: RecentExecutedListViewModel by viewModels()
-    private val oftenExecutedListViewModel: OftenExecutedListViewModel by viewModels()
-    private val unExecutedListViewModel: UnExecutedListViewModel by viewModels()
-    private val runnableListViewModel: RunnableListViewModel by viewModels()
+    private val recentUsedAppListViewModel: RecentUsedAppListViewModel by viewModels()
+    private val oftenUsedAppListViewModel: OftenUsedAppListViewModel by viewModels()
+    private val unUsedAppListViewModel: UnUsedAppListViewModel by viewModels()
+    private val runnableAppListViewModel: RunnableAppListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: ####")
         super.onCreate(savedInstanceState)
-
-//        binding.recentExecutedListViewModel = recentExecutedListViewModel
-//        binding.oftenExecutedListViewModel = oftenExecutedListViewModel
-//        binding.unExecutedListViewModel = unExecutedListViewModel
-//        binding.runnableListViewModel = runnableListViewModel
-
-        // 각 인스턴스 생성
-//        appAlarmState.clearAlarm()
-//        createNotificationView()
-//        createAlarmListView()
         createAppView()
         val mode = usageStatsRepository.checkForPermissionUsageStats()
         if (mode != AppOpsManager.MODE_ALLOWED) {
@@ -205,77 +165,101 @@ class MainActivity :
         with(binding) {
             // 최근 실행된 앱 recyclerView
             recentExecutedAppTextView.text = "최근 실행 앱"
-            val appRecentRecyclerViewAdapter =
-                AppRecentRecyclerViewAdapter(recentExecutedListViewModel)
-            recentExecutedAppRecyclerView.adapter = appRecentRecyclerViewAdapter
+            val recentUsedAppViewAdapter =
+                RecentUsedAppViewAdapter(
+                    {
+                        Log.d(TAG, "RecentUsedAppViewAdapter createAppView: click!!!!!!!!!!!11")
+                    },
+                    {
+                        Log.d(
+                            TAG,
+                            "RecentUsedAppViewAdapter createAppView: longCllick!!!!!!!!!!!11"
+                        )
+                    }
+                )
+            recentExecutedAppRecyclerView.adapter = recentUsedAppViewAdapter
             // item 사이 간격
             if (recentExecutedAppRecyclerView.itemDecorationCount > 0) {
                 recentExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
             recentExecutedAppRecyclerView.addItemDecoration(
-                RecyclerViewHorizontalDecoration(
+                HorizontalDecoration(
                     20
                 )
             )
-            recentExecutedListViewModel.items.observe(this@MainActivity) {
-                appRecentRecyclerViewAdapter.clearItems()
-                appRecentRecyclerViewAdapter.addItems(recentExecutedListViewModel!!.items.value!!)
+            recentUsedAppListViewModel.items.observe(this@MainActivity) {
+                recentUsedAppViewAdapter.clearItems()
+                recentUsedAppViewAdapter.addItems(recentUsedAppListViewModel!!.items.value!!)
                 recentExecutedAppLinearLayout.isGone =
-                    recentExecutedListViewModel!!.items.value?.isEmpty() == true
-                appRecentRecyclerViewAdapter.notifyDataSetChanged()
+                    recentUsedAppListViewModel!!.items.value?.isEmpty() == true
+                recentUsedAppViewAdapter.notifyDataSetChanged()
             }
 
             // 자주 실행하는 앱
             oftenExecutedAppTextView.text = "자주 실행하는 앱"
-            val appOftenRecyclerViewAdapter =
-                AppOftenRecyclerViewAdapter(oftenExecutedListViewModel)
-            oftenExecutedAppRecyclerView.adapter = appOftenRecyclerViewAdapter
+            val oftenUsedAppViewAdapter =
+                OftenUsedAppViewAdapter({
+                    Log.d(TAG, "OftenUsedAppViewAdapter createAppView: click!!!!!!!!!!!11")
+                },
+                    {
+                        Log.d(TAG, "OftenUsedAppViewAdapter createAppView: longCllick!!!!!!!!!!!11")
+                    })
+            oftenExecutedAppRecyclerView.adapter = oftenUsedAppViewAdapter
 
             // item 사이 간격
             if (oftenExecutedAppRecyclerView.itemDecorationCount > 0) {
                 oftenExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
             oftenExecutedAppRecyclerView.addItemDecoration(
-                RecyclerViewHorizontalDecoration(
+                HorizontalDecoration(
                     20
                 )
             )
-            oftenExecutedListViewModel!!.items.observe(this@MainActivity) {
-                appOftenRecyclerViewAdapter.clearItems()
-                appOftenRecyclerViewAdapter.addItems(oftenExecutedListViewModel!!.items.value!!)
+            oftenUsedAppListViewModel!!.items.observe(this@MainActivity) {
+                oftenUsedAppViewAdapter.clearItems()
+                oftenUsedAppViewAdapter.addItems(oftenUsedAppListViewModel!!.items.value!!)
                 oftenExecutedAppLinearLayout.isGone =
-                    oftenExecutedListViewModel!!.items.value?.isEmpty() == true
-                appOftenRecyclerViewAdapter.notifyDataSetChanged()
+                    oftenUsedAppListViewModel!!.items.value?.isEmpty() == true
+                oftenUsedAppViewAdapter.notifyDataSetChanged()
             }
 
             // 아직 실행하지 않은 앱 recyclerView
             unExecutedAppTextView.text = "아직 미실행 앱"
-            val appUnRecyclerViewAdapter =
-                AppUnRecyclerViewAdapter(unExecutedListViewModel)
-            unExecutedAppRecyclerView.adapter = appUnRecyclerViewAdapter
+            val unUsedAppViewAdapter =
+                UnUsedAppViewAdapter({
+                    Log.d(TAG, "UnUsedAppViewAdapter createAppView: click!!!!!!!!!!!11")
+                },
+                    {
+                        Log.d(
+                            TAG,
+                            "UnUsedAppViewAdapter createAppView: longCllick!!!!!!!!!!!11"
+                        )
+                    })
+            unExecutedAppRecyclerView.adapter = unUsedAppViewAdapter
 
             // item 사이 간격
             if (unExecutedAppRecyclerView.itemDecorationCount > 0) {
                 unExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
-            unExecutedAppRecyclerView.addItemDecoration(RecyclerViewHorizontalDecoration(20))
-            unExecutedListViewModel!!.items.observe(this@MainActivity) {
-                appUnRecyclerViewAdapter.clearItems()
-                appUnRecyclerViewAdapter.addItems(unExecutedListViewModel!!.items.value!!)
+            unExecutedAppRecyclerView.addItemDecoration(HorizontalDecoration(20))
+            unUsedAppListViewModel!!.items.observe(this@MainActivity) {
+                unUsedAppViewAdapter.clearItems()
+                unUsedAppViewAdapter.addItems(unUsedAppListViewModel!!.items.value!!)
                 unExecutedAppLinearLayout.isGone =
-                    unExecutedListViewModel!!.items.value?.isEmpty() == true
-                appUnRecyclerViewAdapter.notifyDataSetChanged()
+                    unUsedAppListViewModel!!.items.value?.isEmpty() == true
+                unUsedAppViewAdapter.notifyDataSetChanged()
             }
             // 실행가능한 앱 gridView
             runnableAppTextView.text = "실행 가능한 앱"
-            runnableAppGridView.adapter = appGridViewAdapter
+            val runnableAppViewAdapter = RunnableAppViewAdapter()
+            runnableAppGridView.adapter = runnableAppViewAdapter
             // 스크롤 안보이게 하는 효과남
             runnableAppGridView.isVerticalScrollBarEnabled = false
-            runnableListViewModel!!.items.observe(this@MainActivity) {
-                appGridViewAdapter.clearItems()
-                appGridViewAdapter.addItems(runnableListViewModel!!.items.value!!)
+            runnableAppListViewModel!!.items.observe(this@MainActivity) {
+                runnableAppViewAdapter.clearItems()
+                runnableAppViewAdapter.addItems(runnableAppListViewModel!!.items.value!!)
                 recentExecutedAppLinearLayout.isGone =
-                    runnableListViewModel!!.items.value?.isEmpty() == true
+                    runnableAppListViewModel!!.items.value?.isEmpty() == true
                 unExecutedAppRecyclerView.adapter?.notifyDataSetChanged()
             }
         }
@@ -298,51 +282,5 @@ class MainActivity :
         super.onDestroy()
         Log.d(TAG, "onDestroy: ")
     }
-
-
-    private fun startIntervalPostDelayed(time: Long = 2000) {
-        if (intervalFlag) {
-            stopIntervalPostDelayed()
-        } else {
-            intervalFlag = true
-        }
-        intervalPostDelayed(time)
-    }
-
-    private fun stopIntervalPostDelayed() {
-        intervalFlag = false
-        Log.d(TAG, "stopIntervalPostDelayed: intervalFlag $intervalFlag")
-    }
-
-    private fun intervalPostDelayed(time: Long) {
-        Log.d(TAG, "intervalPostDelayed: intervalFlag $intervalFlag")
-        with(binding) {
-            if (!intervalFlag) {
-                return
-            }
-            appNotificationInfoViewPager.postDelayed({
-                appNotificationInfoViewPager.currentItem =
-                    abs(appNotificationInfoViewPager.currentItem - 1)
-                intervalPostDelayed(time)
-            }, time)
-        }
-    }
-
-//    private fun createNotificationView() {
-//        with(binding) {
-//            appNotificationInfoViewPager.adapter = appNotificationViewPagerAdapter
-//            appNotificationInfoViewPagerTextView.text =
-//                "${appNotificationInfoViewPager.currentItem.plus(1)}/${app.size}"
-//            appNotificationInfoViewPager.registerOnPageChangeCallback(object :
-//                ViewPager2.OnPageChangeCallback() {
-//                override fun onPageSelected(position: Int) {
-//                    super.onPageSelected(position)
-//                    appNotificationInfoViewPagerTextView.text =
-//                        "${position + 1}/${appNotificationInfoList.size}"
-//                }
-//            })
-////            startIntervalPostDelayed(5000)
-//        }
-//    }
 
 }

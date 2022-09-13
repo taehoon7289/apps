@@ -150,21 +150,21 @@ class UsageStatsRepository {
             it.packageName != App.instance.packageName
         }.toMutableList()
         return when (type) {
-            ListViewType.RECENT -> {
+            ListViewType.RECENT_USED -> {
                 items.filter {
                     (it.lastTimeStamp
                         ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp
                 }.sortedByDescending { it.lastTimeStamp }.take(10)
                     .toMutableList()
             }
-            ListViewType.OFTEN -> {
+            ListViewType.OFTEN_USED -> {
                 items.filter {
                     (it.lastTimeStamp
                         ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp && (it.launchCount
                         ?: 0L) > 0
                 }.sortedByDescending { it.launchCount }.take(10).toMutableList()
             }
-            ListViewType.UN -> {
+            ListViewType.UN_USED -> {
                 items.filter {
                     (it.lastTimeStamp ?: 0L) == 0L
                 }.toMutableList()

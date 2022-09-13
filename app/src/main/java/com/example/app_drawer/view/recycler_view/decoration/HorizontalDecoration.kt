@@ -5,7 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
-class RecyclerViewHorizontalDecoration() : ItemDecoration() {
+class HorizontalDecoration() : ItemDecoration() {
     private var horizontalDivWidth = 0
 
     constructor(divWidth: Int) : this() {

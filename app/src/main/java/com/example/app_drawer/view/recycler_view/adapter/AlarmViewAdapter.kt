@@ -8,8 +8,8 @@ import com.example.app_drawer.view_model.AlarmInfoVo
 import javax.inject.Inject
 
 
-class AppAlarmRecyclerViewAdapter @Inject constructor() :
-    RecyclerView.Adapter<AppAlarmRecyclerViewAdapter.ViewHolder>() {
+class AlarmViewAdapter @Inject constructor() :
+    RecyclerView.Adapter<AlarmViewAdapter.ViewHolder>() {
 
     private val TAG = "AppAlarmRecyclerViewAda"
     private val items: MutableList<AlarmInfoVo> = mutableListOf()
