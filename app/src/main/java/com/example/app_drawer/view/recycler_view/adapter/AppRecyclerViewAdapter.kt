@@ -2,12 +2,14 @@ package com.example.app_drawer.recycler_view.adapter
 
 import android.app.TimePickerDialog
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.databinding.TopicAppInfoBinding
 import com.example.app_drawer.repository.AlarmRepository
-import com.example.app_drawer.view_model.AppUsageStatsViewModel
+import com.example.app_drawer.vo.AppInfoVo
 import java.util.*
 import javax.inject.Inject
 
@@ -16,16 +18,16 @@ class AppRecyclerViewAdapter @Inject constructor() :
     RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder>() {
 
     private val TAG = "AppRecyclerViewAdapter"
-    private val items: MutableList<AppUsageStatsViewModel> = mutableListOf()
+    private val items: MutableList<AppInfoVo> = mutableListOf()
 
     inner class ViewHolder(private val binding: TopicAppInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: AppUsageStatsViewModel) {
+        fun bind(item: AppInfoVo) {
             binding.model = item
             binding.iconImageView.apply {
                 setOnClickListener {
-                    this.context.startActivity(item.execIntent.value)
+                    this.context.startActivity(item.execIntent)
                 }
                 setOnLongClickListener {
                     var calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
@@ -50,7 +52,18 @@ class AppRecyclerViewAdapter @Inject constructor() :
                                 }
                             }
                             val alarmRepository = AlarmRepository()
-                            alarmRepository.register(item, calendar, immediatelyFlag)
+                            alarmRepository.register(
+                                AlarmPeriodType.ONCE,
+                                item,
+                                calendar,
+                                immediatelyFlag,
+                                {
+                                    Log.d(TAG, "bind: successCallback")
+                                },
+                                {
+                                    Log.d(TAG, "bind: failCallback")
+                                },
+                            )
 
                         },
                         calendar.get(Calendar.HOUR_OF_DAY),
@@ -85,7 +98,7 @@ class AppRecyclerViewAdapter @Inject constructor() :
 
     override fun getItemCount() = items.size
 
-    fun addItems(items: MutableList<AppUsageStatsViewModel>) {
+    fun addItems(items: MutableList<AppInfoVo>) {
         this.items.addAll(items)
     }
 

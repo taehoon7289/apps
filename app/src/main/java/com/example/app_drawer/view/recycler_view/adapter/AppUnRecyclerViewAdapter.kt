@@ -2,32 +2,40 @@ package com.example.app_drawer.recycler_view.adapter
 
 import android.app.TimePickerDialog
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.databinding.TopicAppInfoBinding
 import com.example.app_drawer.repository.AlarmRepository
-import com.example.app_drawer.view_model.AppUsageStatsViewModel
 import com.example.app_drawer.view_model.UnExecutedListViewModel
+import com.example.app_drawer.vo.AppInfoVo
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class AppUnRecyclerViewAdapter(
     private val viewModel: UnExecutedListViewModel
 ) :
     RecyclerView.Adapter<AppUnRecyclerViewAdapter.ViewHolder>() {
 
     private val TAG = "AppUnRecyclerViewAdapte"
-    private val items: MutableList<AppUsageStatsViewModel> = mutableListOf()
+    private val items: MutableList<AppInfoVo> = mutableListOf()
+
+    @Inject
+    private lateinit var alarmRepository: AlarmRepository
 
     inner class ViewHolder(private val binding: TopicAppInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: AppUsageStatsViewModel) {
+        fun bind(item: AppInfoVo) {
             binding.model = item
             binding.iconImageView.apply {
                 setOnClickListener {
-                    this.context.startActivity(item.execIntent.value)
+                    this.context.startActivity(item.execIntent)
                     postDelayed({
                         viewModel.reCall()
                     }, 500)
@@ -56,7 +64,18 @@ class AppUnRecyclerViewAdapter(
                                 }
                             }
                             val alarmRepository = AlarmRepository()
-                            alarmRepository.register(item, calendar, immediatelyFlag)
+                            alarmRepository.register(
+                                AlarmPeriodType.ONCE,
+                                item,
+                                calendar,
+                                immediatelyFlag,
+                                {
+                                    Log.d(TAG, "bind: successCallback")
+                                },
+                                {
+                                    Log.d(TAG, "bind: failCallback")
+                                },
+                            )
 
                         },
                         calendar.get(Calendar.HOUR_OF_DAY),
@@ -91,7 +110,7 @@ class AppUnRecyclerViewAdapter(
 
     override fun getItemCount() = items.size
 
-    fun addItems(items: MutableList<AppUsageStatsViewModel>) {
+    fun addItems(items: MutableList<AppInfoVo>) {
         this.items.addAll(items)
     }
 
