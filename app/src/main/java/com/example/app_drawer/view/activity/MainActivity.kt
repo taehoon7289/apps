@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AppOpsManager
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.view.isGone
@@ -19,10 +20,7 @@ import com.example.app_drawer.recycler_view.decoration.HorizontalDecoration
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.repository.AppNotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
-import com.example.app_drawer.view_model.OftenUsedAppListViewModel
-import com.example.app_drawer.view_model.RecentUsedAppListViewModel
-import com.example.app_drawer.view_model.RunnableAppListViewModel
-import com.example.app_drawer.view_model.UnUsedAppListViewModel
+import com.example.app_drawer.view_model.*
 import com.example.app_drawer.vo.AppInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -50,6 +48,7 @@ class MainActivity :
     private var isPermission: Boolean = false
 
 
+    private val appAlarmListViewModel: AppAlarmListViewModel by viewModels()
     private val recentUsedAppListViewModel: RecentUsedAppListViewModel by viewModels()
     private val oftenUsedAppListViewModel: OftenUsedAppListViewModel by viewModels()
     private val unUsedAppListViewModel: UnUsedAppListViewModel by viewModels()
@@ -192,6 +191,15 @@ class MainActivity :
 
     private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
         this@MainActivity.startActivity(item.execIntent)
+
+        Handler().postDelayed({
+            usageStatsRepository.createAppInfoList()
+            recentUsedAppListViewModel.reload()
+            oftenUsedAppListViewModel.reload()
+            unUsedAppListViewModel.reload()
+            runnableAppListViewModel.reload()
+        }, 500)
+
         Log.d(TAG, "clickListenerLambda: start!!!")
     }
 
@@ -230,11 +238,20 @@ class MainActivity :
                         Log.d(TAG, "bind: failCallback")
                     })
 
+                Handler().postDelayed({
+                    usageStatsRepository.createAppInfoList()
+                    recentUsedAppListViewModel.reload()
+                    oftenUsedAppListViewModel.reload()
+                    unUsedAppListViewModel.reload()
+                    runnableAppListViewModel.reload()
+                }, 500)
             },
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE),
             false
         ).show()
+
+        Log.d(TAG, "longClickListenerLambda:  동작!!!!!!!!!")
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.app_drawer.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,6 +47,7 @@ class RecentUsedAppListViewModel @Inject constructor(usageStatsRepository: Usage
         _items.value = mUsageStatsRepository.getAppInfoByType(
             ListViewType.RECENT_USED
         )
+        Log.d("reload", "reload: end$$$$$$$$$")
 //        _items.value = _items.value
     }
 

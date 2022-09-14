@@ -9,6 +9,7 @@ import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Process
 import android.provider.Settings
+import android.util.Log
 import com.example.app_drawer.App
 import com.example.app_drawer.code.ListViewType
 import com.example.app_drawer.view.activity.MainActivity
@@ -146,6 +147,7 @@ class UsageStatsRepository {
 
     fun createAppInfoList() {
         items = mergeUsageStats(getLauncherAppList())
+        Log.d(TAG, "createAppInfoList: end!!!!!!!!")
     }
 
     /**
@@ -156,7 +158,7 @@ class UsageStatsRepository {
         val items = items.filter {
             it.packageName != App.instance.packageName
         }.toMutableList()
-        return when (type) {
+        val temps = when (type) {
             ListViewType.RECENT_USED -> {
                 items.filter {
                     (it.lastTimeStamp
@@ -180,6 +182,8 @@ class UsageStatsRepository {
                 items.sortedBy { it.label }.toMutableList()
             }
         }
+        Log.d(TAG, "getAppInfoByType: end############3")
+        return temps
     }
 
 }
