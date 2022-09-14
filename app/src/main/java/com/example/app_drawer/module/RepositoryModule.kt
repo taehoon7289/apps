@@ -1,7 +1,5 @@
 package com.example.app_drawer.module
 
-import android.content.Context
-import androidx.datastore.preferences.preferencesDataStore
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.repository.AppNotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
@@ -17,20 +15,15 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun providerAlarmState() = AlarmRepository()
+    fun providerAlarmRepository() = AlarmRepository()
 
     @Provides
     @Singleton
-    fun providerNotificationState() = AppNotificationRepository()
+    fun providerNotificationRepository() = AppNotificationRepository()
 
     @Provides
     @Singleton
-    fun providerUsageStatsState() = UsageStatsRepository()
+    fun providerUsageStatsRepository() = UsageStatsRepository()
 
-
-
-    @Provides
-    @Singleton
-    fun providerDataStore() = dataStore
 
 }

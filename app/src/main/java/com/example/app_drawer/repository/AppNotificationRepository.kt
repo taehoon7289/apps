@@ -1,42 +1,53 @@
 package com.example.app_drawer.repository
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.http.GET
+import android.util.Log
+import com.example.app_drawer.NotionApiService
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Response
+import retrofit2.Retrofit
 
-interface JsonPlaceHolderApi {
-
-    @GET("/v1/databases/${Companion.databaseKey}/query")
-    fun boardListPost(@FieldMap fields: MutableMap<String, String>): Call<ResponseBody>
-
-    companion object {
-        const val databaseKey = "d4d7fc5b3e2e452ebf2269495aa424eb"
-    }
-}
-
-object NoticeNetwork {
-    private const val baseUrl = "여기에는 베이스 url"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    fun getJsonApi(): JsonPlaceHolderApi {
-        return retrofit.create(JsonPlaceHolderApi::class.java)
-    }
-}
-
-class AppNotificationRepository<T> {
+class AppNotificationRepository {
 
     private val TAG = "AppNotificationState"
 
 //    private lateinit var requestQueue: RequestQueue
 
-    fun getNotifications() {
+    private lateinit var retrofit: Retrofit
+    private lateinit var notionApiService: NotionApiService
 
-        val notionApiKey = "secret_7bZz1bsybczodqK8pC2dCkhVoHer7DJNfLH0zntaK36"
+    init {
+        val okHttpClient = OkHttpClient.Builder().run {
+            addInterceptor(object : Interceptor {
+                override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
+                    val newRequest = request().newBuilder()
+                        .addHeader(
+                            "Authorization",
+                            "Bearer secret_7bZz1bsybczodqK8pC2dCkhVoHer7DJNfLH0zntaK36"
+                        )
+                        .addHeader("Notion-Version", "2022-06-28")
+                        .addHeader("Content-Type", "application/json")
+                        .build()
+                    proceed(newRequest)
+                }
+            })
+        }.build()
+
+        retrofit = Retrofit.Builder().client(okHttpClient).baseUrl("https://api.notion.com").build()
+        notionApiService = retrofit.create(NotionApiService::class.java)
+    }
+
+    fun getNotificationList() {
+
+
+        val result = notionApiService.notificationList(
+            databaseKey = "d4d7fc5b3e2e452ebf2269495aa424eb"
+        )
+
+
+
+        Log.d(TAG, "getNotificationList: result ${result.execute().body()}")
+
 //        requestQueue = Volley.newRequestQueue(App.instance)
 //        val url = "https://api.notion.com/v1/databases/$databaseKey/query"
 //        val request = object : JsonRequest<T>(

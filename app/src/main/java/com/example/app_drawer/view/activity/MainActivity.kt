@@ -2,25 +2,30 @@ package com.example.app_drawer.view.activity
 
 import android.annotation.SuppressLint
 import android.app.AppOpsManager
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.view.isGone
 import com.example.app_drawer.BindActivity
 import com.example.app_drawer.R
+import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.grid_view.adapter.RunnableAppViewAdapter
 import com.example.app_drawer.recycler_view.adapter.OftenUsedAppViewAdapter
 import com.example.app_drawer.recycler_view.adapter.RecentUsedAppViewAdapter
 import com.example.app_drawer.recycler_view.adapter.UnUsedAppViewAdapter
 import com.example.app_drawer.recycler_view.decoration.HorizontalDecoration
+import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.repository.AppNotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
 import com.example.app_drawer.view_model.OftenUsedAppListViewModel
 import com.example.app_drawer.view_model.RecentUsedAppListViewModel
 import com.example.app_drawer.view_model.RunnableAppListViewModel
 import com.example.app_drawer.view_model.UnUsedAppListViewModel
+import com.example.app_drawer.vo.AppInfoVo
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,7 +34,6 @@ class MainActivity :
 
     private val TAG = "MainActivity"
 
-    // 패키지 매니저 앱 정보
     // 앱 정보 상태 관리
     @Inject
     lateinit var usageStatsRepository: UsageStatsRepository
@@ -38,11 +42,14 @@ class MainActivity :
     @Inject
     lateinit var appNotificationRepository: AppNotificationRepository
 
+    // 예약 알람 정보
+    @Inject
+    lateinit var alarmRepository: AlarmRepository
+
     // 앱 사용정보 권한
     private var isPermission: Boolean = false
 
 
-    private val
     private val recentUsedAppListViewModel: RecentUsedAppListViewModel by viewModels()
     private val oftenUsedAppListViewModel: OftenUsedAppListViewModel by viewModels()
     private val unUsedAppListViewModel: UnUsedAppListViewModel by viewModels()
@@ -64,95 +71,8 @@ class MainActivity :
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: ####")
-        // 각 인스턴스 데이터바인딩 시작
-//        appNotificationState.getNotifications(object : AppNotificationState.VolleyCallBack<String> {
-//            override fun success(response: String) {
-//                val results = JSONObject(response).getJSONArray("results")
-//                var i = 0
-//                appNotificationInfoList.clear()
-//                while (i < results.length()) {
-//                    val result = results[i] as JSONObject
-//                    val properties =
-//                        result["properties"] as JSONObject
-//
-//                    val type = (properties.getJSONObject("type").getJSONArray("title")
-//                        .get(0) as JSONObject).getString("plain_text")
-//                    val title = (properties.getJSONObject("title").getJSONArray("rich_text")
-//                        .get(0) as JSONObject).getString("plain_text")
-//                    val createDate =
-//                        properties.getJSONObject("createDate").getJSONObject("date")
-//                            .getString("start")
-//
-//                    val appNotificationInfoViewModel = AppNotificationInfoViewModel(
-//                        _type = AppNotificationType.valueOf(type),
-//                        _title = title,
-//                        _createDate = createDate,
-//                    )
-//
-//                    Log.d(TAG, "success: type: $type")
-//                    Log.d(TAG, "success: title: $title")
-//                    Log.d(TAG, "success: createDate: $createDate")
-//
-//                    appNotificationInfoList.add(appNotificationInfoViewModel)
-//                    i++
-//                }
-//            }
-//
-//            @SuppressLint("NotifyDataSetChanged")
-//            override fun failed(error: VolleyError) {
-//                Log.d(TAG, "failed: $error")
-//                // 더미
-//                appNotificationInfoList.clear()
-//                appNotificationInfoList.add(
-//                    AppNotificationInfoViewModel(
-//                        _type = AppNotificationType.NOTICE,
-//                        _title = "앱서랍 사용방법",
-//                        _createDate = "2022-08-16"
-//                    )
-//                )
-//                appNotificationInfoList.add(
-//                    AppNotificationInfoViewModel(
-//                        _type = AppNotificationType.NOTICE,
-//                        _title = "앱 실행 예약방법",
-//                        _createDate = "2022-08-17"
-//                    )
-//                )
-//            }
-//
-//            @SuppressLint("NotifyDataSetChanged")
-//            override fun completed() {
-//                Log.d(TAG, "completed: ")
-//                if (!appNotificationInfoList.isEmpty()) {
-//                    appNotificationInfoList.sortByDescending { it.createDate.value }
-//                }
-//                binding.appNotificationInfoViewPager.adapter?.notifyDataSetChanged()
-//            }
-//
-//        })
-//        appAlarmState.getAlarmList()
-        if (isPermission) {
-//            appUsageStatsState.getAppInfoState()
-//            recentExecutedViewModel.clear()
-//            recentExecutedViewModel.addAllItems(appUsageStatsData.recentExecutedAppUsageStatsListViewModel.items.value!!)
-        }
-
-//        Log.d(TAG, "onStart: appAlarmListViewModel.value ${appAlarmListViewModel.value}")
     }
 
-//    @SuppressLint("NotifyDataSetChanged")
-//    private fun createAlarmListView() {
-//        with(binding) {
-//            val alarmItems = appAlarmState.appAlarmListViewModel.items
-//            val appAlarmRecyclerViewAdapter = AppAlarmRecyclerViewAdapter(alarmItems.value!!)
-//            alarmRecyclerView.adapter = appAlarmRecyclerViewAdapter
-//            alarmItems.observe(this@MainActivity) {
-//                Log.d(TAG, "createAlarmListView: %%%%%%%%%%%%%%%%%%%%%%")
-//                alarmRecyclerView.adapter?.notifyDataSetChanged()
-//            }
-//        }
-//
-//
-//    }
 
     override fun onResume() {
         super.onResume()
@@ -168,15 +88,8 @@ class MainActivity :
             recentExecutedAppTextView.text = "최근 실행 앱"
             val recentUsedAppViewAdapter =
                 RecentUsedAppViewAdapter(
-                    {
-                        Log.d(TAG, "RecentUsedAppViewAdapter createAppView: click!!!!!!!!!!!11")
-                    },
-                    {
-                        Log.d(
-                            TAG,
-                            "RecentUsedAppViewAdapter createAppView: longCllick!!!!!!!!!!!11"
-                        )
-                    }
+                    clickCallback = clickListenerLambda,
+                    longClickCallback = longClickListenerLambda,
                 )
             recentExecutedAppRecyclerView.adapter = recentUsedAppViewAdapter
             // item 사이 간격
@@ -199,12 +112,10 @@ class MainActivity :
             // 자주 실행하는 앱
             oftenExecutedAppTextView.text = "자주 실행하는 앱"
             val oftenUsedAppViewAdapter =
-                OftenUsedAppViewAdapter({
-                    Log.d(TAG, "OftenUsedAppViewAdapter createAppView: click!!!!!!!!!!!11")
-                },
-                    {
-                        Log.d(TAG, "OftenUsedAppViewAdapter createAppView: longCllick!!!!!!!!!!!11")
-                    })
+                OftenUsedAppViewAdapter(
+                    clickCallback = clickListenerLambda,
+                    longClickCallback = longClickListenerLambda,
+                )
             oftenExecutedAppRecyclerView.adapter = oftenUsedAppViewAdapter
 
             // item 사이 간격
@@ -227,15 +138,10 @@ class MainActivity :
             // 아직 실행하지 않은 앱 recyclerView
             unExecutedAppTextView.text = "아직 미실행 앱"
             val unUsedAppViewAdapter =
-                UnUsedAppViewAdapter({
-                    Log.d(TAG, "UnUsedAppViewAdapter createAppView: click!!!!!!!!!!!11")
-                },
-                    {
-                        Log.d(
-                            TAG,
-                            "UnUsedAppViewAdapter createAppView: longCllick!!!!!!!!!!!11"
-                        )
-                    })
+                UnUsedAppViewAdapter(
+                    clickCallback = clickListenerLambda,
+                    longClickCallback = longClickListenerLambda,
+                )
             unExecutedAppRecyclerView.adapter = unUsedAppViewAdapter
 
             // item 사이 간격
@@ -282,6 +188,53 @@ class MainActivity :
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy: ")
+    }
+
+    private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
+        this@MainActivity.startActivity(item.execIntent)
+        Log.d(TAG, "clickListenerLambda: start!!!")
+    }
+
+    private val longClickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
+        var calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
+        TimePickerDialog(
+            this@MainActivity,
+            { _, hourOfDay, minute ->
+                // datepicker 확인 눌렀을 경우 동작
+                val nowDate =
+                    Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
+                var immediatelyFlag = false
+                calendar.apply {
+                    if (hourOfDay == nowDate.get(Calendar.HOUR_OF_DAY) &&
+                        minute == nowDate.get(Calendar.MINUTE)
+                    ) {
+                        calendar = nowDate
+                        calendar.set(Calendar.SECOND, 0)
+                        immediatelyFlag = true
+
+                    } else {
+                        set(Calendar.HOUR_OF_DAY, hourOfDay)
+                        set(Calendar.MINUTE, minute)
+                        set(Calendar.SECOND, 0)
+                    }
+                }
+                alarmRepository.register(
+                    AlarmPeriodType.ONCE,
+                    item,
+                    calendar,
+                    immediatelyFlag,
+                    {
+                        Log.d(TAG, "bind: successCallback")
+                    },
+                    {
+                        Log.d(TAG, "bind: failCallback")
+                    })
+
+            },
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE),
+            false
+        ).show()
     }
 
 }

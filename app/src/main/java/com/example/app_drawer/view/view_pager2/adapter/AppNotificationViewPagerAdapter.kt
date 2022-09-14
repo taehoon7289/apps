@@ -21,9 +21,9 @@ class AppNotificationViewPagerAdapter @Inject constructor() :
     inner class ViewHolder(private val binding: AppNotificationInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NotificationInfoVo) {
-            Log.d(TAG, "bind: item type ${item.type.value}")
-            Log.d(TAG, "bind: item title ${item.title.value}")
-            Log.d(TAG, "bind: item createDate ${item.createDate.value}")
+            Log.d(TAG, "bind: item type ${item.type}")
+            Log.d(TAG, "bind: item title ${item.title}")
+            Log.d(TAG, "bind: item createDate ${item.createDate}")
             binding.model = item
             with(binding.appNotificationLinearLayout) {
                 setOnClickListener {

@@ -7,10 +7,9 @@ import com.example.app_drawer.databinding.TopicAppInfoBinding
 import com.example.app_drawer.view.recycler_view.adapter.AppViewHolder
 import com.example.app_drawer.vo.AppInfoVo
 
-
 class RecentUsedAppViewAdapter(
-    private val clickCallback: () -> Unit,
-    private val longClickCallback: () -> Unit
+    private val clickCallback: (AppInfoVo) -> Unit,
+    private val longClickCallback: (AppInfoVo) -> Unit
 ) :
     RecyclerView.Adapter<AppViewHolder>() {
 
