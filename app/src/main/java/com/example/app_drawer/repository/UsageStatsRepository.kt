@@ -9,13 +9,11 @@ import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Process
 import android.provider.Settings
-import android.util.Log
 import com.example.app_drawer.App
 import com.example.app_drawer.code.ListViewType
 import com.example.app_drawer.view.activity.MainActivity
 import com.example.app_drawer.vo.AppInfoVo
 import java.lang.reflect.Field
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -91,7 +89,6 @@ class UsageStatsRepository {
         val queryUsageStats = usageStatsManager.queryUsageStats(
             UsageStatsManager.INTERVAL_DAILY, cal.timeInMillis, System.currentTimeMillis()
         )
-        Log.d(TAG, "mergeUsageStats: itemsitemsitems ${queryUsageStats.size}")
         for (stats in queryUsageStats) {
             val item =
                 items.find { it.packageName == stats.packageName }
@@ -112,23 +109,8 @@ class UsageStatsRepository {
                 lastTimeUsed = stats.lastTimeUsed
                 totalTimeInForeground = stats.totalTimeInForeground
             }
-//            Log.d(TAG, "mergeUsageStats: item ${item}")
 
-            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
-            Log.d(TAG, "mergeUsageStats: ----------------------------------")
-            Log.d(TAG, "mergeUsageStats: item ${item}")
-            Log.d(TAG, "mergeUsageStats: item packageName ${item.packageName}")
-            Log.d(
-                TAG,
-                "mergeUsageStats: item.firstTimeStamp ${sdf.format(Date(item.firstTimeStamp!!))}"
-            )
-            Log.d(
-                TAG,
-                "mergeUsageStats: item.lastTimeStamp ${sdf.format(Date(item.lastTimeStamp!!))}"
-            )
-            Log.d(TAG, "mergeUsageStats: ----------------------------------")
         }
-        Log.d(TAG, "mergeUsageStats: itemsitems ${items.size}")
         return items
     }
 
@@ -167,7 +149,6 @@ class UsageStatsRepository {
 
     fun createAppInfoList() {
         items = mergeUsageStats(getLauncherAppList())
-        Log.d(TAG, "createAppInfoList: end!!!!!!!!")
     }
 
     /**
@@ -178,26 +159,13 @@ class UsageStatsRepository {
         val items = items.filter {
             it.packageName != App.instance.packageName
         }.toMutableList()
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
-        val temps = when (type) {
+        return when (type) {
             ListViewType.RECENT_USED -> {
                 items.filter {
                     (it.lastTimeStamp
                         ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp
-                }.sortedByDescending { it.lastTimeStamp }.take(10).onEach {
-                    Log.d(TAG, "getAppInfoByType: it ${it.label}")
-                    Log.d(TAG, "getAppInfoByType: it packageName ${it.packageName}")
-                    Log.d(
-                        TAG,
-                        "getAppInfoByType: it firstTimeStamp ${sdf.format(Date(it.firstTimeStamp!!))}"
-                    )
-                    Log.d(
-                        TAG,
-                        "getAppInfoByType: it lastTimeStamp ${sdf.format(Date(it.lastTimeStamp!!))}"
-                    )
-                }
+                }.sortedByDescending { it.lastTimeStamp }.take(10)
                     .toMutableList()
-
             }
             ListViewType.OFTEN_USED -> {
                 items.filter {
@@ -215,8 +183,6 @@ class UsageStatsRepository {
                 items.sortedBy { it.label }.toMutableList()
             }
         }
-        Log.d(TAG, "getAppInfoByType: end############3")
-        return temps
     }
 
 }

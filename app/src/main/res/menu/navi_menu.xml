@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/first"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="첫번째"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/second"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="두번째"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/third"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="세번째"
+        app:showAsAction="ifRoom" />
+</menu>

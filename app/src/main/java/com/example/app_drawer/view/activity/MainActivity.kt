@@ -48,6 +48,7 @@ class MainActivity :
     private var isPermission: Boolean = false
 
 
+    //    private val notificationListViewModel: NotificationListViewModel by viewModels()
     private val appAlarmListViewModel: AppAlarmListViewModel by viewModels()
     private val recentUsedAppListViewModel: RecentUsedAppListViewModel by viewModels()
     private val oftenUsedAppListViewModel: OftenUsedAppListViewModel by viewModels()
@@ -63,13 +64,14 @@ class MainActivity :
             usageStatsRepository.isOpenSettingIntent()
         } else {
             isPermission = true
-
         }
     }
 
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: ####")
+//        notificationListViewModel.reload()
+//        notificationListViewModel.items.observe(this@MainActivity) {
     }
 
 

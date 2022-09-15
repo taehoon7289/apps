@@ -1,13 +1,12 @@
 package com.example.app_drawer
 
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.http.GET
+import retrofit2.Response
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface NotionApiService {
 
-    @GET("/v1/databases/{databaseKey}/query")
-    fun notificationList(@Path("databaseKey") databaseKey: String): Call<ResponseBody>
+    @POST("/v1/databases/{databaseKey}/query")
+    suspend fun notificationList(@Path("databaseKey") databaseKey: String): Response<MutableMap<String, Any>>
 
 }
