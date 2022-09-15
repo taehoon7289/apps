@@ -18,7 +18,7 @@ import com.example.app_drawer.recycler_view.adapter.RecentUsedAppViewAdapter
 import com.example.app_drawer.recycler_view.adapter.UnUsedAppViewAdapter
 import com.example.app_drawer.recycler_view.decoration.HorizontalDecoration
 import com.example.app_drawer.repository.AlarmRepository
-import com.example.app_drawer.repository.AppNotificationRepository
+import com.example.app_drawer.repository.NotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
 import com.example.app_drawer.view_model.*
 import com.example.app_drawer.vo.AppInfoVo
@@ -38,7 +38,7 @@ class MainActivity :
 
     // 앱 알림정보
     @Inject
-    lateinit var appNotificationRepository: AppNotificationRepository
+    lateinit var notificationRepository: NotificationRepository
 
     // 예약 알람 정보
     @Inject

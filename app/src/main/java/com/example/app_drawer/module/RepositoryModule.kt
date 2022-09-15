@@ -1,7 +1,7 @@
 package com.example.app_drawer.module
 
 import com.example.app_drawer.repository.AlarmRepository
-import com.example.app_drawer.repository.AppNotificationRepository
+import com.example.app_drawer.repository.NotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
 import dagger.Module
 import dagger.Provides
@@ -19,7 +19,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun providerNotificationRepository() = AppNotificationRepository()
+    fun providerNotificationRepository() = NotificationRepository()
 
     @Provides
     @Singleton

@@ -7,7 +7,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
 
-class AppNotificationRepository {
+class NotificationRepository {
 
     private val TAG = "AppNotificationState"
 

@@ -15,6 +15,7 @@ import com.example.app_drawer.code.ListViewType
 import com.example.app_drawer.view.activity.MainActivity
 import com.example.app_drawer.vo.AppInfoVo
 import java.lang.reflect.Field
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -84,32 +85,50 @@ class UsageStatsRepository {
         val usageStatsManager =
             App.instance.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         val cal = Calendar.getInstance()
-        cal.add(Calendar.DAY_OF_YEAR, -7) // 최근 일주일
+//        cal.add(Calendar.DAY_OF_YEAR, -7) // 최근 일주일
+        cal.add(Calendar.YEAR, -1) // 1년
+//        cal.add(Calendar.MONTH, -1) // 최근 한달
         val queryUsageStats = usageStatsManager.queryUsageStats(
             UsageStatsManager.INTERVAL_DAILY, cal.timeInMillis, System.currentTimeMillis()
         )
+        Log.d(TAG, "mergeUsageStats: itemsitemsitems ${queryUsageStats.size}")
         for (stats in queryUsageStats) {
-            stats.apply {
-                val appUsageStatsViewModel =
-                    items.find { it.packageName == packageName }
-                appUsageStatsViewModel?.apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        lastTimeForegroundServiceUsed = stats.lastTimeForegroundServiceUsed
-                        lastTimeVisible = stats.lastTimeVisible
-                        totalTimeForegroundServiceUsed = stats.totalTimeForegroundServiceUsed
-                        totalTimeVisible = stats.totalTimeVisible
-                        val mLaunchCount: Field =
-                            UsageStats::class.java.getDeclaredField("mLaunchCount")
-                        launchCount = mLaunchCount.get(stats).toString().toLong()
-                    }
-
-                    firstTimeStamp = stats.firstTimeStamp
-                    lastTimeStamp = stats.lastTimeStamp
-                    lastTimeUsed = stats.lastTimeUsed
-                    totalTimeInForeground = stats.totalTimeInForeground
+            val item =
+                items.find { it.packageName == stats.packageName }
+            if (item == null) continue
+            item.apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    lastTimeForegroundServiceUsed = stats.lastTimeForegroundServiceUsed
+                    lastTimeVisible = stats.lastTimeVisible
+                    totalTimeForegroundServiceUsed = stats.totalTimeForegroundServiceUsed
+                    totalTimeVisible = stats.totalTimeVisible
+                    val mLaunchCount: Field =
+                        UsageStats::class.java.getDeclaredField("mLaunchCount")
+                    launchCount = mLaunchCount.get(stats).toString().toLong()
                 }
+
+                firstTimeStamp = stats.firstTimeStamp
+                lastTimeStamp = stats.lastTimeStamp
+                lastTimeUsed = stats.lastTimeUsed
+                totalTimeInForeground = stats.totalTimeInForeground
             }
+//            Log.d(TAG, "mergeUsageStats: item ${item}")
+
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+            Log.d(TAG, "mergeUsageStats: ----------------------------------")
+            Log.d(TAG, "mergeUsageStats: item ${item}")
+            Log.d(TAG, "mergeUsageStats: item packageName ${item.packageName}")
+            Log.d(
+                TAG,
+                "mergeUsageStats: item.firstTimeStamp ${sdf.format(Date(item.firstTimeStamp!!))}"
+            )
+            Log.d(
+                TAG,
+                "mergeUsageStats: item.lastTimeStamp ${sdf.format(Date(item.lastTimeStamp!!))}"
+            )
+            Log.d(TAG, "mergeUsageStats: ----------------------------------")
         }
+        Log.d(TAG, "mergeUsageStats: itemsitems ${items.size}")
         return items
     }
 
@@ -125,6 +144,7 @@ class UsageStatsRepository {
 
         val resolveInfoList: List<ResolveInfo> =
             packageManager.queryIntentActivities(mainIntent, 0);
+
         val items: MutableList<AppInfoVo> = mutableListOf()
         for (resolveInfo: ResolveInfo in resolveInfoList) {
 
@@ -158,13 +178,26 @@ class UsageStatsRepository {
         val items = items.filter {
             it.packageName != App.instance.packageName
         }.toMutableList()
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
         val temps = when (type) {
             ListViewType.RECENT_USED -> {
                 items.filter {
                     (it.lastTimeStamp
                         ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp
-                }.sortedByDescending { it.lastTimeStamp }.take(10)
+                }.sortedByDescending { it.lastTimeStamp }.take(10).onEach {
+                    Log.d(TAG, "getAppInfoByType: it ${it.label}")
+                    Log.d(TAG, "getAppInfoByType: it packageName ${it.packageName}")
+                    Log.d(
+                        TAG,
+                        "getAppInfoByType: it firstTimeStamp ${sdf.format(Date(it.firstTimeStamp!!))}"
+                    )
+                    Log.d(
+                        TAG,
+                        "getAppInfoByType: it lastTimeStamp ${sdf.format(Date(it.lastTimeStamp!!))}"
+                    )
+                }
                     .toMutableList()
+
             }
             ListViewType.OFTEN_USED -> {
                 items.filter {
