@@ -8,7 +8,7 @@ import com.example.app_drawer.vo.AppInfoVo
 import javax.inject.Inject
 
 class AppViewHolder(
-    private val binding: TopicAppInfoBinding,
+    val binding: TopicAppInfoBinding,
     private val clickCallback: (AppInfoVo) -> Unit,
     private val longClickCallback: (AppInfoVo) -> Unit,
 ) :

@@ -6,6 +6,7 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.isGone
 import com.example.app_drawer.BindActivity
@@ -121,10 +122,9 @@ class MainActivity :
                 )
             )
             recentUsedAppListViewModel.items.observe(this@MainActivity) {
-                recentUsedAppViewAdapter.clearItems()
                 recentExecutedAppLinearLayout.isGone =
-                    recentUsedAppListViewModel!!.items.value?.isEmpty() == true
-                recentUsedAppViewAdapter.clearAndAddItems(recentUsedAppListViewModel.items.value!!)
+                    it.isEmpty() == true
+                recentUsedAppViewAdapter.submitList(it)
             }
 
             // 자주 실행하는 앱
@@ -166,9 +166,9 @@ class MainActivity :
             }
             unExecutedAppRecyclerView.addItemDecoration(HorizontalDecoration(20))
             unUsedAppListViewModel!!.items.observe(this@MainActivity) {
-                unExecutedAppLinearLayout.isGone =
-                    unUsedAppListViewModel!!.items.value?.isEmpty() == true
-                unUsedAppViewAdapter.clearAndAddItems(unUsedAppListViewModel!!.items.value!!)
+                unExecutedAppLinearLayout.isGone = it.isEmpty() == true
+//                unUsedAppViewAdapter.clearAndAddItems(unUsedAppListViewModel!!.items.value!!)
+                unUsedAppViewAdapter.submitList(it)
             }
             // 실행가능한 앱 gridView
             runnableAppTextView.text = "실행 가능한 앱"
@@ -203,16 +203,22 @@ class MainActivity :
         Log.d(TAG, "onDestroy: ")
     }
 
-    private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
-        this@MainActivity.startActivity(item.execIntent)
+    private val temp = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        Log.d(TAG, "registerForActivityResult: it.resultCode: ${it.resultCode}")
+        Log.d(TAG, "registerForActivityResult: it1111")
+        usageStatsRepository.createAppInfoList()
+        Log.d(TAG, "registerForActivityResult: i2t22222")
+        recentUsedAppListViewModel.reload()
+        oftenUsedAppListViewModel.reload()
+        unUsedAppListViewModel.reload()
+        runnableAppListViewModel.reload()
+    }
 
-        Handler().postDelayed({
-            usageStatsRepository.createAppInfoList()
-            recentUsedAppListViewModel.reload()
-            oftenUsedAppListViewModel.reload()
-            unUsedAppListViewModel.reload()
-            runnableAppListViewModel.reload()
-        }, 500)
+    private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
+
+//        this@MainActivity.startActivity(item.execIntent)
+
+        temp.launch(item.execIntent)
 
         Log.d(TAG, "clickListenerLambda: start!!!")
     }
