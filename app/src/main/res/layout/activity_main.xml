@@ -22,6 +22,8 @@
     <!--            type="com.example.app_drawer.view_model.RunnableListViewModel" />-->
     <!--    </data>-->
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -35,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:context=".view.activity.MainActivity">
+            tools:context=".ui.MainActivity">
 
             <LinearLayout
                 android:layout_width="match_parent"

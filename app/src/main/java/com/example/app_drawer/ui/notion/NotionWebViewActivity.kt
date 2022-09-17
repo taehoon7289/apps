@@ -1,4 +1,4 @@
-package com.example.app_drawer.view.activity
+package com.example.app_drawer.ui.notion
 
 import android.util.Log
 import android.webkit.WebChromeClient

@@ -1,5 +1,6 @@
-package com.example.app_drawer.view_model
+package com.example.app_drawer.ui.app
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,14 +11,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class RunnableAppListViewModel @Inject constructor(usageStatsRepository: UsageStatsRepository) :
+class RecentUsedAppListViewModel @Inject constructor(private val usageStatsRepository: UsageStatsRepository) :
     ViewModel() {
     private var _items: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
         usageStatsRepository.getAppInfoByType(
-            ListViewType.RUNNABLE
+            ListViewType.RECENT_USED
         )
     )
-    private val mUsageStatsRepository = usageStatsRepository
+//    private val mUsageStatsRepository = usageStatsRepository
 
     val items: LiveData<MutableList<AppInfoVo>>
         get() = _items
@@ -43,9 +44,10 @@ class RunnableAppListViewModel @Inject constructor(usageStatsRepository: UsageSt
     }
 
     fun reload() {
-        _items.value = mUsageStatsRepository.getAppInfoByType(
-            ListViewType.RUNNABLE
+        _items.value = usageStatsRepository.getAppInfoByType(
+            ListViewType.RECENT_USED
         )
+        Log.d("reload", "reload: end$$$$$$$$$")
 //        _items.value = _items.value
     }
 

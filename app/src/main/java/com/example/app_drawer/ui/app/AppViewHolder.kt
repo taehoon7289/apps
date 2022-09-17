@@ -1,4 +1,4 @@
-package com.example.app_drawer.view.recycler_view.adapter
+package com.example.app_drawer.ui.app
 
 import android.text.TextUtils
 import androidx.recyclerview.widget.RecyclerView

@@ -1,5 +1,6 @@
-package com.example.app_drawer.module
+package com.example.app_drawer.di
 
+import com.example.app_drawer.NotionApiService
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.repository.NotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
@@ -19,7 +20,9 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun providerNotificationRepository() = NotificationRepository()
+    fun providerNotificationRepository(service: NotionApiService): NotificationRepository {
+        return NotificationRepository(service)
+    }
 
     @Provides
     @Singleton

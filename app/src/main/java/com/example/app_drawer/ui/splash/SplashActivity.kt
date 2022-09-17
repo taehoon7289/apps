@@ -1,4 +1,4 @@
-package com.example.app_drawer.view.activity
+package com.example.app_drawer.ui.splash
 
 import android.animation.Animator
 import android.content.Intent
@@ -7,21 +7,24 @@ import android.util.Log
 import com.example.app_drawer.BindActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.ActivitySplashBinding
+import com.example.app_drawer.ui.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
-class SplashActivity : BindActivity<ActivitySplashBinding>(R.layout.activity_splash) {
+@AndroidEntryPoint
+class SplashActivity : BindActivity<ActivitySplashBinding>() {
 
     private val TAG = "SplashActivity"
+    override val layoutRes: Int = R.layout.activity_splash
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         with(binding) {
-            splashTextView.text = "Apps"
+            splashTextView.text = resources.getText(R.string.app_name)
             animationView.speed = 2.0f
             animationView.addAnimatorListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(p0: Animator?) {
                     Log.d(TAG, "onAnimationStart: ")
-                    // 데이터 초기화
                 }
 
                 override fun onAnimationEnd(p0: Animator?) {

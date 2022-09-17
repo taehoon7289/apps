@@ -1,4 +1,4 @@
-package com.example.app_drawer.view_model
+package com.example.app_drawer.ui.alarm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

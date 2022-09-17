@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.app_drawer">
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- 실행가능 앱 리스트 조회 권한 -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -26,10 +25,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".view.activity.NotionWebViewActivity"
+            android:name=".ui.notion.NotionWebViewActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activity.SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="false"></activity>
 
         <receiver

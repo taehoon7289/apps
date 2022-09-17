@@ -1,4 +1,4 @@
-package com.example.app_drawer.recycler_view.adapter
+package com.example.app_drawer.ui.alarm
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -37,11 +37,11 @@ class AlarmViewAdapter @Inject constructor() :
     override fun getItemCount() = items.size
 
     fun addItems(items: MutableList<AlarmInfoVo>) {
-        items.addAll(items)
+        this.items.addAll(items)
     }
 
     fun clearItems() {
-        items.clear()
+        this.items.clear()
     }
 
 }

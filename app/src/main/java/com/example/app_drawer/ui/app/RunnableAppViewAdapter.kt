@@ -1,4 +1,4 @@
-package com.example.app_drawer.grid_view.adapter
+package com.example.app_drawer.ui.app
 
 import android.app.TimePickerDialog
 import android.text.TextUtils
@@ -91,12 +91,15 @@ class RunnableAppViewAdapter @Inject constructor() : BaseAdapter() {
         return runnableAppInfoBinding.root
     }
 
-    fun addItems(items: MutableList<AppInfoVo>) {
+    fun clearAndAddItems(items: MutableList<AppInfoVo>) {
+        this.items.clear()
         this.items.addAll(items)
+        notifyDataSetChanged()
     }
 
     fun clearItems() {
         this.items.clear()
+        notifyDataSetChanged()
     }
 
 }

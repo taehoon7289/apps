@@ -1,4 +1,4 @@
-package com.example.app_drawer.view_model
+package com.example.app_drawer.ui.app
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,14 +10,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class OftenUsedAppListViewModel @Inject constructor(usageStatsRepository: UsageStatsRepository) :
+class UnUsedAppListViewModel @Inject constructor(private val usageStatsRepository: UsageStatsRepository) :
     ViewModel() {
+
     private var _items: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
         usageStatsRepository.getAppInfoByType(
-            ListViewType.OFTEN_USED
+            ListViewType.UN_USED
         )
     )
-    private val mUsageStatsRepository = usageStatsRepository
+//    private val mUsageStatsRepository = usageStatsRepository
 
     val items: LiveData<MutableList<AppInfoVo>>
         get() = _items
@@ -43,8 +44,8 @@ class OftenUsedAppListViewModel @Inject constructor(usageStatsRepository: UsageS
     }
 
     fun reload() {
-        _items.value = mUsageStatsRepository.getAppInfoByType(
-            ListViewType.OFTEN_USED
+        _items.value = usageStatsRepository.getAppInfoByType(
+            ListViewType.UN_USED
         )
 //        _items.value = _items.value
     }

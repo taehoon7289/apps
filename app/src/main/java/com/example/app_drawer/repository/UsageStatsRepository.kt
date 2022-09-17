@@ -11,7 +11,7 @@ import android.os.Process
 import android.provider.Settings
 import com.example.app_drawer.App
 import com.example.app_drawer.code.ListViewType
-import com.example.app_drawer.view.activity.MainActivity
+import com.example.app_drawer.ui.MainActivity
 import com.example.app_drawer.vo.AppInfoVo
 import java.lang.reflect.Field
 import java.util.*

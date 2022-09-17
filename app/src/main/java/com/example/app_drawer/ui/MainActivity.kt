@@ -1,4 +1,4 @@
-package com.example.app_drawer.view.activity
+package com.example.app_drawer.ui
 
 import android.annotation.SuppressLint
 import android.app.AppOpsManager
@@ -12,15 +12,12 @@ import com.example.app_drawer.BindActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.databinding.ActivityMainBinding
-import com.example.app_drawer.grid_view.adapter.RunnableAppViewAdapter
-import com.example.app_drawer.recycler_view.adapter.OftenUsedAppViewAdapter
-import com.example.app_drawer.recycler_view.adapter.RecentUsedAppViewAdapter
-import com.example.app_drawer.recycler_view.adapter.UnUsedAppViewAdapter
 import com.example.app_drawer.recycler_view.decoration.HorizontalDecoration
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.repository.NotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
-import com.example.app_drawer.view_model.*
+import com.example.app_drawer.ui.alarm.AppAlarmListViewModel
+import com.example.app_drawer.ui.app.*
 import com.example.app_drawer.vo.AppInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -28,7 +25,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity :
-    BindActivity<ActivityMainBinding>(R.layout.activity_main) {
+    BindActivity<ActivityMainBinding>() {
+
+    override val layoutRes: Int = R.layout.activity_main
+
+    override val backDoubleEnableFlag = true
 
     private val TAG = "MainActivity"
 
@@ -48,7 +49,7 @@ class MainActivity :
     private var isPermission: Boolean = false
 
 
-    //    private val notificationListViewModel: NotificationListViewModel by viewModels()
+    private val notificationListViewModel: NotificationListViewModel by viewModels()
     private val appAlarmListViewModel: AppAlarmListViewModel by viewModels()
     private val recentUsedAppListViewModel: RecentUsedAppListViewModel by viewModels()
     private val oftenUsedAppListViewModel: OftenUsedAppListViewModel by viewModels()
@@ -70,8 +71,17 @@ class MainActivity :
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: ####")
-//        notificationListViewModel.reload()
+
 //        notificationListViewModel.items.observe(this@MainActivity) {
+//            Log.d(TAG, "onStart: notificationListViewModel.items.observe!!!!!!!!!!!!!!!!!!!! ")
+//            notificationListViewModel.items.value?.onEach {
+//                Log.d(TAG, "onStart: dfdfdfdfdfdfdfd ----------------------------")
+//                Log.d(TAG, "onStart: dfdfdfdfdfdfdfd ${it.type}")
+//                Log.d(TAG, "onStart: dfdfdfdfdfdfdfd ${it.title}")
+//                Log.d(TAG, "onStart: dfdfdfdfdfdfdfd ${it.createDate}")
+//                Log.d(TAG, "onStart: dfdfdfdfdfdfdfd ----------------------------")
+//            }
+//        }
     }
 
 
@@ -85,6 +95,14 @@ class MainActivity :
     private fun createAppView() {
 
         with(binding) {
+
+            val notificationViewPagerAdapter = NotificationViewPagerAdapter()
+            notificationListViewModel.reload()
+            appNotificationInfoViewPager.adapter = notificationViewPagerAdapter
+            notificationListViewModel.items.observe(this@MainActivity) {
+                notificationViewPagerAdapter.clearAndAddItems(notificationListViewModel.items.value!!)
+            }
+
             // 최근 실행된 앱 recyclerView
             recentExecutedAppTextView.text = "최근 실행 앱"
             val recentUsedAppViewAdapter =
@@ -104,10 +122,9 @@ class MainActivity :
             )
             recentUsedAppListViewModel.items.observe(this@MainActivity) {
                 recentUsedAppViewAdapter.clearItems()
-                recentUsedAppViewAdapter.addItems(recentUsedAppListViewModel!!.items.value!!)
                 recentExecutedAppLinearLayout.isGone =
                     recentUsedAppListViewModel!!.items.value?.isEmpty() == true
-                recentUsedAppViewAdapter.notifyDataSetChanged()
+                recentUsedAppViewAdapter.clearAndAddItems(recentUsedAppListViewModel.items.value!!)
             }
 
             // 자주 실행하는 앱
@@ -129,11 +146,9 @@ class MainActivity :
                 )
             )
             oftenUsedAppListViewModel!!.items.observe(this@MainActivity) {
-                oftenUsedAppViewAdapter.clearItems()
-                oftenUsedAppViewAdapter.addItems(oftenUsedAppListViewModel!!.items.value!!)
                 oftenExecutedAppLinearLayout.isGone =
                     oftenUsedAppListViewModel!!.items.value?.isEmpty() == true
-                oftenUsedAppViewAdapter.notifyDataSetChanged()
+                oftenUsedAppViewAdapter.clearAndAddItems(oftenUsedAppListViewModel!!.items.value!!)
             }
 
             // 아직 실행하지 않은 앱 recyclerView
@@ -151,11 +166,9 @@ class MainActivity :
             }
             unExecutedAppRecyclerView.addItemDecoration(HorizontalDecoration(20))
             unUsedAppListViewModel!!.items.observe(this@MainActivity) {
-                unUsedAppViewAdapter.clearItems()
-                unUsedAppViewAdapter.addItems(unUsedAppListViewModel!!.items.value!!)
                 unExecutedAppLinearLayout.isGone =
                     unUsedAppListViewModel!!.items.value?.isEmpty() == true
-                unUsedAppViewAdapter.notifyDataSetChanged()
+                unUsedAppViewAdapter.clearAndAddItems(unUsedAppListViewModel!!.items.value!!)
             }
             // 실행가능한 앱 gridView
             runnableAppTextView.text = "실행 가능한 앱"
@@ -164,11 +177,10 @@ class MainActivity :
             // 스크롤 안보이게 하는 효과남
             runnableAppGridView.isVerticalScrollBarEnabled = false
             runnableAppListViewModel!!.items.observe(this@MainActivity) {
-                runnableAppViewAdapter.clearItems()
-                runnableAppViewAdapter.addItems(runnableAppListViewModel!!.items.value!!)
+
                 recentExecutedAppLinearLayout.isGone =
                     runnableAppListViewModel!!.items.value?.isEmpty() == true
-                unExecutedAppRecyclerView.adapter?.notifyDataSetChanged()
+                runnableAppViewAdapter.clearAndAddItems(runnableAppListViewModel!!.items.value!!)
             }
         }
 
@@ -256,4 +268,7 @@ class MainActivity :
         Log.d(TAG, "longClickListenerLambda:  동작!!!!!!!!!")
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 }

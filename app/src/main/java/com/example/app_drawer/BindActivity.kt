@@ -5,28 +5,40 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.viewpager2.widget.ViewPager2
 import com.example.app_drawer.handler.BackKeyHandler
-import com.example.app_drawer.view_pager2.adapter.AppNotificationViewPagerAdapter
 
-abstract class BindActivity<T : ViewDataBinding>(
-    @LayoutRes val layoutRes: Int
-) : AppCompatActivity() {
+abstract class BindActivity<View : ViewDataBinding> : AppCompatActivity() {
 
-    protected lateinit var binding: T
+    protected lateinit var binding: View
+
+    protected abstract val layoutRes: Int
+
+    open val backDoubleEnableFlag: Boolean = false
 
     // 종료버튼
     private val backKeyHandler = BackKeyHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, layoutRes)
-        binding.lifecycleOwner = this@BindActivity
+        binding = createBinding(layoutRes)
 
     }
 
+    // 더블백 버튼
     override fun onBackPressed() {
-        backKeyHandler.onBackPressed()
+        if (backDoubleEnableFlag) {
+            backKeyHandler.onBackPressed()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun createBinding(@LayoutRes layoutRes: Int): View {
+        binding = DataBindingUtil.setContentView(this, layoutRes)
+        with(binding) {
+            lifecycleOwner = this@BindActivity
+        }
+        return binding
     }
 
 }

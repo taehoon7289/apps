@@ -1,4 +1,4 @@
-package com.example.app_drawer.view_pager2.adapter
+package com.example.app_drawer.ui.app
 
 import android.content.Intent
 import android.util.Log
@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.AppNotificationInfoBinding
-import com.example.app_drawer.view.activity.NotionWebViewActivity
+import com.example.app_drawer.ui.notion.NotionWebViewActivity
 import com.example.app_drawer.vo.NotificationInfoVo
 import javax.inject.Inject
 
 
-class AppNotificationViewPagerAdapter @Inject constructor() :
-    RecyclerView.Adapter<AppNotificationViewPagerAdapter.ViewHolder>() {
+class NotificationViewPagerAdapter @Inject constructor() :
+    RecyclerView.Adapter<NotificationViewPagerAdapter.ViewHolder>() {
 
     private val TAG = "AppNotificationViewPage"
     private lateinit var appNotificationInfoBinding: AppNotificationInfoBinding
@@ -52,12 +52,15 @@ class AppNotificationViewPagerAdapter @Inject constructor() :
 
     override fun getItemCount() = items.size
 
-    fun addItems(items: MutableList<NotificationInfoVo>) {
-        items.addAll(items)
+    fun clearAndAddItems(items: MutableList<NotificationInfoVo>) {
+        this.items.clear()
+        this.items.addAll(items)
+        notifyDataSetChanged()
     }
 
     fun clearItems() {
-        items.clear()
+        this.items.clear()
+        notifyDataSetChanged()
     }
 
 

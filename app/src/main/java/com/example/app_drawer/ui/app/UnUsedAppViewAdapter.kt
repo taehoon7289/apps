@@ -1,19 +1,19 @@
-package com.example.app_drawer.recycler_view.adapter
+package com.example.app_drawer.ui.app
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.TopicAppInfoBinding
-import com.example.app_drawer.view.recycler_view.adapter.AppViewHolder
 import com.example.app_drawer.vo.AppInfoVo
 
-class OftenUsedAppViewAdapter(
+class UnUsedAppViewAdapter(
     private val clickCallback: (AppInfoVo) -> Unit,
     private val longClickCallback: (AppInfoVo) -> Unit
 ) :
     RecyclerView.Adapter<AppViewHolder>() {
 
-    private val TAG = "AppOftenRecyclerViewAda"
+    private val TAG = "AppUnRecyclerViewAdapte"
     private val items: MutableList<AppInfoVo> = mutableListOf()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): AppViewHolder {
@@ -33,12 +33,17 @@ class OftenUsedAppViewAdapter(
 
     override fun getItemCount() = items.size
 
-    fun addItems(items: MutableList<AppInfoVo>) {
+    @SuppressLint("NotifyDataSetChanged")
+    fun clearAndAddItems(items: MutableList<AppInfoVo>) {
+        this.items.clear()
         this.items.addAll(items)
+        notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun clearItems() {
         this.items.clear()
+        notifyDataSetChanged()
     }
 
 }
