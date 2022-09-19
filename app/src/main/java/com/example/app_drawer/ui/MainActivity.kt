@@ -150,7 +150,6 @@ class MainActivity :
                     oftenUsedAppListViewModel!!.items.value?.isEmpty() == true
                 oftenUsedAppViewAdapter.submitList(it)
             }
-
             // 아직 실행하지 않은 앱 recyclerView
             unExecutedAppTextView.text = "아직 미실행 앱"
             val unUsedAppViewAdapter =
@@ -159,7 +158,6 @@ class MainActivity :
                     longClickCallback = longClickListenerLambda,
                 )
             unExecutedAppRecyclerView.adapter = unUsedAppViewAdapter
-
             // item 사이 간격
             if (unExecutedAppRecyclerView.itemDecorationCount > 0) {
                 unExecutedAppRecyclerView.removeItemDecorationAt(0)
