@@ -83,8 +83,8 @@ class UsageStatsRepository {
         val usageStatsManager =
             App.instance.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         val cal = Calendar.getInstance()
-//        cal.add(Calendar.DAY_OF_YEAR, -7) // 최근 일주일
-        cal.add(Calendar.YEAR, -1) // 1년
+        cal.add(Calendar.DAY_OF_YEAR, -7) // 최근 일주일
+//        cal.add(Calendar.YEAR, -1) // 1년
 //        cal.add(Calendar.MONTH, -1) // 최근 한달
         val queryUsageStats = usageStatsManager.queryUsageStats(
             UsageStatsManager.INTERVAL_DAILY, cal.timeInMillis, System.currentTimeMillis()

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.app_drawer.databinding.TopicAppInfoBinding
 import com.example.app_drawer.vo.AppInfoVo
 
-class RecentUsedAppViewAdapter(
+class AppViewAdapter(
     private val clickCallback: (AppInfoVo) -> Unit,
     private val longClickCallback: (AppInfoVo) -> Unit
 ) :
@@ -21,8 +21,8 @@ class RecentUsedAppViewAdapter(
         }
     }) {
 
-    private val TAG = "RecentUsedAppViewAdapte"
-    private var items: MutableList<AppInfoVo> = mutableListOf()
+    private val TAG = "AppUnRecyclerViewAdapte"
+//    private val items: MutableList<AppInfoVo> = mutableListOf()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): AppViewHolder {
         val topicAppInfoBinding =
@@ -36,24 +36,8 @@ class RecentUsedAppViewAdapter(
     }
 
     override fun onBindViewHolder(viewHolder: AppViewHolder, position: Int) {
-//        viewHolder.bind(items[position])
         viewHolder.bind(getItem(position))
         viewHolder.binding.executePendingBindings()
     }
-
-//    override fun getItemCount() = items.size
-
-//    @SuppressLint("NotifyDataSetChanged")
-//    fun clearAndAddItems(items: MutableList<AppInfoVo>) {
-//        this.items.clear()
-//        this.items.addAll(items)
-//        notifyDataSetChanged()
-//    }
-//
-//    @SuppressLint("NotifyDataSetChanged")
-//    fun clearItems() {
-//        this.items.clear()
-//        notifyDataSetChanged()
-//    }
 
 }

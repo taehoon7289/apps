@@ -107,7 +107,7 @@ class MainActivity :
             // 최근 실행된 앱 recyclerView
             recentExecutedAppTextView.text = "최근 실행 앱"
             val recentUsedAppViewAdapter =
-                RecentUsedAppViewAdapter(
+                AppViewAdapter(
                     clickCallback = clickListenerLambda,
                     longClickCallback = longClickListenerLambda,
                 )
@@ -130,7 +130,7 @@ class MainActivity :
             // 자주 실행하는 앱
             oftenExecutedAppTextView.text = "자주 실행하는 앱"
             val oftenUsedAppViewAdapter =
-                OftenUsedAppViewAdapter(
+                AppViewAdapter(
                     clickCallback = clickListenerLambda,
                     longClickCallback = longClickListenerLambda,
                 )
@@ -148,13 +148,13 @@ class MainActivity :
             oftenUsedAppListViewModel!!.items.observe(this@MainActivity) {
                 oftenExecutedAppLinearLayout.isGone =
                     oftenUsedAppListViewModel!!.items.value?.isEmpty() == true
-                oftenUsedAppViewAdapter.clearAndAddItems(oftenUsedAppListViewModel!!.items.value!!)
+                oftenUsedAppViewAdapter.submitList(it)
             }
 
             // 아직 실행하지 않은 앱 recyclerView
             unExecutedAppTextView.text = "아직 미실행 앱"
             val unUsedAppViewAdapter =
-                UnUsedAppViewAdapter(
+                AppViewAdapter(
                     clickCallback = clickListenerLambda,
                     longClickCallback = longClickListenerLambda,
                 )
@@ -167,7 +167,6 @@ class MainActivity :
             unExecutedAppRecyclerView.addItemDecoration(HorizontalDecoration(20))
             unUsedAppListViewModel!!.items.observe(this@MainActivity) {
                 unExecutedAppLinearLayout.isGone = it.isEmpty() == true
-//                unUsedAppViewAdapter.clearAndAddItems(unUsedAppListViewModel!!.items.value!!)
                 unUsedAppViewAdapter.submitList(it)
             }
             // 실행가능한 앱 gridView
