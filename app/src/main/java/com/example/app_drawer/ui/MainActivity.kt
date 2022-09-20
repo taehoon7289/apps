@@ -62,6 +62,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         Log.d(TAG, "onCreate: ####")
         super.onCreate(savedInstanceState)
         createAppView()
+        notificationListViewModel.reload()
         val mode = usageStatsRepository.checkForPermissionUsageStats()
         if (mode != AppOpsManager.MODE_ALLOWED) {
             usageStatsRepository.isOpenSettingIntent()
@@ -97,7 +98,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             val horizontalDecoration = HorizontalDecoration(5)
 
             val notificationViewPagerAdapter = NotificationViewPagerAdapter()
-            notificationListViewModel.reload()
             appNotificationInfoViewPager.adapter = notificationViewPagerAdapter
             notificationListViewModel.items.observe(this@MainActivity) {
 //                notificationViewPagerAdapter.clearAndAddItems(notificationListViewModel.items.value!!)
@@ -163,10 +163,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             )
             runnableAppGridView.adapter = runnableAppViewAdapter
             // 그리드 레이아웃 설정
-            runnableAppGridView.layoutManager = GridLayoutManager(this@MainActivity, 7)
+            val gridLayoutManager = GridLayoutManager(this@MainActivity, 7)
+            runnableAppGridView.layoutManager = gridLayoutManager
 
             // 스크롤 안보이게 하는 효과남
-            runnableAppGridView.isVerticalScrollBarEnabled = false
+            runnableAppGridView.isVerticalScrollBarEnabled = true
             appListViewModel.runnableItems.observe(this@MainActivity) {
                 runnableAppLinearLayout.isGone = it.isEmpty()
                 runnableAppViewAdapter.submitList(it)
