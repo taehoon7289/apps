@@ -51,7 +51,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     // 앱 사용정보 권한
     private var isPermission: Boolean = false
 
-    private var initFlag: Boolean = false
+    private var initFlag: Boolean = true
 
 
     private val notificationListViewModel: NotificationListViewModel by viewModels()
@@ -68,7 +68,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         } else {
             isPermission = true
         }
-        initFlag = true
+        initFlag = false
     }
 
     override fun onStart() {
@@ -100,7 +100,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             notificationListViewModel.reload()
             appNotificationInfoViewPager.adapter = notificationViewPagerAdapter
             notificationListViewModel.items.observe(this@MainActivity) {
-                notificationViewPagerAdapter.clearAndAddItems(notificationListViewModel.items.value!!)
+//                notificationViewPagerAdapter.clearAndAddItems(notificationListViewModel.items.value!!)
+                appNotificationInfoLinearLayout.isGone = it.isEmpty()
+                notificationViewPagerAdapter.submitList(it)
             }
 
             // 최근 실행된 앱 recyclerView

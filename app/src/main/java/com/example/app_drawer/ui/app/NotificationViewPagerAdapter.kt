@@ -4,22 +4,38 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.AppNotificationInfoBinding
 import com.example.app_drawer.ui.notion.NotionWebViewActivity
 import com.example.app_drawer.vo.NotificationInfoVo
-import javax.inject.Inject
 
 
-class NotificationViewPagerAdapter @Inject constructor() :
-    RecyclerView.Adapter<NotificationViewPagerAdapter.ViewHolder>() {
+class NotificationViewPagerAdapter :
+    ListAdapter<NotificationInfoVo, NotificationViewPagerAdapter.ViewHolder>(object :
+        DiffUtil.ItemCallback<NotificationInfoVo>() {
+        override fun areItemsTheSame(
+            oldItem: NotificationInfoVo, newItem: NotificationInfoVo
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(
+            oldItem: NotificationInfoVo, newItem: NotificationInfoVo
+        ): Boolean {
+            return oldItem == newItem
+        }
+    }) {
+//    RecyclerView.Adapter<NotificationViewPagerAdapter.ViewHolder>() {
 
     private val TAG = "AppNotificationViewPage"
-    private lateinit var appNotificationInfoBinding: AppNotificationInfoBinding
-    private val items = mutableListOf<NotificationInfoVo>()
+//    private lateinit var appNotificationInfoBinding: AppNotificationInfoBinding
+//    private val items = mutableListOf<NotificationInfoVo>()
 
-    inner class ViewHolder(private val binding: AppNotificationInfoBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(
+        val binding: AppNotificationInfoBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NotificationInfoVo) {
             Log.d(TAG, "bind: item type ${item.type}")
             Log.d(TAG, "bind: item title ${item.title}")
@@ -36,32 +52,15 @@ class NotificationViewPagerAdapter @Inject constructor() :
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        appNotificationInfoBinding =
-            AppNotificationInfoBinding.inflate(
-                LayoutInflater.from(viewGroup.context),
-                viewGroup,
-                false
-            )
-        return ViewHolder(appNotificationInfoBinding)
+        val binding = AppNotificationInfoBinding.inflate(
+            LayoutInflater.from(viewGroup.context), viewGroup, false
+        )
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        Log.d(TAG, "onBindViewHolder: position $position")
-        viewHolder.bind(items[position])
+        viewHolder.bind(getItem(position))
+        viewHolder.binding.executePendingBindings()
     }
-
-    override fun getItemCount() = items.size
-
-    fun clearAndAddItems(items: MutableList<NotificationInfoVo>) {
-        this.items.clear()
-        this.items.addAll(items)
-        notifyDataSetChanged()
-    }
-
-    fun clearItems() {
-        this.items.clear()
-        notifyDataSetChanged()
-    }
-
 
 }

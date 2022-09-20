@@ -36,7 +36,7 @@
 
             <!-- 알림 -->
             <LinearLayout
-                android:id="@+id/notification_linear_layout"
+                android:id="@+id/app_notification_info_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape"
@@ -72,7 +72,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/runnable_app_linear_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notification_linear_layout">
+                app:layout_constraintTop_toBottomOf="@id/app_notification_info_linear_layout">
                 <!-- 알림리스트 -->
                 <LinearLayout
                     android:id="@+id/alarm_linear_layout"
@@ -220,7 +220,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/app_topic_linear_layout"
-                app:layout_constraintTop_toBottomOf="@id/notification_linear_layout">
+                app:layout_constraintTop_toBottomOf="@id/app_notification_info_linear_layout">
 
                 <TextView
                     android:id="@+id/runnable_app_text_view"
