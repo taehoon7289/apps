@@ -3,27 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!--    <data>-->
-
-    <!--        <variable-->
-    <!--            name="recentExecutedListViewModel"-->
-    <!--            type="com.example.app_drawer.view_model.RecentExecutedListViewModel" />-->
-
-    <!--        <variable-->
-    <!--            name="oftenExecutedListViewModel"-->
-    <!--            type="com.example.app_drawer.view_model.OftenExecutedListViewModel" />-->
-
-    <!--        <variable-->
-    <!--            name="unExecutedListViewModel"-->
-    <!--            type="com.example.app_drawer.view_model.UnExecutedListViewModel" />-->
-
-    <!--        <variable-->
-    <!--            name="runnableListViewModel"-->
-    <!--            type="com.example.app_drawer.view_model.RunnableListViewModel" />-->
-    <!--    </data>-->
-
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

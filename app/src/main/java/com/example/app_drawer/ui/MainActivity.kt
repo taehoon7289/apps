@@ -9,7 +9,7 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.isGone
-import com.example.app_drawer.BindActivity
+import com.example.app_drawer.BaseActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.databinding.ActivityMainBinding
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity :
-    BindActivity<ActivityMainBinding>() {
+    BaseActivity<ActivityMainBinding>() {
 
     override val layoutRes: Int = R.layout.activity_main
 
@@ -96,6 +96,12 @@ class MainActivity :
     private fun createAppView() {
 
         with(binding) {
+
+            val views = mutableListOf(recentExecutedAppRecyclerView, oftenExecutedAppRecyclerView, unExecutedAppRecyclerView)
+
+            for (view in views) {
+
+            }
 
             val notificationViewPagerAdapter = NotificationViewPagerAdapter()
             notificationListViewModel.reload()

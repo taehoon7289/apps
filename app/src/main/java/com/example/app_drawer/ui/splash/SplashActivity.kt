@@ -4,14 +4,14 @@ import android.animation.Animator
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import com.example.app_drawer.BindActivity
+import com.example.app_drawer.BaseActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.ActivitySplashBinding
 import com.example.app_drawer.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SplashActivity : BindActivity<ActivitySplashBinding>() {
+class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     private val TAG = "SplashActivity"
     override val layoutRes: Int = R.layout.activity_splash
