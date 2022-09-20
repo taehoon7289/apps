@@ -37,15 +37,12 @@ class MainActivity :
     // 앱 정보 상태 관리
     @Inject
     lateinit var usageStatsRepository: UsageStatsRepository
-
     // 앱 알림정보
     @Inject
     lateinit var notificationRepository: NotificationRepository
-
     // 예약 알람 정보
     @Inject
     lateinit var alarmRepository: AlarmRepository
-
     // 앱 사용정보 권한
     private var isPermission: Boolean = false
 
