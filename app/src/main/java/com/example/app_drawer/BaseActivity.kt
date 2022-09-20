@@ -43,12 +43,12 @@ abstract class BaseActivity<View : ViewDataBinding> : AppCompatActivity() {
     }
 
     private fun customOnBackPressed() {
-        if (System.currentTimeMillis() > 2000) {
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis()
             showGuide()
             return
         }
-        if (System.currentTimeMillis() <= 2000) {
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
             finish()
             toast.cancel()
         }

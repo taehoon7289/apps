@@ -13,6 +13,7 @@ import com.example.app_drawer.BaseActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.databinding.ActivityMainBinding
+import com.example.app_drawer.recycler_view.decoration.HorizontalDecoration
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.repository.NotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
@@ -75,6 +76,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         Log.d(TAG, "onStart: ####")
 
         if (!initFlag) {
+            Log.d(TAG, "onStart: reload!!!")
             appListViewModel.reload()
         }
 
@@ -91,6 +93,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun createAppView() {
 
         with(binding) {
+
+            val horizontalDecoration = HorizontalDecoration(5)
 
             val notificationViewPagerAdapter = NotificationViewPagerAdapter()
             notificationListViewModel.reload()
@@ -110,11 +114,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (recentExecutedAppRecyclerView.itemDecorationCount > 0) {
                 recentExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
-//            recentExecutedAppRecyclerView.addItemDecoration(
-//                HorizontalDecoration(
-//                    20
-//                )
-//            )
+            recentExecutedAppRecyclerView.addItemDecoration(horizontalDecoration)
             appListViewModel.recentUsedItems.observe(this@MainActivity) {
                 recentExecutedAppLinearLayout.isGone = it.isEmpty()
                 recentUsedAppViewAdapter.submitList(it)
@@ -132,11 +132,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (oftenExecutedAppRecyclerView.itemDecorationCount > 0) {
                 oftenExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
-//            oftenExecutedAppRecyclerView.addItemDecoration(
-//                HorizontalDecoration(
-//                    20
-//                )
-//            )
+            oftenExecutedAppRecyclerView.addItemDecoration(horizontalDecoration)
             appListViewModel.oftenUsedItems.observe(this@MainActivity) {
                 oftenExecutedAppLinearLayout.isGone = it.isEmpty()
                 oftenUsedAppViewAdapter.submitList(it)
@@ -152,7 +148,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (unExecutedAppRecyclerView.itemDecorationCount > 0) {
                 unExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
-//            unExecutedAppRecyclerView.addItemDecoration(HorizontalDecoration(20))
+            unExecutedAppRecyclerView.addItemDecoration(horizontalDecoration)
             appListViewModel.unUsedItems.observe(this@MainActivity) {
                 unExecutedAppLinearLayout.isGone = it.isEmpty()
                 unUsedAppViewAdapter.submitList(it)
