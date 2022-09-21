@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.app_drawer.databinding.TopicAppInfoBinding
+import com.example.app_drawer.databinding.ViewholderAppBinding
 import com.example.app_drawer.vo.AppInfoVo
 
 class AppViewAdapter(
@@ -25,10 +25,10 @@ class AppViewAdapter(
 //    private val items: MutableList<AppInfoVo> = mutableListOf()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): AppViewHolder {
-        val topicAppInfoBinding =
-            TopicAppInfoBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
+        val viewholderAppBinding =
+            ViewholderAppBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
         return AppViewHolder(
-            binding = topicAppInfoBinding,
+            binding = viewholderAppBinding,
             clickCallback = clickCallback,
             longClickCallback = longClickCallback
         )

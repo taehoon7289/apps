@@ -1,14 +1,15 @@
 package com.example.app_drawer.ui.app
 
 import android.text.TextUtils
+import androidx.databinding.adapters.ViewBindingAdapter.setOnLongClickListener
 import androidx.recyclerview.widget.RecyclerView
-import com.example.app_drawer.databinding.TopicAppInfoBinding
+
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.vo.AppInfoVo
 import javax.inject.Inject
 
 class AppViewHolder(
-    val binding: TopicAppInfoBinding,
+    val binding: ViewholderAppBinding,
     private val clickCallback: (AppInfoVo) -> Unit,
     private val longClickCallback: (AppInfoVo) -> Unit,
 ) :
@@ -21,7 +22,7 @@ class AppViewHolder(
 
     fun bind(item: AppInfoVo) {
         binding.model = item
-        binding.iconImageView.apply {
+        binding.itemAppInfoLinearLayout.apply {
             setOnClickListener {
                 clickCallback(item)
 

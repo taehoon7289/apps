@@ -11,7 +11,6 @@ import android.os.Process
 import android.provider.Settings
 import com.example.app_drawer.App
 import com.example.app_drawer.code.ListViewType
-import com.example.app_drawer.ui.MainActivity
 import com.example.app_drawer.vo.AppInfoVo
 import java.lang.reflect.Field
 import java.util.*
@@ -48,6 +47,7 @@ class UsageStatsRepository {
      * 설정 activity 실행
      */
     fun isOpenSettingIntent() {
+        /*
         val appOps = App.instance.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         appOps.startWatchingMode(AppOpsManager.OPSTR_GET_USAGE_STATS,
             App.instance.applicationContext.packageName,
@@ -65,10 +65,11 @@ class UsageStatsRepository {
                     val intent = Intent(App.instance, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     App.instance.applicationContext.startActivity(intent)
-
                 }
 
             })
+         */
+
         val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         App.instance.startActivity(intent)
@@ -90,8 +91,7 @@ class UsageStatsRepository {
             UsageStatsManager.INTERVAL_DAILY, cal.timeInMillis, System.currentTimeMillis()
         )
         for (stats in queryUsageStats) {
-            val item =
-                items.find { it.packageName == stats.packageName }
+            val item = items.find { it.packageName == stats.packageName }
             if (item == null) continue
             item.apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -162,10 +162,8 @@ class UsageStatsRepository {
         return when (type) {
             ListViewType.RECENT_USED -> {
                 items.filter {
-                    (it.lastTimeStamp
-                        ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp
-                }.sortedByDescending { it.lastTimeStamp }.take(10)
-                    .toMutableList()
+                    (it.lastTimeStamp ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp
+                }.sortedByDescending { it.lastTimeStamp }.take(10).toMutableList()
             }
             ListViewType.OFTEN_USED -> {
                 items.filter {

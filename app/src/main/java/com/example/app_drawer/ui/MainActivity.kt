@@ -3,6 +3,7 @@ package com.example.app_drawer.ui
 import android.annotation.SuppressLint
 import android.app.AppOpsManager
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,15 +14,11 @@ import com.example.app_drawer.BaseActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.databinding.ActivityMainBinding
-import com.example.app_drawer.recycler_view.decoration.HorizontalDecoration
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.repository.NotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
 import com.example.app_drawer.ui.alarm.AppAlarmListViewModel
-import com.example.app_drawer.ui.app.AppListViewModel
-import com.example.app_drawer.ui.app.AppViewAdapter
-import com.example.app_drawer.ui.app.NotificationListViewModel
-import com.example.app_drawer.ui.app.NotificationViewPagerAdapter
+import com.example.app_drawer.ui.app.*
 import com.example.app_drawer.vo.AppInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -95,12 +92,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         with(binding) {
 
-            val horizontalDecoration = HorizontalDecoration(5)
-
-            val notificationViewPagerAdapter = NotificationViewPagerAdapter()
+            val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)
+            val notificationViewPagerAdapter = NotificationViewPagerAdapter(
+                handlerClickEvent = {}
+            )
             appNotificationInfoViewPager.adapter = notificationViewPagerAdapter
             notificationListViewModel.items.observe(this@MainActivity) {
-//                notificationViewPagerAdapter.clearAndAddItems(notificationListViewModel.items.value!!)
                 appNotificationInfoLinearLayout.isGone = it.isEmpty()
                 notificationViewPagerAdapter.submitList(it)
             }
@@ -116,7 +113,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (recentExecutedAppRecyclerView.itemDecorationCount > 0) {
                 recentExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
-            recentExecutedAppRecyclerView.addItemDecoration(horizontalDecoration)
+            recentExecutedAppRecyclerView.addItemDecoration(appViewHorizontalDecoration)
             appListViewModel.recentUsedItems.observe(this@MainActivity) {
                 recentExecutedAppLinearLayout.isGone = it.isEmpty()
                 recentUsedAppViewAdapter.submitList(it)
@@ -134,7 +131,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (oftenExecutedAppRecyclerView.itemDecorationCount > 0) {
                 oftenExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
-            oftenExecutedAppRecyclerView.addItemDecoration(horizontalDecoration)
+            oftenExecutedAppRecyclerView.addItemDecoration(appViewHorizontalDecoration)
             appListViewModel.oftenUsedItems.observe(this@MainActivity) {
                 oftenExecutedAppLinearLayout.isGone = it.isEmpty()
                 oftenUsedAppViewAdapter.submitList(it)
@@ -150,7 +147,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (unExecutedAppRecyclerView.itemDecorationCount > 0) {
                 unExecutedAppRecyclerView.removeItemDecorationAt(0)
             }
-            unExecutedAppRecyclerView.addItemDecoration(horizontalDecoration)
+            unExecutedAppRecyclerView.addItemDecoration(appViewHorizontalDecoration)
             appListViewModel.unUsedItems.observe(this@MainActivity) {
                 unExecutedAppLinearLayout.isGone = it.isEmpty()
                 unUsedAppViewAdapter.submitList(it)
@@ -193,15 +190,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         Log.d(TAG, "onDestroy: ")
     }
 
-    private val temp = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        appListViewModel.reload()
-    }
+    private val activityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+            Log.d(TAG, "activityLauncher: appListViewModel.reload()")
+            appListViewModel.reload()
+        }
 
     private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
 
 //        this@MainActivity.startActivity(item.execIntent)
 
-        temp.launch(item.execIntent)
+        activityLauncher.launch(item.execIntent)
 
         Log.d(TAG, "clickListenerLambda: start!!!")
     }
@@ -239,7 +238,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         Log.d(TAG, "longClickListenerLambda:  동작!!!!!!!!!")
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d(TAG, "onActivityResult: 실행!!!")
+        when (resultCode) {
+            0 -> {
+                Log.d(TAG, "onActivityResult: resultCode $resultCode")
+            }
+            else -> {
+                Log.d(TAG, "onActivityResult: else resultCode $resultCode")
+            }
+        }
+
     }
 }
