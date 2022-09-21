@@ -5,43 +5,22 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.MainActivity">
 
         <LinearLayout
-            android:id="@+id/main_linear_layout"
+            android:id="@+id/linearlayout_main_activity"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/main_bottom_nav_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context=".ui.MainActivity">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/app_notification_info_linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/shape"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/app_notification_info_view_pager"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="9"
-                    android:orientation="vertical" />
-
-                <TextView
-                    android:id="@+id/app_notification_info_view_pager_text_view"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/notification_index_shape"
-                    android:textSize="10dp" />
-            </LinearLayout>
+            <include
+                android:id="@+id/include_notification"
+                layout="@layout/layout_mainactivity_notification" />
 
             <LinearLayout
                 android:id="@+id/alarm_linear_layout"
@@ -218,7 +197,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main_linear_layout"
+            app:layout_constraintTop_toBottomOf="@id/linearlayout_main_activity"
             app:menu="@menu/navi_menu">
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>

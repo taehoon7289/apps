@@ -1,6 +1,5 @@
 package com.example.app_drawer.ui
 
-import android.annotation.SuppressLint
 import android.app.AppOpsManager
 import android.app.TimePickerDialog
 import android.content.Intent
@@ -58,7 +57,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: ####")
         super.onCreate(savedInstanceState)
-        createAppView()
+        createView()
         notificationListViewModel.reload()
         val mode = usageStatsRepository.checkForPermissionUsageStats()
         if (mode != AppOpsManager.MODE_ALLOWED) {
@@ -87,19 +86,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun createAppView() {
-
+    private fun createView() {
         with(binding) {
-
             val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)
             val notificationViewPagerAdapter = NotificationViewPagerAdapter(
                 handlerClickEvent = {}
             )
-            appNotificationInfoViewPager.adapter = notificationViewPagerAdapter
-            notificationListViewModel.items.observe(this@MainActivity) {
-                appNotificationInfoLinearLayout.isGone = it.isEmpty()
-                notificationViewPagerAdapter.submitList(it)
+            with(includeNotification) {
+                this.viewpagerNotification.adapter = notificationViewPagerAdapter
+                notificationListViewModel.items.observe(this@MainActivity) {
+                    this.linearlayoutNotification.isGone = it.isEmpty()
+                    notificationViewPagerAdapter.submitList(it)
+                }
             }
 
             // 최근 실행된 앱 recyclerView
@@ -118,7 +116,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 recentExecutedAppLinearLayout.isGone = it.isEmpty()
                 recentUsedAppViewAdapter.submitList(it)
             }
-
             // 자주 실행하는 앱
             oftenExecutedAppTextView.text = "자주 실행하는 앱"
             val oftenUsedAppViewAdapter = AppViewAdapter(
@@ -126,7 +123,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 longClickCallback = longClickListenerLambda,
             )
             oftenExecutedAppRecyclerView.adapter = oftenUsedAppViewAdapter
-
             // item 사이 간격
             if (oftenExecutedAppRecyclerView.itemDecorationCount > 0) {
                 oftenExecutedAppRecyclerView.removeItemDecorationAt(0)
@@ -162,7 +158,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             // 그리드 레이아웃 설정
             val gridLayoutManager = GridLayoutManager(this@MainActivity, 7)
             runnableAppGridView.layoutManager = gridLayoutManager
-
             // 스크롤 안보이게 하는 효과남
             runnableAppGridView.isVerticalScrollBarEnabled = true
             appListViewModel.runnableItems.observe(this@MainActivity) {

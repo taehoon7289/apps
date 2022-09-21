@@ -1,9 +1,8 @@
 package com.example.app_drawer.ui.app
 
 import android.text.TextUtils
-import androidx.databinding.adapters.ViewBindingAdapter.setOnLongClickListener
 import androidx.recyclerview.widget.RecyclerView
-
+import com.example.app_drawer.databinding.ViewholderAppBinding
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.vo.AppInfoVo
 import javax.inject.Inject
@@ -22,7 +21,7 @@ class AppViewHolder(
 
     fun bind(item: AppInfoVo) {
         binding.model = item
-        binding.itemAppInfoLinearLayout.apply {
+        binding.viewholderAppLinear.apply {
             setOnClickListener {
                 clickCallback(item)
 
@@ -32,7 +31,7 @@ class AppViewHolder(
                 true
             }
         }
-        binding.labelTextView.apply {
+        binding.viewholderAppLabel.apply {
             isSelected = true
             isSingleLine = true
             marqueeRepeatLimit = -1
