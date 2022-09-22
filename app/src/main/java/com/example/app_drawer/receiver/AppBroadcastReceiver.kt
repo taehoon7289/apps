@@ -40,7 +40,7 @@ class AppBroadcastReceiver : BroadcastReceiver() {
         receiveIntent.extras.let {
             val label = it?.getString("label")
             val packageName = it?.getString("packageName")
-            val reservationDate = it?.get("reservationDate") as Calendar
+            val executeDate = it?.get("executeDate") as Calendar
 
             val sdf = SimpleDateFormat("MM-dd HH:mm")
             val intent =
@@ -75,7 +75,7 @@ class AppBroadcastReceiver : BroadcastReceiver() {
                 val notification = NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setContentTitle("예약시간이예요.")
-                    .setContentText("> 클릭시 $label 앱 실행 ${sdf.format(reservationDate.time)} 예약")
+                    .setContentText("> 클릭시 $label 앱 실행 ${sdf.format(executeDate.time)} 예약")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)

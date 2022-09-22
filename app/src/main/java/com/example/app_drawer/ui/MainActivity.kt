@@ -3,8 +3,10 @@ package com.example.app_drawer.ui
 import android.app.AppOpsManager
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.isGone
@@ -16,7 +18,7 @@ import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.repository.NotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
-import com.example.app_drawer.ui.alarm.AppAlarmListViewModel
+import com.example.app_drawer.ui.alarm.AlarmListViewModel
 import com.example.app_drawer.ui.app.*
 import com.example.app_drawer.ui.notion.NotionActivity
 import com.example.app_drawer.vo.AppInfoVo
@@ -52,7 +54,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
 
     private val notificationListViewModel: NotificationListViewModel by viewModels()
-    private val appAlarmListViewModel: AppAlarmListViewModel by viewModels()
+    private val alarmListViewModel: AlarmListViewModel by viewModels()
     private val appListViewModel: AppListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +62,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
         createView()
         notificationListViewModel.reload()
+        alarmListViewModel.reload()
+        Log.d(TAG, "onCreate: alarmListViewModel ${alarmListViewModel.items}")
+        val tempItems = alarmListViewModel.items
+        Log.d(TAG, "onCreate: tempItems $tempItems")
         val mode = usageStatsRepository.checkForPermissionUsageStats()
         if (mode != AppOpsManager.MODE_ALLOWED) {
             usageStatsRepository.isOpenSettingIntent()
@@ -227,11 +233,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         set(Calendar.SECOND, 0)
                     }
                 }
-                alarmRepository.register(AlarmPeriodType.ONCE, item, calendar, immediatelyFlag, {
-                    Log.d(TAG, "bind: successCallback")
-                }, {
-                    Log.d(TAG, "bind: failCallback")
-                })
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    alarmRepository.registerToAlarmManager(
+                        AlarmPeriodType.ONCE,
+                        item,
+                        calendar,
+                        immediatelyFlag,
+                        {
+                            Log.d(TAG, "bind: successCallback")
+                            it?.let {
+                                alarmRepository.saveAlarm(it)
+                            }
+                            Toast.makeText(this@MainActivity, "예약됨", Toast.LENGTH_LONG).show()
+                        },
+                        {
+                            Log.d(TAG, "bind: failCallback")
+                            Toast.makeText(this@MainActivity, "권한이 없습니다.", Toast.LENGTH_LONG).show()
+                        })
+
+                } else {
+                    Toast.makeText(this@MainActivity, "예약불가 버전", Toast.LENGTH_LONG).show()
+                }
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false
         ).show()
 

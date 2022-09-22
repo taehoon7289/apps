@@ -1,6 +1,10 @@
 package com.example.app_drawer.util
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class Util {
 
@@ -23,6 +27,22 @@ class Util {
             } else {
                 Log.d(tag, str)
             }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun getLocalDateTimeToString(
+            localDateTime: LocalDateTime,
+            pattern: String = "yyyyMMddHHmmss"
+        ): String? {
+            return localDateTime.format(DateTimeFormatter.ofPattern(pattern))
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun getStringToLocalDateTime(
+            str: String,
+            pattern: String = "yyyyMMddHHmmss"
+        ): LocalDateTime? {
+            return LocalDateTime.parse(str, DateTimeFormatter.ofPattern(pattern))
         }
 
         private const val TAG = "Util"

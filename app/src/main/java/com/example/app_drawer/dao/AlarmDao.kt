@@ -1,19 +1,20 @@
 package com.example.app_drawer.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
+import androidx.room.*
 import com.example.app_drawer.entity.AlarmEntity
 
 @Dao
 interface AlarmDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(alarmEntity: AlarmEntity)
 
     @Delete
-    fun delete(alarmEntity: AlarmEntity)
+    fun delete(alarmEntity: AlarmEntity): Int
 
-    @Delete
-    fun deleteById(requestCode: Int)
+    @Query("DELETE FROM alarm WHERE alarmNo = :alarmNo")
+    fun deleteById(alarmNo: Long): Int
+
+    @Query("SELECT * FROM alarm ORDER BY alarmNo DESC")
+    fun findAllAlarmNoDesc(): MutableList<AlarmEntity>
 
 }
