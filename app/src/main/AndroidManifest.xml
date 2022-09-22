@@ -25,7 +25,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.notion.NotionWebViewActivity"
+            android:name=".ui.notion.NotionActivity"
             android:exported="false" />
         <activity
             android:name=".ui.splash.SplashActivity"

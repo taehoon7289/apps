@@ -9,7 +9,7 @@ import com.example.app_drawer.vo.NotificationInfoVo
 
 
 class NotificationViewPagerAdapter(
-    private val handlerClickEvent: () -> Unit
+    private val handlerClickEvent: (NotificationInfoVo) -> Unit
 ) :
     ListAdapter<NotificationInfoVo, NotificationViewHolder>(object :
         DiffUtil.ItemCallback<NotificationInfoVo>() {

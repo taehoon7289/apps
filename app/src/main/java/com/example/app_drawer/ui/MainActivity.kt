@@ -18,6 +18,7 @@ import com.example.app_drawer.repository.NotificationRepository
 import com.example.app_drawer.repository.UsageStatsRepository
 import com.example.app_drawer.ui.alarm.AppAlarmListViewModel
 import com.example.app_drawer.ui.app.*
+import com.example.app_drawer.ui.notion.NotionActivity
 import com.example.app_drawer.vo.AppInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -90,7 +91,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         with(binding) {
             val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)
             val notificationViewPagerAdapter = NotificationViewPagerAdapter(
-                handlerClickEvent = {}
+                handlerClickEvent = {
+                    val intent = Intent(this@MainActivity, NotionActivity::class.java)
+                    intent.putExtra("url", it.url)
+                    this@MainActivity.startActivity(intent)
+                }
             )
             with(includeNotification) {
                 this.viewpagerNotification.adapter = notificationViewPagerAdapter

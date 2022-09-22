@@ -1,6 +1,5 @@
 package com.example.app_drawer.ui.app
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,7 +31,6 @@ class NotificationListViewModel @Inject constructor(private val notificationRepo
     }
 
     fun reload() = CoroutineScope(Dispatchers.Main).launch {
-        Log.d(TAG, "reload: launch start!!!")
         _items.value = notificationRepository.getNotificationList()
     }
 }

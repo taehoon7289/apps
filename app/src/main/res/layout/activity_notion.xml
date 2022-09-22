@@ -7,11 +7,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        tools:context=".ui.notion.NotionWebViewActivity"
         android:orientation="horizontal">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/notion_web_view_animation_view"
+            android:id="@+id/lottie_notion"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:lottie_autoPlay="true"
@@ -20,7 +19,7 @@
             tools:targetApi="n" />
 
         <WebView
-            android:id="@+id/notion_web_view"
+            android:id="@+id/webview_notion"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

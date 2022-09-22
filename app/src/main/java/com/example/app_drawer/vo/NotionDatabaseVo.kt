@@ -1,6 +1,6 @@
-package com.example.app_drawer.vo.temp
+package com.example.app_drawer.vo
 
-data class NotionDataVo(
+data class NotionDatabaseVo(
     val has_more: Boolean,
     val next_cursor: Any,
     val `object`: String,
@@ -41,8 +41,10 @@ data class NotionDataVo(
 
         data class Properties(
             val createDate: CreateDate,
+            val id: Id,
             val title: Title,
-            val type: Type
+            val type: Type,
+            val url: Url
         ) {
             data class CreateDate(
                 val date: Date,
@@ -55,6 +57,12 @@ data class NotionDataVo(
                     val time_zone: Any
                 )
             }
+
+            data class Id(
+                val id: String,
+                val number: Int,
+                val type: String
+            )
 
             data class Title(
                 val id: String,
@@ -111,6 +119,12 @@ data class NotionDataVo(
                     )
                 }
             }
+
+            data class Url(
+                val id: String,
+                val type: String,
+                val url: String
+            )
         }
     }
 }
