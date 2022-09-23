@@ -19,23 +19,13 @@ class AppBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, receiveIntent: Intent) {
 
         val activeManager = context.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
-
-        for (app in activeManager.runningAppProcesses) {
-            Log.d(TAG, "onReceive: app ${app.processName}")
-            Log.d(TAG, "onReceive: app ${app.importance}")
-
-        }
-
         var isAppForeground = false
-
         activeManager.runningAppProcesses.find {
             it.processName == context.packageName
         }?.apply {
             isAppForeground =
                 ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND == importance
         }
-
-        Log.d(TAG, "onReceive: isAppRunning $isAppForeground")
 
         receiveIntent.extras.let {
             val label = it?.getString("label")

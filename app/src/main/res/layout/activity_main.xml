@@ -8,187 +8,17 @@
         android:layout_height="match_parent"
         tools:context=".ui.MainActivity">
 
-        <LinearLayout
-            android:id="@+id/linearlayout_main_activity"
-            android:layout_width="match_parent"
+        <FrameLayout
+            android:id="@+id/fragment_main"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/main_bottom_nav_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <include
-                android:id="@+id/include_notification"
-                layout="@layout/layout_mainactivity_notification" />
+        </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/alarm_linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#030305"
-                android:orientation="vertical"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
-                android:paddingRight="5dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:id="@+id/alarm_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:textColor="#ffffff" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/alarm_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/recent_executed_app_linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#030305"
-                android:orientation="vertical"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
-                android:paddingRight="5dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:id="@+id/recent_executed_app_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:textColor="#ffffff" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recent_executed_app_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/often_executed_app_linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#030305"
-                android:orientation="vertical"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
-                android:paddingRight="5dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:id="@+id/often_executed_app_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:textColor="#ffffff" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/often_executed_app_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/un_executed_app_linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#030305"
-                android:orientation="vertical"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
-                android:paddingRight="5dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:id="@+id/un_executed_app_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:textColor="#ffffff" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/un_executed_app_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/runnable_app_linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#030305"
-                android:orientation="vertical"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
-                android:paddingRight="5dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:id="@+id/runnable_app_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:textColor="#ffffff" />
-
-                <!--                <GridView-->
-                <!--                    android:id="@+id/runnable_app_grid_view"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:horizontalSpacing="10dp"-->
-                <!--                    android:numColumns="6"-->
-                <!--                    android:stretchMode="columnWidth"-->
-                <!--                    android:verticalSpacing="10dp">-->
-
-                <!--                </GridView>-->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/runnable_app_grid_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </LinearLayout>
-        </LinearLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_bottom_nav_view"
@@ -197,7 +27,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearlayout_main_activity"
+            app:layout_constraintTop_toBottomOf="@id/fragment_main"
             app:menu="@menu/navi_menu">
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>

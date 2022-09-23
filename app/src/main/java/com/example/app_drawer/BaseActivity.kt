@@ -22,6 +22,7 @@ abstract class BaseActivity<View : ViewDataBinding> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = createBinding(layoutRes)
+        initView()
 
     }
 
@@ -64,5 +65,7 @@ abstract class BaseActivity<View : ViewDataBinding> : AppCompatActivity() {
         toast = Toast.makeText(this, msg, Toast.LENGTH_LONG)
         toast.show()
     }
+
+    abstract fun initView()
 
 }

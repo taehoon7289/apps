@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linearlayout_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include
+                android:id="@+id/include_notification"
+                layout="@layout/layout_mainactivity_notification" />
+
+            <LinearLayout
+                android:id="@+id/alarm_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#030305"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:id="@+id/alarm_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#ffffff" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/alarm_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/recent_executed_app_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#030305"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:id="@+id/recent_executed_app_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#ffffff" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recent_executed_app_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/often_executed_app_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#030305"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:id="@+id/often_executed_app_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#ffffff" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/often_executed_app_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/un_executed_app_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#030305"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:id="@+id/un_executed_app_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#ffffff" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/un_executed_app_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/runnable_app_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#030305"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:id="@+id/runnable_app_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#ffffff" />
+
+                <!--                <GridView-->
+                <!--                    android:id="@+id/runnable_app_grid_view"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:horizontalSpacing="10dp"-->
+                <!--                    android:numColumns="6"-->
+                <!--                    android:stretchMode="columnWidth"-->
+                <!--                    android:verticalSpacing="10dp">-->
+
+                <!--                </GridView>-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/runnable_app_grid_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
