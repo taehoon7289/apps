@@ -5,17 +5,11 @@
         android:id="@+id/first"
         android:enabled="true"
         android:icon="@drawable/ic_launcher_foreground"
-        android:title="첫번째"
+        android:title="앱"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/second"
         android:icon="@drawable/ic_launcher_foreground"
-        android:title="두번째"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/third"
-        android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="세번째"
+        android:title="알람"
         app:showAsAction="ifRoom" />
 </menu>

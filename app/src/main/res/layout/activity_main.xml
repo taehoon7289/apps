@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.MainActivity">
 
-        <FrameLayout
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_main"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -17,7 +17,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-        </FrameLayout>
+        </androidx.fragment.app.FragmentContainerView>
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

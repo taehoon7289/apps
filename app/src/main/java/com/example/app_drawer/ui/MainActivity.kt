@@ -95,24 +95,36 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         mainAppFragment = MainAppFragment()
         mainAlarmFragment = MainAlarmFragment()
         transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_main, mainAppFragment).commitAllowingStateLoss()
+        transaction.replace(R.id.fragment_main, mainAppFragment).commit()
 
-//        with(binding) {
-////            mainBottomNavView.
-//            binding.fragmentMain.
-//        }
+        with(binding) {
+            mainBottomNavView.setOnItemSelectedListener {
+                val id = it.itemId
+                when (id) {
+                    R.id.first -> clickNavButton(0)
+                    R.id.second -> clickNavButton(1)
+                    else -> clickNavButton(0)
+                }
+            }
+        }
 
     }
 
-    fun clickNavButton(index: Int) {
+
+    fun clickNavButton(index: Int): Boolean {
+
         when (index) {
-            0 -> transaction.replace(R.id.fragment_main, mainAppFragment)
-                .commitNowAllowingStateLoss()
-            1 -> transaction.replace(R.id.fragment_main, mainAlarmFragment)
-                .commitNowAllowingStateLoss()
-            else -> transaction.replace(R.id.fragment_main, mainAppFragment)
-                .commitNowAllowingStateLoss()
+            0 -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_main, mainAppFragment)
+                .commit()
+            1 -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_main, mainAlarmFragment)
+                .commit()
+            else -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_main, mainAppFragment)
+                .commit()
         }
+        return true
     }
 
     override fun onPause() {
