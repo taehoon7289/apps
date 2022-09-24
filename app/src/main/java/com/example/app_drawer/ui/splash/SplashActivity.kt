@@ -2,7 +2,6 @@ package com.example.app_drawer.ui.splash
 
 import android.animation.Animator
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import com.example.app_drawer.BaseActivity
 import com.example.app_drawer.R
@@ -16,9 +15,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     private val TAG = "SplashActivity"
     override val layoutRes: Int = R.layout.activity_splash
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+    override fun initView() {
         with(binding) {
             splashTextView.text = resources.getText(R.string.app_name)
             animationView.speed = 2.0f

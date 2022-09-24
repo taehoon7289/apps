@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isGone
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.app_drawer.App
@@ -15,9 +16,6 @@ import com.example.app_drawer.R
 import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.databinding.FragmentMainAppBinding
 import com.example.app_drawer.repository.AlarmRepository
-import com.example.app_drawer.repository.NotificationRepository
-import com.example.app_drawer.repository.UsageStatsRepository
-import com.example.app_drawer.ui.alarm.AlarmListViewModel
 import com.example.app_drawer.ui.app.*
 import com.example.app_drawer.ui.notion.NotionActivity
 import com.example.app_drawer.vo.AppInfoVo
@@ -26,25 +24,30 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainAppFragment : BaseFragment<FragmentMainAppBinding>(R.layout.fragment_main_app) {
+class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
-    // 앱 정보 상태 관리
-    @Inject
-    lateinit var usageStatsRepository: UsageStatsRepository
+    override val layoutRes: Int = R.layout.fragment_main_app
 
-    // 앱 알림정보
-    @Inject
-    lateinit var notificationRepository: NotificationRepository
+//    // 앱 정보 상태 관리
+//    @Inject
+//    lateinit var usageStatsRepository: UsageStatsRepository
+//
+//    // 앱 알림정보
+//    @Inject
+//    lateinit var notificationRepository: NotificationRepository
 
     // 예약 알람 정보
     @Inject
     lateinit var alarmRepository: AlarmRepository
 
     private val notificationListViewModel: NotificationListViewModel by viewModels()
-    private val alarmListViewModel: AlarmListViewModel by viewModels()
     private val appListViewModel: AppListViewModel by viewModels()
+    private val alarmListViewModel: AppListViewModel by viewModels()
 
     override fun initView() {
+
+        notificationListViewModel.reload()
+        alarmListViewModel.reload()
 
         with(binding) {
 
@@ -132,6 +135,11 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>(R.layout.fragment_m
         }
 
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: !!! fragment")
     }
 
     private val activityLauncher =

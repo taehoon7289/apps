@@ -10,7 +10,9 @@ import com.example.app_drawer.databinding.FragmentMainAlarmBinding
  * Use the [MainAlarmFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>(R.layout.fragment_main_alarm) {
+class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>() {
+
+    override val layoutRes: Int = R.layout.fragment_main_alarm
 
     override fun initView() {
 

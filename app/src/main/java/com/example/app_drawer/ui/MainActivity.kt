@@ -1,7 +1,6 @@
 package com.example.app_drawer.ui
 
 import android.app.AppOpsManager
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -52,7 +51,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: ####")
         super.onCreate(savedInstanceState)
-        initView()
+
         notificationListViewModel.reload()
         alarmListViewModel.reload()
         Log.d(TAG, "onCreate: alarmListViewModel ${alarmListViewModel.items}")
@@ -86,6 +85,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     lateinit var transaction: FragmentTransaction
+
     lateinit var mainAppFragment: MainAppFragment
     lateinit var mainAlarmFragment: MainAlarmFragment
 
@@ -94,14 +94,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val fragmentManager = supportFragmentManager
         mainAppFragment = MainAppFragment()
         mainAlarmFragment = MainAlarmFragment()
-
         transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_main, mainAppFragment).commitAllowingStateLoss()
 
-        transaction.replace(R.id.fragment_main, mainAppFragment).commitNowAllowingStateLoss()
-
-        with(binding) {
-//            mainBottomNavView.
-        }
+//        with(binding) {
+////            mainBottomNavView.
+//            binding.fragmentMain.
+//        }
 
     }
 
@@ -131,17 +130,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         Log.d(TAG, "onDestroy: ")
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.d(TAG, "onActivityResult: 실행!!!")
-        when (resultCode) {
-            0 -> {
-                Log.d(TAG, "onActivityResult: resultCode $resultCode")
-            }
-            else -> {
-                Log.d(TAG, "onActivityResult: else resultCode $resultCode")
-            }
-        }
-
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        Log.d(TAG, "onActivityResult: 실행!!!")
+//        when (resultCode) {
+//            0 -> {
+//                Log.d(TAG, "onActivityResult: resultCode $resultCode")
+//            }
+//            else -> {
+//                Log.d(TAG, "onActivityResult: else resultCode $resultCode")
+//            }
+//        }
+//
+//    }
 }
