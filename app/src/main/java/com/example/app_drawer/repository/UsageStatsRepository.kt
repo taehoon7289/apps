@@ -91,8 +91,7 @@ class UsageStatsRepository {
             UsageStatsManager.INTERVAL_DAILY, cal.timeInMillis, System.currentTimeMillis()
         )
         for (stats in queryUsageStats) {
-            val item = items.find { it.packageName == stats.packageName }
-            if (item == null) continue
+            val item = items.find { it.packageName == stats.packageName } ?: continue
             item.apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     lastTimeForegroundServiceUsed = stats.lastTimeForegroundServiceUsed
