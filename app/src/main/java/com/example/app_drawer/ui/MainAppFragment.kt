@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isGone
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.app_drawer.App
@@ -42,19 +41,18 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
     private val notificationListViewModel: NotificationListViewModel by viewModels()
     private val appListViewModel: AppListViewModel by viewModels()
-    private val alarmListViewModel: AppListViewModel by viewModels()
+    private var initFlag: Boolean = true
 
     override fun initView() {
 
         notificationListViewModel.reload()
-        alarmListViewModel.reload()
 
         with(binding) {
 
             val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)
             val notificationViewPagerAdapter = NotificationViewPagerAdapter(
                 handlerClickEvent = {
-                    val intent = Intent(App.instance, NotionActivity::class.java)
+                    val intent = Intent(this@MainAppFragment.activity, NotionActivity::class.java)
                     intent.putExtra("url", it.url)
                     this@MainAppFragment.startActivity(intent)
                 }
@@ -158,7 +156,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
     private val longClickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
         var calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
         TimePickerDialog(
-            App.instance, { _, hourOfDay, minute ->
+            this.activity, { _, hourOfDay, minute ->
                 // datepicker 확인 눌렀을 경우 동작
                 val nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
                 var immediatelyFlag = false
@@ -188,15 +186,15 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                             it?.let {
                                 alarmRepository.saveAlarm(it)
                             }
-                            Toast.makeText(App.instance, "예약됨", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this.activity, "예약됨", Toast.LENGTH_LONG).show()
                         },
                         {
                             Log.d(Companion.TAG, "bind: failCallback")
-                            Toast.makeText(App.instance, "권한이 없습니다.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this.activity, "권한이 없습니다.", Toast.LENGTH_LONG).show()
                         })
 
                 } else {
-                    Toast.makeText(App.instance, "예약불가 버전", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this.activity, "예약불가 버전", Toast.LENGTH_LONG).show()
                 }
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false
         ).show()
