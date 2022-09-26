@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import com.example.app_drawer.code.AlarmPeriodType
 import java.time.LocalDateTime
 
-class AlarmInfoVo(
+data class AlarmInfoVo(
     var alarmNo: Long? = null,
     var requestCode: Int? = null,
     var packageName: String? = null,

@@ -16,9 +16,6 @@ class AppViewHolder(
 
     private val TAG = "AppViewHolder"
 
-    @Inject
-    lateinit var alarmRepository: AlarmRepository
-
     fun bind(item: AppInfoVo) {
         binding.model = item
         binding.viewholderAppLinear.apply {
