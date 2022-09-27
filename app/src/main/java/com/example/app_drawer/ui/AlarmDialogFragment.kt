@@ -10,6 +10,7 @@ import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.databinding.FragmentAlarmDialogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class AlarmDialogFragment(
@@ -40,6 +41,9 @@ class AlarmDialogFragment(
 
     private fun initView() {
         with(binding) {
+            val nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
+            this@AlarmDialogFragment.hourOfDay = nowDate.get(Calendar.HOUR_OF_DAY)
+            this@AlarmDialogFragment.minute = nowDate.get(Calendar.MINUTE)
             timePicker.setOnTimeChangedListener { _, hourOfDay, minute ->
                 this@AlarmDialogFragment.hourOfDay = hourOfDay
                 this@AlarmDialogFragment.minute = minute

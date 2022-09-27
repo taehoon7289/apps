@@ -60,15 +60,12 @@ class AlarmRepository {
         val longMillis =
             ZonedDateTime.of(executeDate, ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli()
 
-        Log.d(
-            TAG, "registerToAlarmManager: $longMillis"
-        )
-
         if (alarmPeriodType === AlarmPeriodType.EVERY_DAY) {
-            alarmManager.setInexactRepeating(
+            alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 longMillis,
-                AlarmManager.INTERVAL_DAY,
+//                AlarmManager.INTERVAL_DAY,
+                1000 * 60,
                 pendingIntent,
             )
         } else {
