@@ -9,74 +9,79 @@
             type="com.example.app_drawer.vo.AlarmInfoVo" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewholder_alarm_linear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+        android:layout_height="70dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
+
+        <ImageView
+            android:id="@+id/alarm_app_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@{model.iconDrawable}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/alarm_app_info_constraint"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/viewholder_alarm_linear"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp">
+            android:id="@+id/alarm_app_info_constraint"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/alarm_app_switch"
+            app:layout_constraintStart_toEndOf="@id/alarm_app_icon"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/alarm_app_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="20dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@{model.iconDrawable}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/alarm_app_info_constraint"
+            <TextView
+                android:id="@+id/alarm_app_label"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="bottom"
+                android:text="@{model.label}"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@id/alarm_app_time"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/alarm_app_info_constraint"
+            <TextView
+                android:id="@+id/alarm_app_time"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:gravity="top"
+                android:text="@{model.executeDate.toString()}"
+                android:textColor="#cccccc"
+                android:textSize="12dp"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/alarm_app_icon"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/alarm_app_label"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:gravity="bottom"
-                    android:text="@{model.label}"
-                    android:textColor="#ffffff"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    app:layout_constrainedHeight="true"
-                    app:layout_constrainedWidth="true"
-                    app:layout_constraintBottom_toTopOf="@id/alarm_app_time"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/alarm_app_time"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:gravity="top"
-                    android:text="@{model.executeDate.toString()}"
-                    android:textColor="#cccccc"
-                    android:textSize="12dp"
-                    app:layout_constrainedHeight="true"
-                    app:layout_constrainedWidth="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/alarm_app_label" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/alarm_app_label" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/alarm_app_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/alarm_app_info_constraint"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.appcompat.widget.SwitchCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </layout>

@@ -10,7 +10,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.example.app_drawer.R
 import java.text.SimpleDateFormat
-import java.util.*
 
 class AppBroadcastReceiver : BroadcastReceiver() {
     private val TAG = "AppBroadcastReceiver"
@@ -30,9 +29,8 @@ class AppBroadcastReceiver : BroadcastReceiver() {
         receiveIntent.extras.let {
             val label = it?.getString("label")
             val packageName = it?.getString("packageName")
-            val executeDate = it?.get("executeDate") as Calendar
+            val executeDate = it?.get("executeDate")
 
-            val sdf = SimpleDateFormat("MM-dd HH:mm")
             val intent =
                 context.applicationContext.packageManager.getLaunchIntentForPackage(packageName!!)
             intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -65,7 +63,7 @@ class AppBroadcastReceiver : BroadcastReceiver() {
                 val notification = NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setContentTitle("예약시간이예요.")
-                    .setContentText("> 클릭시 $label 앱 실행 ${sdf.format(executeDate.time)} 예약")
+                    .setContentText("> 클릭시 $label 앱 실행 ${executeDate} 예약")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)

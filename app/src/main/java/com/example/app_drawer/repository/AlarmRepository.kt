@@ -17,6 +17,9 @@ import com.example.app_drawer.vo.AlarmInfoVo
 import com.example.app_drawer.vo.AppInfoVo
 import kotlinx.coroutines.*
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AlarmRepository {
@@ -33,82 +36,66 @@ class AlarmRepository {
     fun registerToAlarmManager(
         alarmPeriodType: AlarmPeriodType,
         appInfoVo: AppInfoVo,
-        calendar: Calendar,
-        immediatelyFlag: Boolean,
+        executeDate: LocalDateTime,
         successCallback: (AlarmInfoVo?) -> Unit = {},
         failCallback: () -> Unit = {},
     ) {
         val alarmManager = App.instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            alarmManager.canScheduleExactAlarms()
+        // BroadCastReceiver 로 인텐트 전달
+        val intent = Intent(
+            App.instance, AppBroadcastReceiver::class.java
+        )
+        intent.putExtra("label", appInfoVo.label)
+        intent.putExtra("packageName", appInfoVo.packageName)
+        intent.putExtra("executeDate", executeDate.format(DateTimeFormatter.ofPattern("HH:mm")))
+
+        val requestCode = Calendar.getInstance().timeInMillis.toInt()
+        val pendingIntent = PendingIntent.getBroadcast(
+            App.instance,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val longMillis =
+            ZonedDateTime.of(executeDate, ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli()
+
+        Log.d(
+            TAG, "registerToAlarmManager: $longMillis"
+        )
+
+        if (alarmPeriodType === AlarmPeriodType.EVERY_DAY) {
+            alarmManager.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                longMillis,
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent,
+            )
         } else {
-            false
-        }
-        if (hasPermission) {
-            // BroadCastReceiver 로 인텐트 전달
-            val intent = Intent(
-                App.instance, AppBroadcastReceiver::class.java
-            )
-            intent.putExtra("label", appInfoVo.label)
-            intent.putExtra("packageName", appInfoVo.packageName)
-            intent.putExtra("executeDate", calendar)
-
-            val requestCode = Calendar.getInstance().timeInMillis.toInt()
-
-            if (immediatelyFlag) {
-                val immediatelyIntent =
-                    App.instance.packageManager.getLaunchIntentForPackage(appInfoVo.packageName!!)
-                immediatelyIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                App.instance.startActivity(immediatelyIntent)
-                successCallback(null)
-                return
-            }
-
-            val pendingIntent = PendingIntent.getBroadcast(
-                App.instance,
-                requestCode,
-                intent,
-                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-
-            if (alarmPeriodType === AlarmPeriodType.EVERY_DAY) {
-                alarmManager.setRepeating(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,
-                    calendar.timeInMillis,
-                    AlarmManager.INTERVAL_DAY,
+                    longMillis,
                     pendingIntent,
                 )
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP,
-                        calendar.timeInMillis,
-                        pendingIntent,
-                    )
-                } else {
-                    alarmManager.setExact(
-                        AlarmManager.RTC_WAKEUP,
-                        calendar.timeInMillis,
-                        pendingIntent,
-                    )
-                }
+                alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    longMillis,
+                    pendingIntent,
+                )
             }
-            val alarmInfoVo = AlarmInfoVo(
-                requestCode = requestCode,
-                executeDate = LocalDateTime.ofInstant(
-                    calendar.toInstant(), TimeZone.getTimeZone("Asia/Seoul").toZoneId()
-                ),
-                createDate = LocalDateTime.now(),
-                periodType = alarmPeriodType,
-                packageName = appInfoVo.packageName,
-                iconDrawable = appInfoVo.iconDrawable,
-                label = appInfoVo.label,
-            )
-            successCallback(alarmInfoVo)
-
-        } else {
-            failCallback()
         }
+        val alarmInfoVo = AlarmInfoVo(
+            requestCode = requestCode,
+            executeDate = executeDate,
+            createDate = LocalDateTime.now(),
+            periodType = alarmPeriodType,
+            packageName = appInfoVo.packageName,
+            iconDrawable = appInfoVo.iconDrawable,
+            label = appInfoVo.label,
+        )
+        successCallback(alarmInfoVo)
 
     }
 
