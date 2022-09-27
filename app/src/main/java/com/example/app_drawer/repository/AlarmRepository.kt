@@ -64,8 +64,8 @@ class AlarmRepository {
             alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 longMillis,
-//                AlarmManager.INTERVAL_DAY,
-                1000 * 60,
+                AlarmManager.INTERVAL_DAY,
+//                1000 * 60,
                 pendingIntent,
             )
         } else {

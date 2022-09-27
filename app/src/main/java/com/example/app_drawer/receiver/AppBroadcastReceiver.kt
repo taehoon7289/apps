@@ -9,7 +9,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.example.app_drawer.R
-import java.text.SimpleDateFormat
+import java.util.*
 
 class AppBroadcastReceiver : BroadcastReceiver() {
     private val TAG = "AppBroadcastReceiver"
@@ -68,7 +68,7 @@ class AppBroadcastReceiver : BroadcastReceiver() {
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
                     .build()
-                notificationManager.notify(45, notification)
+                notificationManager.notify(Random().nextInt(), notification)
             }
 
         }
