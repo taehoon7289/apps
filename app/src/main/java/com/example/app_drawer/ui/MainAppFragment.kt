@@ -78,9 +78,12 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                         Log.d(TAG, "onPageSelected: $position")
                         val items = notificationListViewModel.items.value
                         if (items?.isEmpty() == false) {
-                            Log.d(TAG, "onPageSelected: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                            Log.d(
+                                TAG, "onPageSelected: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+                            )
                             textviewNotification.text =
                                 "${position + 1} / ${notificationListViewModel.items.value?.size ?: 0}"
+                            Log.d(TAG, "onPageSelected: ${textviewNotification.text}")
                         } else {
                             Log.d(TAG, "onPageSelected: @@@@@@@@@@@@@@@@@@@@")
                             textviewNotification.text = ""
@@ -99,6 +102,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 notificationListViewModel.items.observe(this@MainAppFragment) {
                     linearlayoutNotification.isGone = it.isEmpty()
                     notificationViewPagerAdapter.submitList(it)
+
                 }
             }
 

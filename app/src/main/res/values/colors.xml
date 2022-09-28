@@ -26,8 +26,8 @@
     <color name="light_main_color_variant">#4D887dfb</color>
 
     <color name="light_secondary_color">#B774FB</color>
-    <color name="light_secondary_color_low_2">#CD9FFD</color>
-    <color name="light_secondary_color_low_1">#EAD7FE</color>
+    <color name="light_secondary_color_low_2">#EAD7FE</color>
+    <color name="light_secondary_color_low_1">#CD9FFD</color>
     <color name="light_secondary_color_high_1">#A24EF7</color>
     <color name="light_secondary_color_high_2">#8928EC</color>
     <color name="light_secondary_color_on">#F7F4FB</color>
@@ -35,10 +35,10 @@
     <color name="light_secondary_color_variant">#4DB774FB</color>
 
     <color name="dark_main_color">#2E313D</color>
-    <color name="dark_main_color_low_2">#424D77</color>
-    <color name="dark_main_color_low_1">#2E313D</color>
-    <color name="dark_main_color_high_1">#424D77</color>
-    <color name="dark_main_color_high_2">#26315C</color>
+    <color name="dark_main_color_low_2">#676C7E</color>
+    <color name="dark_main_color_low_1">#4B4F60</color>
+    <color name="dark_main_color_high_1">#1C2030</color>
+    <color name="dark_main_color_high_2">#11162A</color>
     <color name="dark_main_color_on">#F4F5FB</color>
     <color name="dark_main_color_accent">#1D2426</color>
     <color name="dark_main_color_variant">#4D2E313D</color>
