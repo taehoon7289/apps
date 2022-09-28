@@ -52,16 +52,16 @@
             app:layout_constraintTop_toBottomOf="@id/time_picker">
 
             <Button
-                android:id="@+id/button_save"
+                android:id="@+id/button_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="등록" />
+                android:text="@string/text_confirm" />
 
             <Button
-                android:id="@+id/button_close"
+                android:id="@+id/button_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="취소" />
+                android:text="@string/text_cancel" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

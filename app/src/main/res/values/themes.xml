@@ -27,8 +27,10 @@
         <item name="colorSecondaryVariant">@color/light_secondary_color_variant</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/light_main_color</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <!-- Customize your theme here. -->
+        <item name="android:colorBackground">@color/light_main_color_background</item>
+        <item name="android:fontFamily" tools:targetApi="o">@font/bmhannapro</item>
     </style>
 </resources>

@@ -59,11 +59,11 @@ class AlarmDialogFragment(
                 onRadioButtonClicked(it)
             }
 
-            buttonSave.setOnClickListener {
+            buttonConfirm.setOnClickListener {
                 saveCallback(alarmPeriodType, hourOfDay, minute)
                 dismiss()
             }
-            buttonClose.setOnClickListener {
+            buttonCancel.setOnClickListener {
                 dismiss()
             }
         }
