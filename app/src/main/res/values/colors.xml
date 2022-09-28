@@ -17,7 +17,7 @@
     <!-- low, high 는 https://paletton.com 에서 추천 색 적용 -->
 
     <color name="light_main_color">#887dfb</color>
-    <color name="light_main_color_low_2">#DDD9FE</color>
+    <color name="light_main_color_low_2">#ADA5FD</color>
     <color name="light_main_color_low_1">#DDD9FE</color>
     <color name="light_main_color_high_1">#6759F7</color>
     <color name="light_main_color_high_2">#ADA5FD</color>
@@ -26,12 +26,12 @@
     <color name="light_main_color_variant">#4D887dfb</color>
 
     <color name="light_secondary_color">#B774FB</color>
-    <color name="light_secondary_color_low_2">#87C0FF</color>
-    <color name="light_secondary_color_low_1">#BC7BFF</color>
-    <color name="light_secondary_color_high_1">#65AEFF</color>
-    <color name="light_secondary_color_high_2">#65AEFF</color>
-    <color name="light_secondary_color_on">#FBF7F4</color>
-    <color name="light_secondary_color_accent">#F2584A</color>
+    <color name="light_secondary_color_low_2">#CD9FFD</color>
+    <color name="light_secondary_color_low_1">#EAD7FE</color>
+    <color name="light_secondary_color_high_1">#A24EF7</color>
+    <color name="light_secondary_color_high_2">#8928EC</color>
+    <color name="light_secondary_color_on">#F7F4FB</color>
+    <color name="light_secondary_color_accent">#4D5BF9</color>
     <color name="light_secondary_color_variant">#4DB774FB</color>
 
     <color name="dark_main_color">#2E313D</color>

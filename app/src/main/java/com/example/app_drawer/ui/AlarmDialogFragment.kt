@@ -48,12 +48,10 @@ class AlarmDialogFragment(
                 this@AlarmDialogFragment.hourOfDay = hourOfDay
                 this@AlarmDialogFragment.minute = minute
             }
-            radioEveryDay.text = "매일반복"
             radioEveryDay.isChecked = alarmPeriodType === AlarmPeriodType.EVERY_DAY
             radioEveryDay.setOnClickListener {
                 onRadioButtonClicked(it)
             }
-            radioOnce.text = "한번"
             radioOnce.isChecked = alarmPeriodType === AlarmPeriodType.ONCE
             radioOnce.setOnClickListener {
                 onRadioButtonClicked(it)

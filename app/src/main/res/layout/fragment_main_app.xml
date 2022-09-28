@@ -17,9 +17,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:subtitle="@string/menu_title_app"
-            app:subtitleTextColor="?attr/colorOnSecondary"
+            app:subtitleTextColor="?attr/colorPrimary"
             app:title="@string/app_name"
-            app:titleTextColor="?attr/colorOnPrimary" />
+            app:titleTextColor="?attr/colorPrimary" />
 
         <LinearLayout
             android:id="@+id/linearlayout_main_activity"

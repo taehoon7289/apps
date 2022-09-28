@@ -5,4 +5,6 @@
     <string name="text_cancel">취소</string>
     <string name="menu_title_app">앱 고르기</string>
     <string name="menu_title_alarm">알람예약 보기</string>
+    <string name="time_picker_radio_every">반복</string>
+    <string name="time_picker_radio_once">한번</string>
 </resources>

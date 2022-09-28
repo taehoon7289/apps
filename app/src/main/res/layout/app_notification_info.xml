@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{model.type.label}"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="15sp" />
 
         <TextView
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"
             android:text="@{model.title}"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="15sp" />
 
         <TextView
@@ -35,7 +37,8 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:text="@{model.createDate}"
-            android:textSize="10sp" />
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="11sp" />
 
     </LinearLayout>
 </layout>

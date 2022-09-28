@@ -38,8 +38,8 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <!-- Customize your theme here. -->
-        <item name="android:colorBackground">@color/dark_main_color</item>
-        <item name="android:textColor">@color/dark_main_color_on</item>
+        <item name="android:colorBackground">@color/dark_main_color_on</item>
+        <item name="android:textColor">@color/dark_main_color</item>
         <item name="android:fontFamily" tools:targetApi="o">@font/bmhannapro</item>
 
     </style>
