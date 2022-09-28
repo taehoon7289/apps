@@ -22,36 +22,6 @@
                 layout="@layout/layout_mainactivity_notification" />
 
             <LinearLayout
-                android:id="@+id/alarm_linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
-                android:paddingRight="5dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:id="@+id/alarm_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/alarm_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/recent_executed_app_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
