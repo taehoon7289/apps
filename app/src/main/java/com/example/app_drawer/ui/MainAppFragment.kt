@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.app_drawer.AlarmDialogFragment
 import com.example.app_drawer.App
 import com.example.app_drawer.BaseFragment
@@ -58,10 +59,43 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 this@MainAppFragment.startActivity(intent)
             })
 
+
             with(includeNotification) {
-                this.viewpagerNotification.adapter = notificationViewPagerAdapter
+
+                viewpagerNotification.registerOnPageChangeCallback(object :
+                    ViewPager2.OnPageChangeCallback() {
+                    override fun onPageScrolled(
+                        position: Int, positionOffset: Float, positionOffsetPixels: Int
+                    ) {
+                        super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                        // 스크롤 중에 반응
+                        Log.d(TAG, "onPageScrolled: $position")
+                    }
+
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                        // 페이지 변경되면 반응
+                        Log.d(TAG, "onPageSelected: $position")
+                        val items = notificationListViewModel.items.value
+                        if (items?.isEmpty() == false) {
+                            textviewNotification.text =
+                                "${position + 1} / ${notificationListViewModel.items.value?.size ?: 0}"
+                        } else {
+                            textviewNotification.text = ""
+                        }
+
+                    }
+
+                    override fun onPageScrollStateChanged(state: Int) {
+                        super.onPageScrollStateChanged(state)
+                        // 스크롤 상태에 변경되면 반응 0, 1, 2
+                        Log.d(TAG, "onPageScrollStateChanged: $state")
+                    }
+                })
+
+                viewpagerNotification.adapter = notificationViewPagerAdapter
                 notificationListViewModel.items.observe(this@MainAppFragment) {
-                    this.linearlayoutNotification.isGone = it.isEmpty()
+                    linearlayoutNotification.isGone = it.isEmpty()
                     notificationViewPagerAdapter.submitList(it)
                 }
             }

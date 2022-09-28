@@ -4,5 +4,5 @@
     <string name="text_confirm">확인</string>
     <string name="text_cancel">취소</string>
     <string name="menu_title_app">앱 고르기</string>
-    <string name="menu_title_alarm">알람 리스트</string>
+    <string name="menu_title_alarm">알람예약 보기</string>
 </resources>
