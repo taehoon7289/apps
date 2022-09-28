@@ -55,13 +55,13 @@
                 android:id="@+id/button_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="등록"></Button>
+                android:text="등록" />
 
             <Button
                 android:id="@+id/button_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="취소"></Button>
+                android:text="취소" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
