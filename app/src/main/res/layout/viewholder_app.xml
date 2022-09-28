@@ -28,7 +28,6 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@{model.label}"
-            android:textColor="#ffffff"
             android:textSize="12dp" />
 
     </LinearLayout>

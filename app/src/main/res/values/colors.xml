@@ -11,4 +11,28 @@
     <color name="main2">#728BF2</color>
     <color name="main3">#91A6FE</color>
     <color name="main_black">#2e2e2e</color>
+
+    <!-- main, secondary 색상 골라서 _on, _accent 는 https://mobilepalette.colorion.co 에서 선택 -->
+    <!-- _variant 는 https://color.adobe.com/ko/create/color-wheel 에서 음영 선택 -->
+
+    <color name="light_main_color">#887dfb</color>
+    <color name="light_main_color_on">#F4F4FB</color>
+    <color name="light_main_color_accent">#57A8FA</color>
+    <color name="light_main_color_variant">#403B75</color>
+
+    <color name="light_secondary_color">#F5A26E</color>
+    <color name="light_secondary_color_on">#FBF7F4</color>
+    <color name="light_secondary_color_accent">#F2584A</color>
+    <color name="light_secondary_color_variant">#754E35</color>
+
+    <color name="dark_main_color">#222724</color>
+    <color name="dark_main_color_on">#F4FBF7</color>
+    <color name="dark_main_color_accent">#0F100E</color>
+    <color name="dark_main_color_variant">#66756C</color>
+
+    <color name="dark_secondary_color">#121212</color>
+    <color name="dark_secondary_color_on">#FBF4F4</color>
+    <color name="dark_secondary_color_accent">#000000</color>
+    <color name="dark_secondary_color_variant">#757575</color>
+
 </resources>

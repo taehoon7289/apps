@@ -19,7 +19,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{model.type.label}"
-            android:textColor="@color/main1"
             android:textSize="15dp" />
 
         <TextView
