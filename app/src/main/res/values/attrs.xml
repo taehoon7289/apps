@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorPrimaryLow1" format="color"></attr>
+    <attr name="colorPrimaryLow2" format="color"></attr>
+    <attr name="colorPrimaryHigh1" format="color"></attr>
+    <attr name="colorPrimaryHigh2" format="color"></attr>
+
+    <attr name="colorSecondaryLow1" format="color"></attr>
+    <attr name="colorSecondaryLow2" format="color"></attr>
+    <attr name="colorSecondaryHigh1" format="color"></attr>
+    <attr name="colorSecondaryHigh2" format="color"></attr>
+</resources>

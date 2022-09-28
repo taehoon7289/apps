@@ -7,7 +7,6 @@ import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -139,17 +138,18 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: !!! fragment")
+        appListViewModel.reload()
     }
 
-    private val activityLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
-            Log.d(Companion.TAG, "activityLauncher: appListViewModel.reload()")
-            appListViewModel.reload()
-        }
+//    private val activityLauncher =
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+//            Log.d(Companion.TAG, "activityLauncher: appListViewModel.reload()")
+//            appListViewModel.reload()
+//        }
 
     private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
 
-        activityLauncher.launch(item.execIntent)
+        this@MainAppFragment.startActivity(item.execIntent)
 
         Log.d(Companion.TAG, "clickListenerLambda: start!!!")
     }

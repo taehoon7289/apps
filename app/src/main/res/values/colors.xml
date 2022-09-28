@@ -14,27 +14,62 @@
 
     <!-- main, secondary 색상 골라서 _on, _accent 는 https://mobilepalette.colorion.co 에서 선택 -->
     <!-- _variant 는 https://color.adobe.com/ko/create/color-wheel 에서 음영 선택 -->
+    <!-- low, high 는 https://paletton.com 에서 추천 색 적용 -->
 
     <color name="light_main_color">#887dfb</color>
+    <color name="light_main_color_low_2">#DDD9FE</color>
+    <color name="light_main_color_low_1">#DDD9FE</color>
+    <color name="light_main_color_high_1">#6759F7</color>
+    <color name="light_main_color_high_2">#ADA5FD</color>
     <color name="light_main_color_on">#F4F4FB</color>
     <color name="light_main_color_accent">#57A8FA</color>
-    <color name="light_main_color_variant">#403B75</color>
-    <color name="light_main_color_background">#B6D3DE</color>
+    <color name="light_main_color_variant">#4D887dfb</color>
 
-    <color name="light_secondary_color">#F5A26E</color>
+    <color name="light_secondary_color">#B774FB</color>
+    <color name="light_secondary_color_low_2">#87C0FF</color>
+    <color name="light_secondary_color_low_1">#BC7BFF</color>
+    <color name="light_secondary_color_high_1">#65AEFF</color>
+    <color name="light_secondary_color_high_2">#65AEFF</color>
     <color name="light_secondary_color_on">#FBF7F4</color>
     <color name="light_secondary_color_accent">#F2584A</color>
-    <color name="light_secondary_color_variant">#754E35</color>
+    <color name="light_secondary_color_variant">#4DB774FB</color>
 
-    <color name="dark_main_color">#222724</color>
-    <color name="dark_main_color_on">#F4FBF7</color>
-    <color name="dark_main_color_accent">#0F100E</color>
-    <color name="dark_main_color_variant">#66756C</color>
-    <color name="dark_main_color_background">#2F3631</color>
+    <color name="dark_main_color">#2E313D</color>
+    <color name="dark_main_color_low_2">#424D77</color>
+    <color name="dark_main_color_low_1">#2E313D</color>
+    <color name="dark_main_color_high_1">#424D77</color>
+    <color name="dark_main_color_high_2">#26315C</color>
+    <color name="dark_main_color_on">#F4F5FB</color>
+    <color name="dark_main_color_accent">#1D2426</color>
+    <color name="dark_main_color_variant">#4D2E313D</color>
 
-    <color name="dark_secondary_color">#121212</color>
-    <color name="dark_secondary_color_on">#FBF4F4</color>
-    <color name="dark_secondary_color_accent">#000000</color>
-    <color name="dark_secondary_color_variant">#757575</color>
+    <color name="dark_secondary_color">#332E3D</color>
+    <color name="dark_secondary_color_low_2">#534278</color>
+    <color name="dark_secondary_color_low_1">#473C61</color>
+    <color name="dark_secondary_color_high_1">#534278</color>
+    <color name="dark_secondary_color_high_2">#372D4E</color>
+    <color name="dark_secondary_color_on">#F6F4FB</color>
+    <color name="dark_secondary_color_accent">#1E2434</color>
+    <color name="dark_secondary_color_variant">#4D332E3D</color>
+
+    <color name="o5">#0D000000</color>
+    <color name="o10">#1A000000</color>
+    <color name="o15">#26000000</color>
+    <color name="o20">#33000000</color>
+    <color name="o25">#40000000</color>
+    <color name="o30">#4D000000</color>
+    <color name="o35">#59000000</color>
+    <color name="o40">#66000000</color>
+    <color name="o45">#73000000</color>
+    <color name="o50">#80000000</color>
+    <color name="o55">#8C000000</color>
+    <color name="o60">#99000000</color>
+    <color name="o65">#A6000000</color>
+    <color name="o70">#B3000000</color>
+    <color name="o75">#BF000000</color>
+    <color name="o80">#CC000000</color>
+    <color name="o85">#D9000000</color>
+    <color name="o90">#E6000000</color>
+    <color name="o95">#F2000000</color>
 
 </resources>

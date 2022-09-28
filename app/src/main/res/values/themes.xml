@@ -17,12 +17,20 @@
 
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/light_main_color</item>
-        <item name="colorOnPrimary">@color/light_main_color_accent</item>
+        <item name="colorPrimaryLow1">@color/light_main_color_low_1</item>
+        <item name="colorPrimaryLow2">@color/light_main_color_low_2</item>
+        <item name="colorPrimaryHigh1">@color/light_main_color_high_1</item>
+        <item name="colorPrimaryHigh2">@color/light_main_color_high_2</item>
+        <item name="colorOnPrimary">@color/light_main_color_on</item>
         <item name="colorPrimaryVariant">@color/light_main_color_variant</item>
         <item name="colorPrimarySurface">@color/light_main_color_on</item>
 
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/light_secondary_color</item>
+        <item name="colorSecondaryLow1">@color/light_secondary_color_low_1</item>
+        <item name="colorSecondaryLow2">@color/light_secondary_color_low_2</item>
+        <item name="colorSecondaryHigh1">@color/light_secondary_color_high_1</item>
+        <item name="colorSecondaryHigh2">@color/light_secondary_color_high_2</item>
         <item name="colorOnSecondary">@color/light_secondary_color_on</item>
         <item name="colorSecondaryVariant">@color/light_secondary_color_variant</item>
 
@@ -30,7 +38,10 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <!-- Customize your theme here. -->
-        <item name="android:colorBackground">@color/light_main_color_background</item>
+        <!-- default color 주입 -->
+        <item name="android:colorBackground">@color/light_main_color</item>
+        <item name="android:textColor">@color/light_main_color_on</item>
         <item name="android:fontFamily" tools:targetApi="o">@font/bmhannapro</item>
+
     </style>
 </resources>
