@@ -24,7 +24,6 @@
         android:autoSizeTextType="uniform"
         android:background="@drawable/notification_index_shape"
         android:gravity="center_horizontal"
-        android:maxLines="1"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
