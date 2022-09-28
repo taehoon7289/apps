@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{model.type.label}"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/app_notification_title"
@@ -28,7 +28,7 @@
             android:paddingLeft="5dp"
             android:text="@{model.title}"
             android:textColor="#2e2e2e"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/app_notification_create_date"
@@ -37,7 +37,7 @@
             android:paddingLeft="10dp"
             android:text="@{model.createDate}"
             android:textColor="#2e2e2e"
-            android:textSize="10dp" />
+            android:textSize="10sp" />
 
     </LinearLayout>
 </layout>

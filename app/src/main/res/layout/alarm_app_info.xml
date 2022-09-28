@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@{model.label}"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/package_name_text_view"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@{model.packageName}"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
 
     </LinearLayout>
