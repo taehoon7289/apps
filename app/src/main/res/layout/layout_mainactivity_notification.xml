@@ -6,9 +6,10 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp"
     android:background="@drawable/shape"
-    android:visibility="gone"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:visibility="gone">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager_notification"
@@ -24,9 +25,9 @@
         android:id="@+id/textview_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="50dp"
         android:background="@drawable/notification_index_shape"
         android:gravity="center_horizontal"
+        android:minWidth="50dp"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

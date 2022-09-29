@@ -75,6 +75,8 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     // To use Kotlin annotation processing tool (kapt)
     kapt "androidx.room:room-compiler:$room_version"
+
+    implementation "com.google.android.gms:play-services-ads:21.2.0"
 }
 
 kapt {

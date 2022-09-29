@@ -1,11 +1,16 @@
 package com.example.app_drawer.ui.app
 
+import android.graphics.Color
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.app_drawer.App
+import com.example.app_drawer.R
 import com.example.app_drawer.code.ListViewType
 import com.example.app_drawer.repository.UsageStatsRepository
 import com.example.app_drawer.vo.AppInfoVo
+import com.example.app_drawer.vo.TopicInfoVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -48,6 +53,11 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
     val runnableItems: LiveData<MutableList<AppInfoVo>>
         get() = _runnableItems
 
+    private var _topicItems: MutableLiveData<MutableList<TopicInfoVo>> = MutableLiveData()
+
+    val topicItems: LiveData<MutableList<TopicInfoVo>>
+        get() = _topicItems
+
     fun reload() {
         usageStatsRepository.createAppInfoList()
         _recentUsedItems.value = usageStatsRepository.getAppInfoByType(
@@ -62,6 +72,59 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
         _runnableItems.value = usageStatsRepository.getAppInfoByType(
             ListViewType.RUNNABLE
         )
+        val topics = mutableListOf<TopicInfoVo>()
+        topics.add(
+            TopicInfoVo(
+                appInfoVoList = _recentUsedItems.value,
+                title = App.instance.getString(R.string.topic_title_recent),
+                description = "${App.instance.getString(R.string.topic_title_recent)}입니다",
+                color = Color.RED,
+                icon = ContextCompat.getDrawable(
+                    App.instance,
+                    R.drawable.ic_topic_recent
+                )
+            )
+        )
+
+        topics.add(
+            TopicInfoVo(
+                appInfoVoList = _oftenUsedItems.value,
+                title = App.instance.getString(R.string.topic_title_often),
+                description = "${App.instance.getString(R.string.topic_title_often)}입니다",
+                color = Color.RED,
+                icon = ContextCompat.getDrawable(
+                    App.instance,
+                    R.drawable.ic_topic_often
+                )
+            )
+        )
+
+        topics.add(
+            TopicInfoVo(
+                appInfoVoList = _unUsedItems.value,
+                title = App.instance.getString(R.string.topic_title_unused),
+                description = "${App.instance.getString(R.string.topic_title_unused)}입니다",
+                color = Color.RED,
+                icon = ContextCompat.getDrawable(
+                    App.instance,
+                    R.drawable.ic_topic_unused
+                )
+            )
+        )
+
+        topics.add(
+            TopicInfoVo(
+                appInfoVoList = _runnableItems.value,
+                title = App.instance.getString(R.string.topic_title_runnable),
+                description = "${App.instance.getString(R.string.topic_title_runnable)}입니다",
+                color = Color.RED,
+                icon = ContextCompat.getDrawable(
+                    App.instance,
+                    R.drawable.ic_topic_runnable
+                )
+            )
+        )
+        _topicItems.value = topics
     }
 
 }

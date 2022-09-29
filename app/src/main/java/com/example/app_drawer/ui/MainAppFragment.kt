@@ -44,7 +44,6 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
     private val notificationListViewModel: NotificationListViewModel by viewModels()
     private val appListViewModel: AppListViewModel by viewModels()
-    private var initFlag: Boolean = true
 
     override fun initView() {
 
@@ -106,8 +105,22 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 }
             }
 
+            // 주제별 2열 리스트
+            val topicViewAdapter = TopicViewAdapter(
+                clickCallback = {},
+                longClickCallback = {},
+            )
+            topicRecyclerView.adapter = topicViewAdapter
+            // 그리드 레이아웃 설정
+            val topicGridLayoutManager = GridLayoutManager(this@MainAppFragment.activity, 2)
+            topicRecyclerView.layoutManager = topicGridLayoutManager
+            appListViewModel.topicItems.observe(this@MainAppFragment) {
+                Log.d(TAG, "initView: topicItems ${it?.size}")
+                topicViewAdapter.submitList(it)
+            }
+
             // 최근 실행된 앱 recyclerView
-            recentExecutedAppTextView.text = "최근 실행 앱"
+            recentExecutedAppTextView.text = getString(R.string.topic_title_recent)
             val recentUsedAppViewAdapter = AppViewAdapter(
                 clickCallback = clickListenerLambda,
                 longClickCallback = longClickListenerLambda,
@@ -123,7 +136,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 recentUsedAppViewAdapter.submitList(it)
             }
             // 자주 실행하는 앱
-            oftenExecutedAppTextView.text = "자주 실행하는 앱"
+            oftenExecutedAppTextView.text = getString(R.string.topic_title_often)
             val oftenUsedAppViewAdapter = AppViewAdapter(
                 clickCallback = clickListenerLambda,
                 longClickCallback = longClickListenerLambda,
@@ -139,7 +152,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 oftenUsedAppViewAdapter.submitList(it)
             }
             // 아직 실행하지 않은 앱 recyclerView
-            unExecutedAppTextView.text = "아직 미실행 앱"
+            unExecutedAppTextView.text = getString(R.string.topic_title_unused)
             val unUsedAppViewAdapter = AppViewAdapter(
                 clickCallback = clickListenerLambda,
                 longClickCallback = longClickListenerLambda,
@@ -155,7 +168,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 unUsedAppViewAdapter.submitList(it)
             }
             // 실행가능한 앱 gridView
-            runnableAppTextView.text = "실행 가능한 앱"
+            runnableAppTextView.text = getString(R.string.topic_title_runnable)
             val runnableAppViewAdapter = AppViewAdapter(
                 clickCallback = clickListenerLambda,
                 longClickCallback = longClickListenerLambda,
@@ -164,8 +177,8 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             // 그리드 레이아웃 설정
             val gridLayoutManager = GridLayoutManager(App.instance, 7)
             runnableAppGridView.layoutManager = gridLayoutManager
-            // 스크롤 안보이게 하는 효과남
-            runnableAppGridView.isVerticalScrollBarEnabled = true
+            // 안의 스크롤효과 제거
+            runnableAppGridView.isNestedScrollingEnabled = false
             appListViewModel.runnableItems.observe(this@MainAppFragment) {
                 runnableAppLinearLayout.isGone = it.isEmpty()
                 runnableAppViewAdapter.submitList(it)
