@@ -24,6 +24,10 @@
     <color name="light_main_color_on">#F4F4FB</color>
     <color name="light_main_color_accent">#57A8FA</color>
     <color name="light_main_color_variant">#4D887dfb</color>
+    <color name="light_color_title">#7C4DFF</color>
+    <color name="light_color_sub_title">#99000000</color>
+    <color name="light_color_notification_title_bg">#EDE7F6</color>
+    <color name="light_color_notification_index_bg">#D1C4E9</color>
 
     <color name="light_secondary_color">#B774FB</color>
     <color name="light_secondary_color_low_2">#EAD7FE</color>
@@ -42,6 +46,10 @@
     <color name="dark_main_color_on">#F4F5FB</color>
     <color name="dark_main_color_accent">#1D2426</color>
     <color name="dark_main_color_variant">#4D2E313D</color>
+    <color name="dark_color_title">#2E313D</color>
+    <color name="dark_color_sub_title">#2E313D</color>
+    <color name="dark_color_notification_title_bg">#2E313D</color>
+    <color name="dark_color_notification_index_bg">#2E313D</color>
 
     <color name="dark_secondary_color">#332E3D</color>
     <color name="dark_secondary_color_low_2">#534278</color>

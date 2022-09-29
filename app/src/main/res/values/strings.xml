@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Apps</string>
+    <string name="app_name">APPS</string>
     <string name="app_label">앱스</string>
     <string name="text_confirm">확인</string>
     <string name="text_cancel">취소</string>

@@ -4,12 +4,10 @@
     android:id="@+id/linearlayout_notification"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:background="@drawable/shape"
-    android:gravity="center_vertical"
-    android:visibility="gone">
+    android:gravity="center_vertical">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager_notification"

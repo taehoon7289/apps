@@ -3,12 +3,13 @@ package com.example.app_drawer.ui
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.FragmentMainAlarmBinding
 import com.example.app_drawer.ui.alarm.AlarmListViewModel
+import com.example.app_drawer.ui.alarm.AlarmViewAdapter
 import com.example.app_drawer.ui.alarm.AlarmViewVerticalDecoration
-import com.example.app_drawer.ui.app.AlarmViewAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -43,6 +44,10 @@ class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>() {
                 AlarmViewVerticalDecoration(250f, 100f, 1f, "#BDBDBD")
             alarmRecyclerView.addItemDecoration(alarmViewVerticalDecoration)
             alarmRecyclerView.adapter = alarmViewAdapter
+
+            val itemTouchHelper = ItemTouchHelper(SwipeController(alarmViewAdapter))
+            itemTouchHelper.attachToRecyclerView(alarmRecyclerView)
+
             alarmListViewModel.items.observe(this@MainAlarmFragment) {
                 Log.d(TAG, "initView: it $it")
                 alarmViewAdapter.submitList(it)

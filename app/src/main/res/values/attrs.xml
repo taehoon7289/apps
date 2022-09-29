@@ -9,4 +9,9 @@
     <attr name="colorSecondaryLow2" format="color"></attr>
     <attr name="colorSecondaryHigh1" format="color"></attr>
     <attr name="colorSecondaryHigh2" format="color"></attr>
+
+    <attr name="colorTitle" format="color"></attr>
+    <attr name="colorSubTitle" format="color"></attr>
+    <attr name="colorNotificationTitleBg" format="color"></attr>
+    <attr name="colorNotificationIndexBg" format="color"></attr>
 </resources>

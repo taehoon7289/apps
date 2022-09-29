@@ -34,6 +34,12 @@
         <item name="colorOnSecondary">@color/light_secondary_color_on</item>
         <item name="colorSecondaryVariant">@color/light_secondary_color_variant</item>
 
+        <!-- Specific color -->
+        <item name="colorTitle">@color/light_color_title</item>
+        <item name="colorSubTitle">@color/light_color_sub_title</item>
+        <item name="colorNotificationTitleBg">@color/light_color_notification_title_bg</item>
+        <item name="colorNotificationIndexBg">@color/light_color_notification_index_bg</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
@@ -41,7 +47,8 @@
         <!-- default color 주입 -->
         <item name="android:colorBackground">@color/light_main_color_on</item>
         <item name="android:textColor">@color/light_main_color</item>
-        <item name="android:fontFamily" tools:targetApi="o">@font/bmhannapro</item>
+        <item name="android:fontFamily" tools:targetApi="o">@font/pretendard_regular</item>
 
     </style>
+
 </resources>
