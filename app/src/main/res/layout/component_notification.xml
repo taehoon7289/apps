@@ -18,14 +18,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:text="1/10"
         android:id="@+id/textview_index"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
         android:background="@drawable/notification_index_shape"
-        android:gravity="center_horizontal"
-        android:minWidth="50dp"
-        android:textSize="12sp"
+        android:fontFamily="@font/pretendard_medium"
+        android:gravity="center"
         android:textColor="?attr/colorPrimary"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/view_pager"

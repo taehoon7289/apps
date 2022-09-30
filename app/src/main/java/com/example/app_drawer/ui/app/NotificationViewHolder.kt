@@ -11,7 +11,7 @@ class NotificationViewHolder(
 
     fun bind(item: NotificationInfoVo) {
         binding.model = item
-        binding.appNotificationLinearLayout.apply {
+        binding.constraintLayout.apply {
             setOnClickListener {
                 handlerClickEvent(item)
             }

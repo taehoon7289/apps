@@ -80,7 +80,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
                 description = "${App.instance.getString(R.string.topic_title_recent)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance, R.drawable.ic_topic_recent
+                    App.instance, R.drawable.ic_quick_recent
                 )
             )
         )
@@ -92,7 +92,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
                 description = "${App.instance.getString(R.string.topic_title_often)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance, R.drawable.ic_topic_often
+                    App.instance, R.drawable.ic_quick_often
                 )
             )
         )
@@ -104,7 +104,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
                 description = "${App.instance.getString(R.string.topic_title_unused)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance, R.drawable.ic_topic_unused
+                    App.instance, R.drawable.ic_quick_unused
                 )
             )
         )
@@ -116,7 +116,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
                 description = "${App.instance.getString(R.string.topic_title_installed)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance, R.drawable.ic_topic_runnable
+                    App.instance, R.drawable.ic_quick_installed
                 )
             )
         )

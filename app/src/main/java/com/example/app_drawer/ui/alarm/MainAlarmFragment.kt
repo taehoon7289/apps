@@ -1,4 +1,4 @@
-package com.example.app_drawer.ui
+package com.example.app_drawer.ui.alarm
 
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,9 +7,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.FragmentMainAlarmBinding
-import com.example.app_drawer.ui.alarm.AlarmListViewModel
-import com.example.app_drawer.ui.alarm.AlarmViewAdapter
-import com.example.app_drawer.ui.alarm.AlarmViewVerticalDecoration
+import com.example.app_drawer.ui.SwipeController
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -31,7 +29,6 @@ class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>() {
         Log.d(TAG, "initView: reload!!!")
 
         with(binding) {
-//            centerText.text = "이걸로 설정!!!!!!"
             val alarmViewAdapter = AlarmViewAdapter(
                 clickCallback = {
                     Log.d(TAG, "initView: clickCallback")

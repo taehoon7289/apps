@@ -7,6 +7,8 @@ import com.example.app_drawer.BaseActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.repository.UsageStatsRepository
+import com.example.app_drawer.ui.alarm.MainAlarmFragment
+import com.example.app_drawer.ui.app.MainAppFragment
 import com.google.android.gms.ads.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

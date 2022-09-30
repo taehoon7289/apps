@@ -1,4 +1,4 @@
-package com.example.app_drawer.ui
+package com.example.app_drawer.ui.app
 
 import android.app.AlarmManager
 import android.content.Context
@@ -11,13 +11,12 @@ import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.example.app_drawer.AlarmDialogFragment
 import com.example.app_drawer.App
 import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.FragmentMainAppBinding
 import com.example.app_drawer.repository.AlarmRepository
-import com.example.app_drawer.ui.app.*
+import com.example.app_drawer.ui.alarm.AlarmDialogFragment
 import com.example.app_drawer.ui.notion.NotionActivity
 import com.example.app_drawer.util.Util
 import com.example.app_drawer.vo.AppInfoVo
@@ -85,7 +84,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                         val items = notificationListViewModel.items.value
                         if (items?.isEmpty() == false) {
                             textviewIndex.text =
-                                "${position + 1} / ${notificationListViewModel.items.value?.size ?: 0}"
+                                "${position + 1}/${notificationListViewModel.items.value?.size ?: 0}"
                             Log.d(TAG, "onPageSelected: ${textviewIndex.text}")
                         } else {
                             textviewIndex.text = ""
@@ -222,7 +221,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
         this@MainAppFragment.startActivity(item.execIntent)
 
-        Log.d(Companion.TAG, "clickListenerLambda: start!!!")
+        Log.d(TAG, "clickListenerLambda: start!!!")
     }
 
 

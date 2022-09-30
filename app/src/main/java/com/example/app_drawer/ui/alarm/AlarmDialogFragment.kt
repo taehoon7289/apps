@@ -1,4 +1,4 @@
-package com.example.app_drawer
+package com.example.app_drawer.ui.alarm
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.databinding.DataBindingUtil
+import com.example.app_drawer.R
 import com.example.app_drawer.code.AlarmPeriodType
 import com.example.app_drawer.databinding.FragmentAlarmDialogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

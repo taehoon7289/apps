@@ -8,11 +8,21 @@
         android:color="@color/deep_purple_100"></stroke>
 
     <padding
-        android:bottom="12dp"
-        android:left="12dp"
-        android:right="12dp"
-        android:top="12dp"></padding>
+        android:bottom="0dp"
+        android:left="8dp"
+        android:right="8dp"
+        android:top="0dp"></padding>
 
-    <corners android:radius="8dp"></corners>
+    <corners android:radius="4dp"></corners>
+
+    <!--
+    <shape /> : 형태 모형을 정의한다는 루트 요소이다.
+    <corners /> : 가장자리를 둥글게 처리하는 요소이다.
+    <gradient /> : 색상의 기울기를 처리하는 요소이다.
+    <padding /> : 패딩값을 지정한다.
+    <size /> : 형태 모형의 크기를 정한다.
+    <solid /> : 단색으로 채울 때 처리하는 요소이다.
+    <stroke /> : 테두리나 선을 그릴 때 사용하는 요소이다.
+     -->
 
 </shape>
