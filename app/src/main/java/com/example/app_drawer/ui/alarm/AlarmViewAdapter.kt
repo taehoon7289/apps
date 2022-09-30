@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.App
 import com.example.app_drawer.databinding.ViewholderAlarmBinding
 import com.example.app_drawer.ui.ItemTouchHelperListener
-import com.example.app_drawer.ui.app.AlarmViewHolder
 import com.example.app_drawer.vo.AlarmInfoVo
 
 class AlarmViewAdapter(

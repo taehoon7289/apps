@@ -1,4 +1,4 @@
-package com.example.app_drawer.ui.app
+package com.example.app_drawer.ui.alarm
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.ViewholderAlarmBinding

@@ -9,59 +9,39 @@
             type="com.example.app_drawer.vo.TopicInfoVo" />
     </data>
 
-    <LinearLayout
-        android:id="@+id/linear_layout"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/shape"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:background="@drawable/shape_topic">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@{model.icon}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!--            <ImageView-->
-            <!--                android:id="@+id/topic_color"-->
-            <!--                android:layout_width="20dp"-->
-            <!--                android:layout_height="20dp"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toEndOf="@id/icon"-->
-            <!--                app:layout_constraintTop_toTopOf="parent" />-->
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="4dp"
+            android:src="@{model.icon}"
+            app:layout_constraintBottom_toTopOf="@id/title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
             android:text="@{model.title}"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="15sp" />
+            android:textColor="?attr/colorTextReverse"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/icon" />
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{model.description}"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="12sp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
 
 </layout>

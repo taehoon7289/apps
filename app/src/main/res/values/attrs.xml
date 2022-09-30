@@ -4,6 +4,7 @@
     <attr name="colorTitle" format="color"></attr>
     <attr name="colorSubTitle" format="color"></attr>
     <attr name="colorText" format="color"></attr>
+    <attr name="colorTextReverse" format="color"></attr>
 
     <attr name="colorPrimary50" format="color"></attr>
     <attr name="colorPrimary100" format="color"></attr>

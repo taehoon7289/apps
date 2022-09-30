@@ -98,7 +98,6 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                         Log.d(TAG, "onPageScrollStateChanged: $state")
                     }
                 })
-
                 viewPager.adapter = notificationViewPagerAdapter
                 notificationListViewModel.items.observe(this@MainAppFragment) {
                     linearLayout.isGone = it.isEmpty()
@@ -109,6 +108,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
             with(componentTopic) {
                 // 주제별 2열 리스트
+                title.setTextColor(Util.getColorWithAlpha(0.6f, title.textColors.defaultColor))
                 val topicViewAdapter = TopicViewAdapter(
                     clickCallback = {},
                     longClickCallback = {},
@@ -117,6 +117,8 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 // 그리드 레이아웃 설정
                 val topicGridLayoutManager = GridLayoutManager(this@MainAppFragment.activity, 2)
                 recyclerView.layoutManager = topicGridLayoutManager
+                val topicRecyclerViewDecoration = TopicRecyclerViewDecoration(10, 10, 10, 10, 2)
+                recyclerView.addItemDecoration(topicRecyclerViewDecoration)
                 appListViewModel.topicItems.observe(this@MainAppFragment) {
                     Log.d(TAG, "initView: topicItems ${it?.size}")
                     topicViewAdapter.submitList(it)

@@ -30,6 +30,7 @@
         <item name="colorTitle">@color/deep_purple_a200</item>
         <item name="colorSubTitle">@color/white</item>
         <item name="colorText">@color/white</item>
+        <item name="colorTextReverse">@color/black</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
