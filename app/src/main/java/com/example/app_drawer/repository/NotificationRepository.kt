@@ -13,11 +13,6 @@ class NotificationRepository(private val service: NotionApiService) {
         val response = service.notificationList(
             databaseKey = "d4d7fc5b3e2e452ebf2269495aa424eb"
         )
-        val temp = service.notificationListByString(
-            databaseKey = "d4d7fc5b3e2e452ebf2269495aa424eb"
-        )
-
-//        Util.printLongLog(TAG, temp.body())
 
         val notificationInfoVoList = mutableListOf<NotificationInfoVo>()
         if (response.isSuccessful) {

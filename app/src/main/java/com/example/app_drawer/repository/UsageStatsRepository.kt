@@ -176,7 +176,7 @@ class UsageStatsRepository {
                     (it.lastTimeStamp ?: 0L) == 0L
                 }.toMutableList()
             }
-            ListViewType.RUNNABLE -> {
+            ListViewType.INSTALLED -> {
                 items.sortedBy { it.label }.toMutableList()
             }
         }

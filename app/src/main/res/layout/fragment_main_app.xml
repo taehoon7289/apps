@@ -7,52 +7,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ToolbarTheme"
-            app:contentInsetStart="20dp"
+        <include
+            android:id="@+id/component_toolbar"
+            layout="@layout/component_toolbar"
             app:layout_constraintBottom_toTopOf="@id/linearlayout_main_activity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="0dp"
-                    android:layout_height="54dp"
-                    android:fontFamily="@font/pretendard_bold"
-                    android:gravity="center_vertical"
-                    android:text="@string/app_name"
-                    android:textColor="?attr/colorTitle"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@id/sub_title"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/sub_title"
-                    android:layout_width="0dp"
-                    android:layout_height="46dp"
-                    android:fontFamily="@font/pretendard_bold"
-                    android:gravity="center_vertical"
-                    android:text="@string/menu_title_app"
-                    android:textColor="?attr/colorSubTitle"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/title" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </androidx.appcompat.widget.Toolbar>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <LinearLayout
@@ -65,7 +26,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar">
+            app:layout_constraintTop_toBottomOf="@id/component_toolbar">
 
             <include
                 android:id="@+id/component_notification"
@@ -80,150 +41,26 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/topic_linear_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingRight="5dp"
-                        android:paddingBottom="5dp">
+                    <include
+                        android:id="@+id/component_topic"
+                        layout="@layout/component_topic" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="빠른 앱 찾기" />
+                    <include
+                        android:id="@+id/component_topic_recent"
+                        layout="@layout/component_topic_app" />
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/topic_recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+                    <include
+                        android:id="@+id/component_topic_often"
+                        layout="@layout/component_topic_app" />
 
-                        </androidx.recyclerview.widget.RecyclerView>
+                    <include
+                        android:id="@+id/component_topic_unused"
+                        layout="@layout/component_topic_app" />
 
-                    </LinearLayout>
+                    <include
+                        android:id="@+id/component_topic_installed"
+                        layout="@layout/component_topic_app" />
 
-
-                    <LinearLayout
-                        android:id="@+id/recent_executed_app_linear_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingRight="5dp"
-                        android:paddingBottom="5dp">
-
-                        <TextView
-                            android:id="@+id/recent_executed_app_text_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recent_executed_app_recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-                        </androidx.recyclerview.widget.RecyclerView>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/often_executed_app_linear_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingRight="5dp"
-                        android:paddingBottom="5dp">
-
-                        <TextView
-                            android:id="@+id/often_executed_app_text_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/often_executed_app_recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-                        </androidx.recyclerview.widget.RecyclerView>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/un_executed_app_linear_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingRight="5dp"
-                        android:paddingBottom="5dp">
-
-                        <TextView
-                            android:id="@+id/un_executed_app_text_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/un_executed_app_recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-                        </androidx.recyclerview.widget.RecyclerView>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/runnable_app_linear_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingRight="5dp"
-                        android:paddingBottom="5dp">
-
-                        <TextView
-                            android:id="@+id/runnable_app_text_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/runnable_app_grid_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        </androidx.recyclerview.widget.RecyclerView>
-
-                    </LinearLayout>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 

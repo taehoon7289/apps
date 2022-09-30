@@ -44,14 +44,14 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
     val unUsedItems: LiveData<MutableList<AppInfoVo>>
         get() = _unUsedItems
 
-    private var _runnableItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
+    private var _installedItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
         usageStatsRepository.getAppInfoByType(
-            ListViewType.RUNNABLE
+            ListViewType.INSTALLED
         )
     )
 
-    val runnableItems: LiveData<MutableList<AppInfoVo>>
-        get() = _runnableItems
+    val installedItems: LiveData<MutableList<AppInfoVo>>
+        get() = _installedItems
 
     private var _topicItems: MutableLiveData<MutableList<TopicInfoVo>> = MutableLiveData()
 
@@ -69,8 +69,8 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
         _unUsedItems.value = usageStatsRepository.getAppInfoByType(
             ListViewType.UN_USED
         )
-        _runnableItems.value = usageStatsRepository.getAppInfoByType(
-            ListViewType.RUNNABLE
+        _installedItems.value = usageStatsRepository.getAppInfoByType(
+            ListViewType.INSTALLED
         )
         val topics = mutableListOf<TopicInfoVo>()
         topics.add(
@@ -80,8 +80,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
                 description = "${App.instance.getString(R.string.topic_title_recent)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance,
-                    R.drawable.ic_topic_recent
+                    App.instance, R.drawable.ic_topic_recent
                 )
             )
         )
@@ -93,8 +92,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
                 description = "${App.instance.getString(R.string.topic_title_often)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance,
-                    R.drawable.ic_topic_often
+                    App.instance, R.drawable.ic_topic_often
                 )
             )
         )
@@ -106,21 +104,19 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
                 description = "${App.instance.getString(R.string.topic_title_unused)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance,
-                    R.drawable.ic_topic_unused
+                    App.instance, R.drawable.ic_topic_unused
                 )
             )
         )
 
         topics.add(
             TopicInfoVo(
-                appInfoVoList = _runnableItems.value,
-                title = App.instance.getString(R.string.topic_title_runnable),
-                description = "${App.instance.getString(R.string.topic_title_runnable)}입니다",
+                appInfoVoList = _installedItems.value,
+                title = App.instance.getString(R.string.topic_title_installed),
+                description = "${App.instance.getString(R.string.topic_title_installed)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance,
-                    R.drawable.ic_topic_runnable
+                    App.instance, R.drawable.ic_topic_runnable
                 )
             )
         )

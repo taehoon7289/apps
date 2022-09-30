@@ -59,7 +59,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 this@MainAppFragment.startActivity(intent)
             })
 
-            with(toolbar) {
+            with(componentToolbar) {
                 subTitle.setTextColor(
                     Util.getColorWithAlpha(
                         0.6f, subTitle.textColors.defaultColor
@@ -108,84 +108,99 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 }
             }
 
-            // 주제별 2열 리스트
-            val topicViewAdapter = TopicViewAdapter(
-                clickCallback = {},
-                longClickCallback = {},
-            )
-            topicRecyclerView.adapter = topicViewAdapter
-            // 그리드 레이아웃 설정
-            val topicGridLayoutManager = GridLayoutManager(this@MainAppFragment.activity, 2)
-            topicRecyclerView.layoutManager = topicGridLayoutManager
-            appListViewModel.topicItems.observe(this@MainAppFragment) {
-                Log.d(TAG, "initView: topicItems ${it?.size}")
-                topicViewAdapter.submitList(it)
+            with(componentTopic) {
+                // 주제별 2열 리스트
+                val topicViewAdapter = TopicViewAdapter(
+                    clickCallback = {},
+                    longClickCallback = {},
+                )
+                recyclerView.adapter = topicViewAdapter
+                // 그리드 레이아웃 설정
+                val topicGridLayoutManager = GridLayoutManager(this@MainAppFragment.activity, 2)
+                recyclerView.layoutManager = topicGridLayoutManager
+                appListViewModel.topicItems.observe(this@MainAppFragment) {
+                    Log.d(TAG, "initView: topicItems ${it?.size}")
+                    topicViewAdapter.submitList(it)
+                }
             }
 
-            // 최근 실행된 앱 recyclerView
-            recentExecutedAppTextView.text = getString(R.string.topic_title_recent)
-            val recentUsedAppViewAdapter = AppViewAdapter(
-                clickCallback = clickListenerLambda,
-                longClickCallback = longClickListenerLambda,
-            )
-            recentExecutedAppRecyclerView.adapter = recentUsedAppViewAdapter
-            // item 사이 간격
-            if (recentExecutedAppRecyclerView.itemDecorationCount > 0) {
-                recentExecutedAppRecyclerView.removeItemDecorationAt(0)
+            with(componentTopicRecent) {
+                // 최근 실행된 앱 recyclerView
+                textViewTitle.text = getString(R.string.topic_title_recent)
+                val recentUsedAppViewAdapter = AppViewAdapter(
+                    clickCallback = clickListenerLambda,
+                    longClickCallback = longClickListenerLambda,
+                )
+                recyclerView.adapter = recentUsedAppViewAdapter
+                // item 사이 간격
+                if (recyclerView.itemDecorationCount > 0) {
+                    recyclerView.removeItemDecorationAt(0)
+                }
+                recyclerView.addItemDecoration(appViewHorizontalDecoration)
+                appListViewModel.recentUsedItems.observe(this@MainAppFragment) {
+                    linearLayout.isGone = it.isEmpty()
+                    recentUsedAppViewAdapter.submitList(it)
+                }
             }
-            recentExecutedAppRecyclerView.addItemDecoration(appViewHorizontalDecoration)
-            appListViewModel.recentUsedItems.observe(this@MainAppFragment) {
-                recentExecutedAppLinearLayout.isGone = it.isEmpty()
-                recentUsedAppViewAdapter.submitList(it)
+
+            with(componentTopicOften) {
+                // 자주 실행하는 앱
+                textViewTitle.text = getString(R.string.topic_title_often)
+                val oftenUsedAppViewAdapter = AppViewAdapter(
+                    clickCallback = clickListenerLambda,
+                    longClickCallback = longClickListenerLambda,
+                )
+                recyclerView.adapter = oftenUsedAppViewAdapter
+                // item 사이 간격
+                if (recyclerView.itemDecorationCount > 0) {
+                    recyclerView.removeItemDecorationAt(0)
+                }
+                recyclerView.addItemDecoration(appViewHorizontalDecoration)
+                appListViewModel.oftenUsedItems.observe(this@MainAppFragment) {
+                    linearLayout.isGone = it.isEmpty()
+                    oftenUsedAppViewAdapter.submitList(it)
+                }
             }
-            // 자주 실행하는 앱
-            oftenExecutedAppTextView.text = getString(R.string.topic_title_often)
-            val oftenUsedAppViewAdapter = AppViewAdapter(
-                clickCallback = clickListenerLambda,
-                longClickCallback = longClickListenerLambda,
-            )
-            oftenExecutedAppRecyclerView.adapter = oftenUsedAppViewAdapter
-            // item 사이 간격
-            if (oftenExecutedAppRecyclerView.itemDecorationCount > 0) {
-                oftenExecutedAppRecyclerView.removeItemDecorationAt(0)
+
+            with(componentTopicUnused) {
+                // 아직 실행하지 않은 앱 recyclerView
+                textViewTitle.text = getString(R.string.topic_title_unused)
+                val unUsedAppViewAdapter = AppViewAdapter(
+                    clickCallback = clickListenerLambda,
+                    longClickCallback = longClickListenerLambda,
+                )
+                recyclerView.adapter = unUsedAppViewAdapter
+                // item 사이 간격
+                if (recyclerView.itemDecorationCount > 0) {
+                    recyclerView.removeItemDecorationAt(0)
+                }
+                recyclerView.addItemDecoration(appViewHorizontalDecoration)
+                appListViewModel.unUsedItems.observe(this@MainAppFragment) {
+                    linearLayout.isGone = it.isEmpty()
+                    unUsedAppViewAdapter.submitList(it)
+                }
             }
-            oftenExecutedAppRecyclerView.addItemDecoration(appViewHorizontalDecoration)
-            appListViewModel.oftenUsedItems.observe(this@MainAppFragment) {
-                oftenExecutedAppLinearLayout.isGone = it.isEmpty()
-                oftenUsedAppViewAdapter.submitList(it)
+
+            with(componentTopicInstalled) {
+                // 실행가능한 앱 gridView
+                textViewTitle.text = getString(R.string.topic_title_installed)
+                val installedAppViewAdapter = AppViewAdapter(
+                    clickCallback = clickListenerLambda,
+                    longClickCallback = longClickListenerLambda,
+                )
+                recyclerView.adapter = installedAppViewAdapter
+//                // 그리드 레이아웃 설정
+//                val gridLayoutManager = GridLayoutManager(App.instance, 7)
+//                recyclerView.layoutManager = gridLayoutManager
+                // 안의 스크롤효과 제거
+//                recyclerView.isNestedScrollingEnabled = false
+                appListViewModel.installedItems.observe(this@MainAppFragment) {
+                    linearLayout.isGone = it.isEmpty()
+                    installedAppViewAdapter.submitList(it)
+                }
             }
-            // 아직 실행하지 않은 앱 recyclerView
-            unExecutedAppTextView.text = getString(R.string.topic_title_unused)
-            val unUsedAppViewAdapter = AppViewAdapter(
-                clickCallback = clickListenerLambda,
-                longClickCallback = longClickListenerLambda,
-            )
-            unExecutedAppRecyclerView.adapter = unUsedAppViewAdapter
-            // item 사이 간격
-            if (unExecutedAppRecyclerView.itemDecorationCount > 0) {
-                unExecutedAppRecyclerView.removeItemDecorationAt(0)
-            }
-            unExecutedAppRecyclerView.addItemDecoration(appViewHorizontalDecoration)
-            appListViewModel.unUsedItems.observe(this@MainAppFragment) {
-                unExecutedAppLinearLayout.isGone = it.isEmpty()
-                unUsedAppViewAdapter.submitList(it)
-            }
-            // 실행가능한 앱 gridView
-            runnableAppTextView.text = getString(R.string.topic_title_runnable)
-            val runnableAppViewAdapter = AppViewAdapter(
-                clickCallback = clickListenerLambda,
-                longClickCallback = longClickListenerLambda,
-            )
-            runnableAppGridView.adapter = runnableAppViewAdapter
-            // 그리드 레이아웃 설정
-            val gridLayoutManager = GridLayoutManager(App.instance, 7)
-            runnableAppGridView.layoutManager = gridLayoutManager
-            // 안의 스크롤효과 제거
-            runnableAppGridView.isNestedScrollingEnabled = false
-            appListViewModel.runnableItems.observe(this@MainAppFragment) {
-                runnableAppLinearLayout.isGone = it.isEmpty()
-                runnableAppViewAdapter.submitList(it)
-            }
+
+
         }
 
 
