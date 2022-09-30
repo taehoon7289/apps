@@ -10,63 +10,64 @@
         <include
             android:id="@+id/component_toolbar"
             layout="@layout/component_toolbar"
-            app:layout_constraintBottom_toTopOf="@id/linearlayout_main_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/component_notification"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <include
+            android:id="@+id/component_notification"
+            layout="@layout/component_notification"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toTopOf="@id/nested_scroll_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/component_toolbar" />
 
-        <LinearLayout
-            android:id="@+id/linearlayout_main_activity"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/component_toolbar">
+            app:layout_constraintTop_toBottomOf="@id/component_notification">
 
-            <include
-                android:id="@+id/component_notification"
-                layout="@layout/component_notification" />
-
-            <androidx.core.widget.NestedScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                <include
+                    android:id="@+id/component_topic"
+                    layout="@layout/component_topic" />
 
-                    <include
-                        android:id="@+id/component_topic"
-                        layout="@layout/component_topic" />
+                <include
+                    android:id="@+id/component_topic_recent"
+                    layout="@layout/component_topic_app" />
 
-                    <include
-                        android:id="@+id/component_topic_recent"
-                        layout="@layout/component_topic_app" />
+                <include
+                    android:id="@+id/component_topic_often"
+                    layout="@layout/component_topic_app" />
 
-                    <include
-                        android:id="@+id/component_topic_often"
-                        layout="@layout/component_topic_app" />
+                <include
+                    android:id="@+id/component_topic_unused"
+                    layout="@layout/component_topic_app" />
 
-                    <include
-                        android:id="@+id/component_topic_unused"
-                        layout="@layout/component_topic_app" />
+                <include
+                    android:id="@+id/component_topic_installed"
+                    layout="@layout/component_topic_app" />
 
-                    <include
-                        android:id="@+id/component_topic_installed"
-                        layout="@layout/component_topic_app" />
-
-                </LinearLayout>
-            </androidx.core.widget.NestedScrollView>
-
-
-        </LinearLayout>
-
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
