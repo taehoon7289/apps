@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.app_drawer.databinding.AppNotificationInfoBinding
+import com.example.app_drawer.databinding.ViewholderNotificationBinding
 import com.example.app_drawer.vo.NotificationInfoVo
 
 
@@ -27,7 +27,7 @@ class NotificationViewPagerAdapter(
     }) {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): NotificationViewHolder {
-        val binding = AppNotificationInfoBinding.inflate(
+        val binding = ViewholderNotificationBinding.inflate(
             LayoutInflater.from(viewGroup.context), viewGroup, false
         )
         return NotificationViewHolder(

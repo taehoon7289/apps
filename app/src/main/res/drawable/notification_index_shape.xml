@@ -1,11 +1,11 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <solid android:color="?attr/colorNotificationIndexBg"></solid>
+    <solid android:color="@color/deep_purple_100"></solid>
 
     <stroke
         android:width="0dp"
-        android:color="?attr/colorNotificationIndexBg"></stroke>
+        android:color="@color/deep_purple_100"></stroke>
 
     <padding
         android:bottom="12dp"

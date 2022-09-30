@@ -19,6 +19,7 @@ import com.example.app_drawer.databinding.FragmentMainAppBinding
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.ui.app.*
 import com.example.app_drawer.ui.notion.NotionActivity
+import com.example.app_drawer.util.Util
 import com.example.app_drawer.vo.AppInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
@@ -58,11 +59,17 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 this@MainAppFragment.startActivity(intent)
             })
 
+            with(toolbar) {
+                subTitle.setTextColor(
+                    Util.getColorWithAlpha(
+                        0.6f, subTitle.textColors.defaultColor
+                    )
+                )
+            }
 
-            with(includeNotification) {
+            with(componentNotification) {
 
-                viewpagerNotification.registerOnPageChangeCallback(object :
-                    ViewPager2.OnPageChangeCallback() {
+                viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageScrolled(
                         position: Int, positionOffset: Float, positionOffsetPixels: Int
                     ) {
@@ -77,15 +84,11 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                         Log.d(TAG, "onPageSelected: $position")
                         val items = notificationListViewModel.items.value
                         if (items?.isEmpty() == false) {
-                            Log.d(
-                                TAG, "onPageSelected: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-                            )
-                            textviewNotification.text =
+                            textviewIndex.text =
                                 "${position + 1} / ${notificationListViewModel.items.value?.size ?: 0}"
-                            Log.d(TAG, "onPageSelected: ${textviewNotification.text}")
+                            Log.d(TAG, "onPageSelected: ${textviewIndex.text}")
                         } else {
-                            Log.d(TAG, "onPageSelected: @@@@@@@@@@@@@@@@@@@@")
-                            textviewNotification.text = ""
+                            textviewIndex.text = ""
                         }
 
                     }
@@ -97,9 +100,9 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                     }
                 })
 
-                viewpagerNotification.adapter = notificationViewPagerAdapter
+                viewPager.adapter = notificationViewPagerAdapter
                 notificationListViewModel.items.observe(this@MainAppFragment) {
-                    linearlayoutNotification.isGone = it.isEmpty()
+                    linearLayout.isGone = it.isEmpty()
                     notificationViewPagerAdapter.submitList(it)
 
                 }

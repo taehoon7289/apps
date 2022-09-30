@@ -7,58 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="main1">#6884F1</color>
-    <color name="main2">#728BF2</color>
-    <color name="main3">#91A6FE</color>
-    <color name="main_black">#2e2e2e</color>
 
     <!-- main, secondary 색상 골라서 _on, _accent 는 https://mobilepalette.colorion.co 에서 선택 -->
     <!-- _variant 는 https://color.adobe.com/ko/create/color-wheel 에서 음영 선택 -->
     <!-- low, high 는 https://paletton.com 에서 추천 색 적용 -->
-
-    <color name="light_main_color">#887dfb</color>
-    <color name="light_main_color_low_2">#ADA5FD</color>
-    <color name="light_main_color_low_1">#DDD9FE</color>
-    <color name="light_main_color_high_1">#6759F7</color>
-    <color name="light_main_color_high_2">#ADA5FD</color>
-    <color name="light_main_color_on">#F4F4FB</color>
-    <color name="light_main_color_accent">#57A8FA</color>
-    <color name="light_main_color_variant">#4D887dfb</color>
-    <color name="light_color_title">#7C4DFF</color>
-    <color name="light_color_sub_title">#99000000</color>
-    <color name="light_color_notification_title_bg">#EDE7F6</color>
-    <color name="light_color_notification_index_bg">#D1C4E9</color>
-
-    <color name="light_secondary_color">#B774FB</color>
-    <color name="light_secondary_color_low_2">#EAD7FE</color>
-    <color name="light_secondary_color_low_1">#CD9FFD</color>
-    <color name="light_secondary_color_high_1">#A24EF7</color>
-    <color name="light_secondary_color_high_2">#8928EC</color>
-    <color name="light_secondary_color_on">#F7F4FB</color>
-    <color name="light_secondary_color_accent">#4D5BF9</color>
-    <color name="light_secondary_color_variant">#4DB774FB</color>
-
-    <color name="dark_main_color">#2E313D</color>
-    <color name="dark_main_color_low_2">#676C7E</color>
-    <color name="dark_main_color_low_1">#4B4F60</color>
-    <color name="dark_main_color_high_1">#1C2030</color>
-    <color name="dark_main_color_high_2">#11162A</color>
-    <color name="dark_main_color_on">#F4F5FB</color>
-    <color name="dark_main_color_accent">#1D2426</color>
-    <color name="dark_main_color_variant">#4D2E313D</color>
-    <color name="dark_color_title">#2E313D</color>
-    <color name="dark_color_sub_title">#2E313D</color>
-    <color name="dark_color_notification_title_bg">#2E313D</color>
-    <color name="dark_color_notification_index_bg">#2E313D</color>
-
-    <color name="dark_secondary_color">#332E3D</color>
-    <color name="dark_secondary_color_low_2">#534278</color>
-    <color name="dark_secondary_color_low_1">#473C61</color>
-    <color name="dark_secondary_color_high_1">#534278</color>
-    <color name="dark_secondary_color_high_2">#372D4E</color>
-    <color name="dark_secondary_color_on">#F6F4FB</color>
-    <color name="dark_secondary_color_accent">#1E2434</color>
-    <color name="dark_secondary_color_variant">#4D332E3D</color>
 
     <color name="o5">#0D000000</color>
     <color name="o10">#1A000000</color>
@@ -79,5 +31,32 @@
     <color name="o85">#D9000000</color>
     <color name="o90">#E6000000</color>
     <color name="o95">#F2000000</color>
+    <color name="o100">#FF000000</color>
+
+    <color name="deep_purple_50">#EDE7F6</color>
+    <color name="deep_purple_100">#D1C4E9</color>
+    <color name="deep_purple_200">#B39DDB</color>
+    <color name="deep_purple_300">#9575CD</color>
+    <color name="deep_purple_400">#7E57C2</color>
+    <color name="deep_purple_500">#673AB7</color>
+    <color name="deep_purple_600">#5E35B1</color>
+    <color name="deep_purple_700">#512DA8</color>
+    <color name="deep_purple_800">#4527A0</color>
+    <color name="deep_purple_900">#311B92</color>
+    <color name="deep_purple_a100">#B388FF</color>
+    <color name="deep_purple_a200">#7C4DFF</color>
+    <color name="deep_purple_a400">#651FFF</color>
+    <color name="deep_purple_a700">#6200EA</color>
+
+    <color name="blue_gray_50">#ECEFF1</color>
+    <color name="blue_gray_100">#CFD8DC</color>
+    <color name="blue_gray_200">#B0BEC5</color>
+    <color name="blue_gray_300">#90A4AE</color>
+    <color name="blue_gray_400">#78909C</color>
+    <color name="blue_gray_500">#607D8B</color>
+    <color name="blue_gray_600">#546E7A</color>
+    <color name="blue_gray_700">#455A64</color>
+    <color name="blue_gray_800">#37474F</color>
+    <color name="blue_gray_900">#263238</color>
 
 </resources>

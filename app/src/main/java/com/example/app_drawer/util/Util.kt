@@ -7,6 +7,8 @@ import android.widget.ListView
 import androidx.annotation.RequiresApi
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.max
+import kotlin.math.min
 
 class Util {
 
@@ -33,16 +35,14 @@ class Util {
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun getLocalDateTimeToString(
-            localDateTime: LocalDateTime,
-            pattern: String = "yyyyMMddHHmmss"
+            localDateTime: LocalDateTime, pattern: String = "yyyyMMddHHmmss"
         ): String? {
             return localDateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun getStringToLocalDateTime(
-            str: String,
-            pattern: String = "yyyyMMddHHmmss"
+            str: String, pattern: String = "yyyyMMddHHmmss"
         ): LocalDateTime? {
             return LocalDateTime.parse(str, DateTimeFormatter.ofPattern(pattern))
         }
@@ -68,6 +68,11 @@ class Util {
             }
         }
 
+        fun getColorWithAlpha(alpha: Float, baseColor: Int): Int {
+            val a = min(255, max(0, (alpha * 255).toInt())) shl 24
+            val rgb = 0x00ffffff and baseColor
+            return a.plus(rgb)
+        }
 
         private const val TAG = "Util"
         private const val MAX_LEN = 2000

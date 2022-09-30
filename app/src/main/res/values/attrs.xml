@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="colorPrimaryLow1" format="color"></attr>
-    <attr name="colorPrimaryLow2" format="color"></attr>
-    <attr name="colorPrimaryHigh1" format="color"></attr>
-    <attr name="colorPrimaryHigh2" format="color"></attr>
-
-    <attr name="colorSecondaryLow1" format="color"></attr>
-    <attr name="colorSecondaryLow2" format="color"></attr>
-    <attr name="colorSecondaryHigh1" format="color"></attr>
-    <attr name="colorSecondaryHigh2" format="color"></attr>
 
     <attr name="colorTitle" format="color"></attr>
     <attr name="colorSubTitle" format="color"></attr>
-    <attr name="colorNotificationTitleBg" format="color"></attr>
-    <attr name="colorNotificationIndexBg" format="color"></attr>
+    <attr name="colorText" format="color"></attr>
+
+    <attr name="colorPrimary50" format="color"></attr>
+    <attr name="colorPrimary100" format="color"></attr>
+    <attr name="colorPrimary200" format="color"></attr>
+    <attr name="colorPrimary300" format="color"></attr>
+    <attr name="colorPrimary400" format="color"></attr>
+    <attr name="colorPrimary500" format="color"></attr>
+    <attr name="colorPrimary600" format="color"></attr>
+    <attr name="colorPrimary700" format="color"></attr>
+    <attr name="colorPrimary800" format="color"></attr>
+    <attr name="colorPrimary900" format="color"></attr>
+    <attr name="colorPrimaryA100" format="color"></attr>
+    <attr name="colorPrimaryA200" format="color"></attr>
+    <attr name="colorPrimaryA400" format="color"></attr>
+    <attr name="colorPrimaryA700" format="color"></attr>
+
+    <attr name="colorSecondary50" format="color"></attr>
+    <attr name="colorSecondary100" format="color"></attr>
+    <attr name="colorSecondary200" format="color"></attr>
+    <attr name="colorSecondary300" format="color"></attr>
+    <attr name="colorSecondary400" format="color"></attr>
+    <attr name="colorSecondary500" format="color"></attr>
+    <attr name="colorSecondary600" format="color"></attr>
+    <attr name="colorSecondary700" format="color"></attr>
+    <attr name="colorSecondary800" format="color"></attr>
+    <attr name="colorSecondary900" format="color"></attr>
+
 </resources>

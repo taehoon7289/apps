@@ -16,39 +16,55 @@
         <!-- textColorSecondary: 두번째 텍스트 색상 -->
 
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/light_main_color</item>
-        <item name="colorPrimaryLow1">@color/light_main_color_low_1</item>
-        <item name="colorPrimaryLow2">@color/light_main_color_low_2</item>
-        <item name="colorPrimaryHigh1">@color/light_main_color_high_1</item>
-        <item name="colorPrimaryHigh2">@color/light_main_color_high_2</item>
-        <item name="colorOnPrimary">@color/light_main_color_on</item>
-        <item name="colorPrimaryVariant">@color/light_main_color_variant</item>
-        <item name="colorPrimarySurface">@color/light_main_color_on</item>
+        <item name="colorPrimary">@color/deep_purple_400</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/deep_purple_200</item>
+        <item name="colorPrimarySurface">@color/white</item>
 
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/light_secondary_color</item>
-        <item name="colorSecondaryLow1">@color/light_secondary_color_low_1</item>
-        <item name="colorSecondaryLow2">@color/light_secondary_color_low_2</item>
-        <item name="colorSecondaryHigh1">@color/light_secondary_color_high_1</item>
-        <item name="colorSecondaryHigh2">@color/light_secondary_color_high_2</item>
-        <item name="colorOnSecondary">@color/light_secondary_color_on</item>
-        <item name="colorSecondaryVariant">@color/light_secondary_color_variant</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryVariant">@color/deep_purple_200</item>
 
         <!-- Specific color -->
-        <item name="colorTitle">@color/light_color_title</item>
-        <item name="colorSubTitle">@color/light_color_sub_title</item>
-        <item name="colorNotificationTitleBg">@color/light_color_notification_title_bg</item>
-        <item name="colorNotificationIndexBg">@color/light_color_notification_index_bg</item>
+        <item name="colorTitle">@color/deep_purple_a200</item>
+        <item name="colorSubTitle">@color/black</item>
+        <item name="colorText">@color/black</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <!-- Customize your theme here. -->
         <!-- default color 주입 -->
-        <item name="android:colorBackground">@color/light_main_color_on</item>
-        <item name="android:textColor">@color/light_main_color</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily" tools:targetApi="o">@font/pretendard_regular</item>
 
+        <!--        <item name="colorPrimary50">@color/deep_purple_50</item>-->
+        <!--        <item name="colorPrimary100">@color/deep_purple_100</item>-->
+        <!--        <item name="colorPrimary200">@color/deep_purple_200</item>-->
+        <!--        <item name="colorPrimary300">@color/deep_purple_300</item>-->
+        <!--        <item name="colorPrimary400">@color/deep_purple_400</item>-->
+        <!--        <item name="colorPrimary500">@color/deep_purple_500</item>-->
+        <!--        <item name="colorPrimary600">@color/deep_purple_600</item>-->
+        <!--        <item name="colorPrimary700">@color/deep_purple_700</item>-->
+        <!--        <item name="colorPrimary800">@color/deep_purple_800</item>-->
+        <!--        <item name="colorPrimary900">@color/deep_purple_900</item>-->
+        <!--        <item name="colorPrimaryA100">@color/deep_purple_a100</item>-->
+        <!--        <item name="colorPrimaryA200">@color/deep_purple_a200</item>-->
+        <!--        <item name="colorPrimaryA400">@color/deep_purple_a400</item>-->
+        <!--        <item name="colorPrimaryA700">@color/deep_purple_a700</item>-->
+
+        <!--        <item name="colorSecondary50">@color/blue_gray_50</item>-->
+        <!--        <item name="colorSecondary100">@color/blue_gray_100</item>-->
+        <!--        <item name="colorSecondary200">@color/blue_gray_200</item>-->
+        <!--        <item name="colorSecondary300">@color/blue_gray_300</item>-->
+        <!--        <item name="colorSecondary400">@color/blue_gray_400</item>-->
+        <!--        <item name="colorSecondary500">@color/blue_gray_500</item>-->
+        <!--        <item name="colorSecondary600">@color/blue_gray_600</item>-->
+        <!--        <item name="colorSecondary700">@color/blue_gray_700</item>-->
+        <!--        <item name="colorSecondary800">@color/blue_gray_800</item>-->
+        <!--        <item name="colorSecondary900">@color/blue_gray_900</item>-->
     </style>
 
 </resources>
