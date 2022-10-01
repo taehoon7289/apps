@@ -12,4 +12,8 @@
     <string name="topic_title_unused">미실행 앱</string>
     <string name="topic_title_installed">설치된 앱</string>
     <string name="topic_title">빠른 앱 찾기</string>
+    <string name="tooltip_button_start">실행</string>
+    <string name="tooltip_button_unlike">추가</string>
+    <string name="tooltip_button_like">해제</string>
+    <string name="tooltip_button_alarm">등록</string>
 </resources>

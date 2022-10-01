@@ -1,16 +1,15 @@
 package com.example.app_drawer.ui.app
 
 import android.text.TextUtils
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.ViewholderAppBinding
-import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.vo.AppInfoVo
-import javax.inject.Inject
 
 class AppViewHolder(
     val binding: ViewholderAppBinding,
     private val clickCallback: (AppInfoVo) -> Unit,
-    private val longClickCallback: (AppInfoVo) -> Unit,
+    private val longClickCallback: (View, AppInfoVo) -> Unit,
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
@@ -24,7 +23,7 @@ class AppViewHolder(
 
             }
             setOnLongClickListener {
-                longClickCallback(item)
+                longClickCallback(binding.root, item)
                 true
             }
         }

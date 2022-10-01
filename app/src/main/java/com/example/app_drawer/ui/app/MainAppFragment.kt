@@ -6,6 +6,11 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
@@ -131,7 +136,7 @@ class MainAppFragment private constructor() : BaseFragment<FragmentMainAppBindin
                 textViewTitle.text = getString(R.string.topic_title_recent)
                 val recentUsedAppViewAdapter = AppViewAdapter(
                     clickCallback = clickListenerLambda,
-                    longClickCallback = longClickListenerLambda,
+                    longClickCallback = longClickListenerLambda2,
                 )
                 recyclerView.adapter = recentUsedAppViewAdapter
                 // item 사이 간격
@@ -227,8 +232,47 @@ class MainAppFragment private constructor() : BaseFragment<FragmentMainAppBindin
         Log.d(TAG, "clickListenerLambda: start!!!")
     }
 
+    private val longClickListenerLambda2: (View, AppInfoVo) -> Unit = { view2, item: AppInfoVo ->
+//        AppActionTooltipDialog(
+//            clickCallbackStart = {
+//                Log.d(TAG, "AppActionTooltipDialog: clickCallbackStart")
+//            },
+//            clickCallbackLike = {
+//                Log.d(TAG, "AppActionTooltipDialog: clickCallbackLike")
+//            },
+//            clickCallbackAlarm = {
+//                Log.d(TAG, "AppActionTooltipDialog: clickCallbackAlarm")
+//            },
+//        ).show(requireActivity().supportFragmentManager, "tooltip")
 
-    private val longClickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
+        val inflater =
+            this@MainAppFragment.activity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.tooltip_app, null)
+        val popupWindow = PopupWindow(
+            view,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        )
+
+        Log.d(TAG, "sdjfkjsd: view2 top ${view2.top}")
+        Log.d(TAG, "sdjfkjsd: view2 bottom ${view2.bottom}")
+        Log.d(TAG, "sdjfkjsd: view2 left ${view2.left}")
+        Log.d(TAG, "sdjfkjsd: view2 right ${view2.right}")
+
+        with(popupWindow) {
+            isFocusable = true
+            showAtLocation(
+                this@MainAppFragment.view,
+                Gravity.CENTER,
+                view2.top, view2.left
+            )
+
+        }
+
+
+    }
+
+    private val longClickListenerLambda: (View, AppInfoVo) -> Unit = { _, item: AppInfoVo ->
         val alarmManager = App.instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             alarmManager.canScheduleExactAlarms()

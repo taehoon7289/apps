@@ -39,7 +39,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_main, MainAppFragment.getInstance()).commit()
+        transaction.replace(R.id.fragment_main, MainAppFragment.getInstance())
+            .commitAllowingStateLoss()
 
         with(binding) {
             mainBottomNavView.setOnItemSelectedListener {
@@ -57,9 +58,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val transaction = supportFragmentManager.beginTransaction()
         when (resInt) {
             R.id.first -> transaction.replace(R.id.fragment_main, MainAppFragment.getInstance())
-                .commit()
+                .commitAllowingStateLoss()
             R.id.second -> {
-                transaction.replace(R.id.fragment_main, MainAlarmFragment.getInstance()).commit()
+                transaction.replace(R.id.fragment_main, MainAlarmFragment.getInstance())
+                    .commitAllowingStateLoss()
             }
             else -> transaction.replace(R.id.fragment_main, MainAppFragment.getInstance()).commit()
         }

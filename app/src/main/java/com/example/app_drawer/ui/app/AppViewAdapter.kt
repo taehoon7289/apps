@@ -1,6 +1,7 @@
 package com.example.app_drawer.ui.app
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,7 +10,7 @@ import com.example.app_drawer.vo.AppInfoVo
 
 class AppViewAdapter(
     private val clickCallback: (AppInfoVo) -> Unit,
-    private val longClickCallback: (AppInfoVo) -> Unit
+    private val longClickCallback: (View, AppInfoVo) -> Unit
 ) :
     ListAdapter<AppInfoVo, AppViewHolder>(object : DiffUtil.ItemCallback<AppInfoVo>() {
         override fun areItemsTheSame(oldItem: AppInfoVo, newItem: AppInfoVo): Boolean {
