@@ -26,11 +26,12 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
+class MainAppFragment private constructor() : BaseFragment<FragmentMainAppBinding>() {
+
 
     override val layoutRes: Int = R.layout.fragment_main_app
 
-//    // 앱 정보 상태 관리
+    //    // 앱 정보 상태 관리
 //    @Inject
 //    lateinit var usageStatsRepository: UsageStatsRepository
 //
@@ -277,5 +278,13 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
     companion object {
         private const val TAG = "MainAppFragment"
+        private var instance: MainAppFragment? = null
+        fun getInstance(): MainAppFragment {
+            return this.instance ?: synchronized(this) {
+                this.instance ?: MainAppFragment().also {
+                    instance = it
+                }
+            }
+        }
     }
 }

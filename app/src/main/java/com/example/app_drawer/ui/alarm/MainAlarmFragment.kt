@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * create an instance of this fragment.
  */
 @AndroidEntryPoint
-class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>() {
+class MainAlarmFragment private constructor() : BaseFragment<FragmentMainAlarmBinding>() {
 
     override val layoutRes: Int = R.layout.fragment_main_alarm
 
@@ -29,16 +29,12 @@ class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>() {
         Log.d(TAG, "initView: reload!!!")
 
         with(binding) {
-            val alarmViewAdapter = AlarmViewAdapter(
-                clickCallback = {
-                    Log.d(TAG, "initView: clickCallback")
-                },
-                longClickCallback = {
-                    Log.d(TAG, "initView: longClickCallback")
-                }
-            )
-            val alarmViewVerticalDecoration =
-                AlarmViewVerticalDecoration(250f, 100f, 1f, "#BDBDBD")
+            val alarmViewAdapter = AlarmViewAdapter(clickCallback = {
+                Log.d(TAG, "initView: clickCallback")
+            }, longClickCallback = {
+                Log.d(TAG, "initView: longClickCallback")
+            })
+            val alarmViewVerticalDecoration = AlarmViewVerticalDecoration(250f, 100f, 1f, "#BDBDBD")
             alarmRecyclerView.addItemDecoration(alarmViewVerticalDecoration)
             alarmRecyclerView.adapter = alarmViewAdapter
 
@@ -55,5 +51,13 @@ class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>() {
 
     companion object {
         private const val TAG = "MainAlarmFragment"
+        private var instance: MainAlarmFragment? = null
+        fun getInstance(): MainAlarmFragment {
+            return this.instance ?: synchronized(this) {
+                this.instance ?: MainAlarmFragment().also {
+                    instance = it
+                }
+            }
+        }
     }
 }

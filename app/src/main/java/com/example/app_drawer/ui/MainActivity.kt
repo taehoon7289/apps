@@ -35,16 +35,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    lateinit var mainAppFragment: MainAppFragment
-    lateinit var mainAlarmFragment: MainAlarmFragment
-
     override fun initView() {
 
         val fragmentManager = supportFragmentManager
-        mainAppFragment = MainAppFragment()
-        mainAlarmFragment = MainAlarmFragment()
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_main, mainAppFragment).commit()
+        transaction.replace(R.id.fragment_main, MainAppFragment.getInstance()).commit()
 
         with(binding) {
             mainBottomNavView.setOnItemSelectedListener {
@@ -61,9 +56,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun clickNavButton(resInt: Int): Boolean {
         val transaction = supportFragmentManager.beginTransaction()
         when (resInt) {
-            R.id.first -> transaction.replace(R.id.fragment_main, mainAppFragment).commit()
-            R.id.second -> transaction.replace(R.id.fragment_main, mainAlarmFragment).commit()
-            else -> transaction.replace(R.id.fragment_main, mainAppFragment).commit()
+            R.id.first -> transaction.replace(R.id.fragment_main, MainAppFragment.getInstance())
+                .commit()
+            R.id.second -> {
+                transaction.replace(R.id.fragment_main, MainAlarmFragment.getInstance()).commit()
+            }
+            else -> transaction.replace(R.id.fragment_main, MainAppFragment.getInstance()).commit()
         }
         return true
     }
