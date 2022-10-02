@@ -32,4 +32,6 @@
     <attr name="colorSecondary800" format="color"></attr>
     <attr name="colorSecondary900" format="color"></attr>
 
+    <attr name="colorSystemDialog" format="color"></attr>
+
 </resources>

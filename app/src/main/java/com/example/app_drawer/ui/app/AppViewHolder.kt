@@ -2,6 +2,7 @@ package com.example.app_drawer.ui.app
 
 import android.text.TextUtils
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_drawer.databinding.ViewholderAppBinding
 import com.example.app_drawer.vo.AppInfoVo
@@ -15,7 +16,7 @@ class AppViewHolder(
 
     private val TAG = "AppViewHolder"
 
-    fun bind(item: AppInfoVo) {
+    fun bind(item: AppInfoVo, viewGroup: ViewGroup) {
         binding.model = item
         binding.viewholderAppLinear.apply {
             setOnClickListener {

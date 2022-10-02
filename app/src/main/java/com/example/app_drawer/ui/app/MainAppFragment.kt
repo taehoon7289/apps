@@ -6,11 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
@@ -21,6 +17,7 @@ import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.FragmentMainAppBinding
 import com.example.app_drawer.repository.AlarmRepository
+import com.example.app_drawer.ui.PopupWindowDialog
 import com.example.app_drawer.ui.alarm.AlarmDialogFragment
 import com.example.app_drawer.ui.notion.NotionActivity
 import com.example.app_drawer.util.Util
@@ -136,7 +133,7 @@ class MainAppFragment private constructor() : BaseFragment<FragmentMainAppBindin
                 textViewTitle.text = getString(R.string.topic_title_recent)
                 val recentUsedAppViewAdapter = AppViewAdapter(
                     clickCallback = clickListenerLambda,
-                    longClickCallback = longClickListenerLambda2,
+                    longClickCallback = longClickListenerLambda,
                 )
                 recyclerView.adapter = recentUsedAppViewAdapter
                 // item 사이 간격
@@ -219,60 +216,65 @@ class MainAppFragment private constructor() : BaseFragment<FragmentMainAppBindin
         appListViewModel.reload()
     }
 
-//    private val activityLauncher =
-//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
-//            Log.d(Companion.TAG, "activityLauncher: appListViewModel.reload()")
-//            appListViewModel.reload()
-//        }
-
     private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
-
-        this@MainAppFragment.startActivity(item.execIntent)
-
-        Log.d(TAG, "clickListenerLambda: start!!!")
+        executeApp(item)
     }
 
-    private val longClickListenerLambda2: (View, AppInfoVo) -> Unit = { view2, item: AppInfoVo ->
-//        AppActionTooltipDialog(
-//            clickCallbackStart = {
-//                Log.d(TAG, "AppActionTooltipDialog: clickCallbackStart")
-//            },
-//            clickCallbackLike = {
-//                Log.d(TAG, "AppActionTooltipDialog: clickCallbackLike")
-//            },
-//            clickCallbackAlarm = {
-//                Log.d(TAG, "AppActionTooltipDialog: clickCallbackAlarm")
-//            },
-//        ).show(requireActivity().supportFragmentManager, "tooltip")
+    private val longClickListenerLambda: (View, AppInfoVo) -> Unit = { view, item: AppInfoVo ->
 
-        val inflater =
-            this@MainAppFragment.activity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.tooltip_app, null)
+        val dialog = PopupWindowDialog(
+            appInfoVo = item,
+            clickCallbackStart = {
+                executeApp(item)
+            },
+            clickCallbackLike = {},
+            clickCallbackAlarm = {
+                openAlarmSaveView(item)
+            },
+            x = view.width.div(2),
+            y = view.height,
+        )
+
+        dialog.show(requireFragmentManager(), "popupWindowDialog")
+
+        /*
+        팝업윈도우로 띄우는 방법 -> 팝업윈도우 xml 데이터바인딩방식으로 안되는거같아서 dialogFragment 로 해야할듯
+        val inflater = LayoutInflater.from(this@MainAppFragment.context)
+        val popupWindowView = inflater.inflate(R.layout.frame_popup_window, null)
+
+        popupWindowView.measure(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        )
         val popupWindow = PopupWindow(
-            view,
+            popupWindowView,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
         )
 
-        Log.d(TAG, "sdjfkjsd: view2 top ${view2.top}")
-        Log.d(TAG, "sdjfkjsd: view2 bottom ${view2.bottom}")
-        Log.d(TAG, "sdjfkjsd: view2 left ${view2.left}")
-        Log.d(TAG, "sdjfkjsd: view2 right ${view2.right}")
+        val pX = popupWindowView.measuredWidth.div(2).minus(view.width.div(2))
+        val pY = view.height.plus(popupWindowView.measuredHeight)
 
         with(popupWindow) {
             isFocusable = true
-            showAtLocation(
-                this@MainAppFragment.view,
-                Gravity.CENTER,
-                view2.top, view2.left
+            isTouchable = true
+            showAsDropDown(
+                view,
+                -pX,
+                -pY,
+                Gravity.NO_GRAVITY,
             )
-
         }
+         */
 
 
     }
 
-    private val longClickListenerLambda: (View, AppInfoVo) -> Unit = { _, item: AppInfoVo ->
+    private fun executeApp(appInfoVo: AppInfoVo) {
+        this@MainAppFragment.startActivity(appInfoVo.execIntent)
+    }
+
+    private fun openAlarmSaveView(appInfoVo: AppInfoVo) {
         val alarmManager = App.instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             alarmManager.canScheduleExactAlarms()
@@ -294,7 +296,7 @@ class MainAppFragment private constructor() : BaseFragment<FragmentMainAppBindin
                         executeDate.set(Calendar.MINUTE, minute)
                         executeDate.set(Calendar.SECOND, 0)
                         alarmRepository.registerToAlarmManager(periodType,
-                            item,
+                            appInfoVo,
                             LocalDateTime.ofInstant(
                                 executeDate.toInstant(), executeDate.timeZone.toZoneId()
                             ),

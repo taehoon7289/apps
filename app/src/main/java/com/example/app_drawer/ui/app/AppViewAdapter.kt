@@ -25,7 +25,10 @@ class AppViewAdapter(
     private val TAG = "AppUnRecyclerViewAdapte"
 //    private val items: MutableList<AppInfoVo> = mutableListOf()
 
+    private lateinit var mViewGroup: ViewGroup
+
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): AppViewHolder {
+        this.mViewGroup = viewGroup
         val viewholderAppBinding =
             ViewholderAppBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
         return AppViewHolder(
@@ -37,7 +40,7 @@ class AppViewAdapter(
     }
 
     override fun onBindViewHolder(viewHolder: AppViewHolder, position: Int) {
-        viewHolder.bind(getItem(position))
+        viewHolder.bind(getItem(position), this.mViewGroup)
         viewHolder.binding.executePendingBindings()
     }
 
