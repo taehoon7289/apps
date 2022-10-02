@@ -28,7 +28,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainAppFragment private constructor() : BaseFragment<FragmentMainAppBinding>() {
+class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
 
     override val layoutRes: Int = R.layout.fragment_main_app
@@ -324,13 +324,13 @@ class MainAppFragment private constructor() : BaseFragment<FragmentMainAppBindin
 
     companion object {
         private const val TAG = "MainAppFragment"
-        private var instance: MainAppFragment? = null
-        fun getInstance(): MainAppFragment {
-            return this.instance ?: synchronized(this) {
-                this.instance ?: MainAppFragment().also {
-                    instance = it
-                }
-            }
-        }
+//        private var instance: MainAppFragment? = null
+//        fun getInstance(): MainAppFragment {
+//            return this.instance ?: synchronized(this) {
+//                this.instance ?: MainAppFragment().also {
+//                    instance = it
+//                }
+//            }
+//        }
     }
 }

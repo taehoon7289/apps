@@ -22,6 +22,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val TAG = "MainActivity"
 
+    private lateinit var mainAppFragment: MainAppFragment
+    private lateinit var mainAlarmFragment: MainAlarmFragment
+
     // 앱 정보 상태 관리
     @Inject
     lateinit var usageStatsRepository: UsageStatsRepository
@@ -37,9 +40,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun initView() {
 
+        mainAppFragment = MainAppFragment()
+        mainAlarmFragment = MainAlarmFragment()
+
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_main, MainAppFragment.getInstance())
+        transaction.replace(R.id.fragment_main, mainAppFragment)
             .commitAllowingStateLoss()
 
         with(binding) {
@@ -57,13 +63,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun clickNavButton(resInt: Int): Boolean {
         val transaction = supportFragmentManager.beginTransaction()
         when (resInt) {
-            R.id.first -> transaction.replace(R.id.fragment_main, MainAppFragment.getInstance())
+            R.id.first -> transaction.replace(R.id.fragment_main, mainAppFragment)
                 .commitAllowingStateLoss()
             R.id.second -> {
-                transaction.replace(R.id.fragment_main, MainAlarmFragment.getInstance())
+                transaction.replace(R.id.fragment_main, mainAlarmFragment)
                     .commitAllowingStateLoss()
             }
-            else -> transaction.replace(R.id.fragment_main, MainAppFragment.getInstance()).commit()
+            else -> transaction.replace(R.id.fragment_main, mainAppFragment).commit()
         }
         return true
     }

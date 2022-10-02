@@ -21,7 +21,7 @@ class AlarmDialogFragment(
 
     private lateinit var binding: FragmentAlarmDialogBinding
 
-    private var alarmPeriodType: AlarmPeriodType = AlarmPeriodType.EVERY_DAY
+    private var alarmPeriodType: AlarmPeriodType = AlarmPeriodType.ONCE
     private var hourOfDay: Int = 0
     private var minute: Int = 0
 

@@ -1,7 +1,6 @@
 package com.example.app_drawer.ui.alarm
 
 import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.app_drawer.BaseFragment
@@ -10,13 +9,8 @@ import com.example.app_drawer.databinding.FragmentMainAlarmBinding
 import com.example.app_drawer.ui.SwipeController
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MainAlarmFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 @AndroidEntryPoint
-class MainAlarmFragment private constructor() : BaseFragment<FragmentMainAlarmBinding>() {
+class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>() {
 
     override val layoutRes: Int = R.layout.fragment_main_alarm
 
@@ -51,13 +45,13 @@ class MainAlarmFragment private constructor() : BaseFragment<FragmentMainAlarmBi
 
     companion object {
         private const val TAG = "MainAlarmFragment"
-        private var instance: MainAlarmFragment? = null
-        fun getInstance(): MainAlarmFragment {
-            return this.instance ?: synchronized(this) {
-                this.instance ?: MainAlarmFragment().also {
-                    instance = it
-                }
-            }
-        }
+//        private var instance: MainAlarmFragment? = null
+//        fun getInstance(): MainAlarmFragment {
+//            return this.instance ?: synchronized(this) {
+//                this.instance ?: MainAlarmFragment().also {
+//                    instance = it
+//                }
+//            }
+//        }
     }
 }

@@ -44,8 +44,10 @@ class PopupWindowDialog(
     }
 
     private fun initView() {
+        binding.model = appInfoVo
         with(binding.content) {
             textViewTitle.text = appInfoVo.label
+            appIcon.setImageDrawable(appInfoVo.iconDrawable)
             linearLayoutStart.setOnClickListener {
                 clickCallbackStart()
                 dismiss()

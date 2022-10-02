@@ -35,9 +35,12 @@
             ads:layout_constraintTop_toBottomOf="@id/fragment_main" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
+            ads:elevation="0dp"
+            android:background="@android:color/transparent"
             android:id="@+id/main_bottom_nav_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            ads:itemBackground="@android:color/transparent"
             ads:layout_constraintBottom_toBottomOf="parent"
             ads:layout_constraintTop_toBottomOf="@id/adView"
             app:layout_constraintEnd_toEndOf="parent"
