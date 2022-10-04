@@ -237,6 +237,8 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
         dialog.show(requireFragmentManager(), "popupWindowDialog")
 
+        // 레이아웃 빌더 찾아보기
+
         /*
         팝업윈도우로 띄우는 방법 -> 팝업윈도우 xml 데이터바인딩방식으로 안되는거같아서 dialogFragment 로 해야할듯
         val inflater = LayoutInflater.from(this@MainAppFragment.context)
