@@ -11,6 +11,7 @@
         tools:ignore="ProtectedPermissions" /> <!-- 스케쥴 정확한 시간 권한 -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" /> <!-- 인터넷 관련 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".App"

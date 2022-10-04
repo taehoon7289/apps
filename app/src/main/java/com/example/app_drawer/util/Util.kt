@@ -1,10 +1,14 @@
 package com.example.app_drawer.util
 
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.ListView
 import androidx.annotation.RequiresApi
+import com.example.app_drawer.App
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.max
@@ -72,6 +76,21 @@ class Util {
             val a = min(255, max(0, (alpha * 255).toInt())) shl 24
             val rgb = 0x00ffffff and baseColor
             return a.plus(rgb)
+        }
+
+        @RequiresApi(Build.VERSION_CODES.M)
+        fun checkNetworkState(): Boolean {
+            val connectivityManager: ConnectivityManager =
+                App.instance.getSystemService(ConnectivityManager::class.java)
+            val network: Network = connectivityManager.activeNetwork ?: return false
+            val actNetwork: NetworkCapabilities =
+                connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                else -> false
+            }
         }
 
         private const val TAG = "Util"

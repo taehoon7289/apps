@@ -7,6 +7,8 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import javax.inject.Singleton
 
 @Module
@@ -19,15 +21,23 @@ class NetworkModule {
         return OkHttpClient.Builder().run {
             addInterceptor { chain ->
                 with(chain) {
-                    val newRequest = request().newBuilder()
-                        .addHeader(
-                            "Authorization",
-                            "Bearer secret_7bZz1bsybczodqK8pC2dCkhVoHer7DJNfLH0zntaK36"
-                        )
-                        .addHeader("Notion-Version", "2022-06-28")
-                        .addHeader("Content-Type", "application/json")
-                        .build()
-                    proceed(newRequest)
+                    try {
+                        val newRequest = request().newBuilder()
+                            .addHeader(
+                                "Authorization",
+                                "Bearer secret_7bZz1bsybczodqK8pC2dCkhVoHer7DJNfLH0zntaK36"
+                            )
+                            .addHeader("Notion-Version", "2022-06-28")
+                            .addHeader("Content-Type", "application/json")
+                            .build()
+                        proceed(newRequest)
+                    } catch (e: SocketTimeoutException) {
+                        e.printStackTrace()
+                        throw SocketTimeoutException()
+                    } catch (e: UnknownHostException) {
+                        e.printStackTrace()
+                        throw UnknownHostException()
+                    }
                 }
             }
         }.build()

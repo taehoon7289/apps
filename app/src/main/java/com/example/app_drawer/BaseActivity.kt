@@ -28,8 +28,12 @@ abstract class BaseActivity<View : ViewDataBinding> : AppCompatActivity() {
 
     // 더블백 버튼
     override fun onBackPressed() {
-        if (backDoubleEnableFlag) {
-            customOnBackPressed()
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            if (backDoubleEnableFlag) {
+                customOnBackPressed()
+            } else {
+                super.onBackPressed()
+            }
         } else {
             super.onBackPressed()
         }

@@ -11,7 +11,4 @@ interface NotionApiService {
     @POST("/v1/databases/{databaseKey}/query")
     suspend fun notificationList(@Path("databaseKey") databaseKey: String): Response<NotionDatabaseVo>
 
-    @POST("/v1/databases/{databaseKey}/query")
-    suspend fun notificationListByString(@Path("databaseKey") databaseKey: String): Response<JsonObject>
-
 }

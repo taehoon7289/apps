@@ -1,5 +1,6 @@
 package com.example.app_drawer.repository
 
+import android.os.Build
 import android.util.Log
 import com.example.app_drawer.NotionApiService
 import com.example.app_drawer.code.NotificationType
@@ -10,6 +11,17 @@ import com.example.app_drawer.vo.NotificationInfoVo
 class NotificationRepository(private val service: NotionApiService) {
 
     suspend fun getNotificationList(): MutableList<NotificationInfoVo> {
+
+        val networkStateFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Util.checkNetworkState()
+        } else {
+            false
+        }
+
+        if (!networkStateFlag) {
+            return mutableListOf()
+        }
+
         val response = service.notificationList(
             databaseKey = "d4d7fc5b3e2e452ebf2269495aa424eb"
         )
