@@ -3,6 +3,7 @@ package com.example.app_drawer.ui
 import android.app.AppOpsManager
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.commitNow
 import com.example.app_drawer.BaseActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.ActivityMainBinding
@@ -45,7 +46,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_main, mainAppFragment)
+        transaction.replace(R.id.fragment_main, mainAppFragment, "app")
             .commitAllowingStateLoss()
 
         with(binding) {
@@ -61,15 +62,59 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun clickNavButton(resInt: Int): Boolean {
-        val transaction = supportFragmentManager.beginTransaction()
-        when (resInt) {
-            R.id.first -> transaction.replace(R.id.fragment_main, mainAppFragment)
-                .commitAllowingStateLoss()
-            R.id.second -> {
-                transaction.replace(R.id.fragment_main, mainAlarmFragment)
-                    .commitAllowingStateLoss()
+
+        var visibleTag: String = ""
+
+//        for (fragment in supportFragmentManager.fragments) {
+//            if (fragment.isVisible) {
+//                visibleTag = fragment.tag.toString()
+//            }
+//        }
+//
+//        val slideInDirection: Int
+//        val slideOutDirection: Int
+//        when (visibleTag) {
+//            "app" -> {
+//                slideInDirection = R.anim.slide_right_to_left
+//                slideOutDirection = R.anim.slide_left_to_right
+//            }
+//            "alarm" -> {
+//                slideOutDirection = R.anim.slide_right_to_left
+//                slideInDirection = R.anim.slide_left_to_right
+//            }
+//            else -> {
+//                slideInDirection = R.anim.slide_right_to_left
+//                slideOutDirection = R.anim.slide_left_to_right
+//            }
+//        }
+
+        Log.d(TAG, "clickNavButton: visibleTag $visibleTag")
+
+        supportFragmentManager.commitNow {
+            when (resInt) {
+                R.id.home -> {
+                    setCustomAnimations(
+                        R.anim.slide_right_to_left,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.slide_left_to_right,
+                    )
+                    replace(R.id.fragment_main, mainAppFragment, "app")
+                }
+                R.id.alarm_list -> {
+                    setCustomAnimations(
+                        R.anim.slide_right_to_left,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.slide_left_to_right,
+                    )
+                    replace(R.id.fragment_main, mainAlarmFragment, "alarm")
+                }
+                else -> {
+                    replace(R.id.fragment_main, mainAppFragment, "app")
+                }
             }
-            else -> transaction.replace(R.id.fragment_main, mainAppFragment).commit()
+
         }
         return true
     }

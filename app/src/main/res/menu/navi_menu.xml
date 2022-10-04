@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/first"
+        android:id="@+id/home"
         android:enabled="true"
         android:icon="@drawable/ic_action_app"
         android:title="@string/menu_title_app"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/second"
+        android:id="@+id/alarm_list"
         android:icon="@drawable/ic_action_alarm"
         android:title="@string/menu_title_alarm"
         app:showAsAction="ifRoom" />
