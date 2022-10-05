@@ -46,7 +46,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_main, mainAppFragment, "app")
+        transaction.replace(R.id.frame_layout, mainAppFragment, "app")
             .commitAllowingStateLoss()
 
         with(binding) {
@@ -99,7 +99,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         R.anim.fade_in,
                         R.anim.slide_left_to_right,
                     )
-                    replace(R.id.fragment_main, mainAppFragment, "app")
+                    replace(R.id.frame_layout, mainAppFragment, "app")
                 }
                 R.id.alarm_list -> {
                     setCustomAnimations(
@@ -108,10 +108,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         R.anim.fade_in,
                         R.anim.slide_left_to_right,
                     )
-                    replace(R.id.fragment_main, mainAlarmFragment, "alarm")
+                    replace(R.id.frame_layout, mainAlarmFragment, "alarm")
                 }
                 else -> {
-                    replace(R.id.fragment_main, mainAppFragment, "app")
+                    replace(R.id.frame_layout, mainAppFragment, "app")
                 }
             }
 

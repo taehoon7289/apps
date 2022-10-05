@@ -6,22 +6,27 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.view.isGone
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.app_drawer.App
 import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
+import com.example.app_drawer.databinding.ComponentPopupBinding
 import com.example.app_drawer.databinding.FragmentMainAppBinding
 import com.example.app_drawer.repository.AlarmRepository
-import com.example.app_drawer.ui.PopupWindowDialog
 import com.example.app_drawer.ui.alarm.AlarmDialogFragment
 import com.example.app_drawer.ui.notion.NotionActivity
 import com.example.app_drawer.util.Util
 import com.example.app_drawer.vo.AppInfoVo
+import com.example.app_drawer.vo.PositionVo
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.util.*
@@ -222,6 +227,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
     private val longClickListenerLambda: (View, AppInfoVo) -> Unit = { view, item: AppInfoVo ->
 
+        /*
         val dialog = PopupWindowDialog(
             appInfoVo = item,
             clickCallbackStart = {
@@ -234,28 +240,47 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             x = view.width.div(2),
             y = view.height,
         )
+        activity?.supportFragmentManager.let {
+            if (it != null) {
+                dialog.show(it, "popupWindowDialog")
+            }
+        }
+         */
 
-        dialog.show(requireFragmentManager(), "popupWindowDialog")
 
-        // 레이아웃 빌더 찾아보기
+        val binding = DataBindingUtil.setContentView<ComponentPopupBinding>(
+            this@MainAppFragment.requireActivity(),
+            R.layout.component_popup,
+        )
 
-        /*
-        팝업윈도우로 띄우는 방법 -> 팝업윈도우 xml 데이터바인딩방식으로 안되는거같아서 dialogFragment 로 해야할듯
-        val inflater = LayoutInflater.from(this@MainAppFragment.context)
-        val popupWindowView = inflater.inflate(R.layout.frame_popup_window, null)
+//        val binding = FramePopupWindowBinding.inflate(
+//            LayoutInflater.from(
+//                this@MainAppFragment.context
+//            )
+//        )
+
+        val popupWindowView = binding.root
+
+        binding.model = item
+
 
         popupWindowView.measure(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
         )
-        val popupWindow = PopupWindow(
-            popupWindowView,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-        )
+
 
         val pX = popupWindowView.measuredWidth.div(2).minus(view.width.div(2))
         val pY = view.height.plus(popupWindowView.measuredHeight)
+
+        binding.positionModel = PositionVo(
+            x = -pX,
+            y = -pY,
+        )
+
+        val popupWindow = PopupWindow(
+            popupWindowView
+        )
 
         with(popupWindow) {
             isFocusable = true
@@ -267,7 +292,6 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 Gravity.NO_GRAVITY,
             )
         }
-         */
 
 
     }

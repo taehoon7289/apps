@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.app_drawer.R
-import com.example.app_drawer.databinding.FramePopupWindowBinding
+import com.example.app_drawer.databinding.ComponentPopupBinding
 import com.example.app_drawer.vo.AppInfoVo
 
 class PopupWindowDialog(
@@ -27,12 +27,12 @@ class PopupWindowDialog(
         isCancelable = true
     }
 
-    lateinit var binding: FramePopupWindowBinding
+    lateinit var binding: ComponentPopupBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.frame_popup_window, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.component_popup, container, false)
         initView()
         return binding.root
     }
