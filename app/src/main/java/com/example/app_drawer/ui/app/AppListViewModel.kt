@@ -76,6 +76,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
         topics.add(
             TopicInfoVo(
                 appInfoVoList = _recentUsedItems.value,
+                type = ListViewType.RECENT_USED,
                 title = App.instance.getString(R.string.topic_title_recent),
                 description = "${App.instance.getString(R.string.topic_title_recent)}입니다",
                 color = Color.RED,
@@ -88,6 +89,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
         topics.add(
             TopicInfoVo(
                 appInfoVoList = _oftenUsedItems.value,
+                type = ListViewType.OFTEN_USED,
                 title = App.instance.getString(R.string.topic_title_often),
                 description = "${App.instance.getString(R.string.topic_title_often)}입니다",
                 color = Color.RED,
@@ -100,6 +102,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
         topics.add(
             TopicInfoVo(
                 appInfoVoList = _unUsedItems.value,
+                type = ListViewType.UN_USED,
                 title = App.instance.getString(R.string.topic_title_unused),
                 description = "${App.instance.getString(R.string.topic_title_unused)}입니다",
                 color = Color.RED,
@@ -112,6 +115,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
         topics.add(
             TopicInfoVo(
                 appInfoVoList = _installedItems.value,
+                type = ListViewType.INSTALLED,
                 title = App.instance.getString(R.string.topic_title_installed),
                 description = "${App.instance.getString(R.string.topic_title_installed)}입니다",
                 color = Color.RED,

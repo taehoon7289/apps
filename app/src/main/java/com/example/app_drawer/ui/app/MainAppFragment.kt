@@ -9,13 +9,16 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.app_drawer.App
 import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
+import com.example.app_drawer.code.ListViewType
 import com.example.app_drawer.databinding.FragmentMainAppBinding
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.ui.AppInfoPopup
@@ -114,8 +117,44 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 // 주제별 2열 리스트
                 title.setTextColor(Util.getColorWithAlpha(0.6f, title.textColors.defaultColor))
                 val topicViewAdapter = TopicViewAdapter(
-                    clickCallback = {},
-                    longClickCallback = {},
+                    clickCallback = {
+                        Log.d(TAG, "initView????????: ${it.title}")
+                        when (it.type) {
+                            ListViewType.RECENT_USED -> {
+                                findNavController().navigate(
+                                    R.id.main_app_fragment_to_main_search_app_fragment,
+                                    bundleOf("type" to it.type),
+                                )
+                            }
+                            ListViewType.OFTEN_USED -> {
+                                findNavController().navigate(
+                                    R.id.main_app_fragment_to_main_search_app_fragment,
+                                    bundleOf("type" to it.type),
+                                )
+                            }
+                            ListViewType.UN_USED -> {
+                                findNavController().navigate(
+                                    R.id.main_app_fragment_to_main_search_app_fragment,
+                                    bundleOf("type" to it.type),
+                                )
+                            }
+                            ListViewType.INSTALLED -> {
+                                findNavController().navigate(
+                                    R.id.main_app_fragment_to_main_search_app_fragment,
+                                    bundleOf("type" to it.type),
+                                )
+                            }
+                            else -> {
+                                findNavController().navigate(
+                                    R.id.main_app_fragment_to_main_search_app_fragment,
+                                    bundleOf("type" to it.type),
+                                )
+                            }
+                        }
+                    },
+                    longClickCallback = {
+                        Log.d(TAG, "initView@@@@@@@@????????: ${it.title}")
+                    },
                 )
                 recyclerView.adapter = topicViewAdapter
                 // 그리드 레이아웃 설정

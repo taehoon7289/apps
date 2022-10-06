@@ -3,13 +3,13 @@ package com.example.app_drawer.ui
 import android.app.AppOpsManager
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.commitNow
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.example.app_drawer.BaseActivity
 import com.example.app_drawer.R
 import com.example.app_drawer.databinding.ActivityMainBinding
 import com.example.app_drawer.repository.UsageStatsRepository
-import com.example.app_drawer.ui.alarm.MainAlarmFragment
-import com.example.app_drawer.ui.app.MainAppFragment
 import com.google.android.gms.ads.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -23,8 +23,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val TAG = "MainActivity"
 
-    private lateinit var mainAppFragment: MainAppFragment
-    private lateinit var mainAlarmFragment: MainAlarmFragment
+//    private lateinit var mainAppFragment: MainAppFragment
+//    private lateinit var mainAlarmFragment: MainAlarmFragment
+
+    private lateinit var navController: NavController
 
     // 앱 정보 상태 관리
     @Inject
@@ -40,83 +42,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun initView() {
-
-        mainAppFragment = MainAppFragment()
-        mainAlarmFragment = MainAlarmFragment()
-
-        val fragmentManager = supportFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout, mainAppFragment, "app")
-            .commitAllowingStateLoss()
-
+        // bottomNavView, fragmentContainerView 연동
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        navController = navHostFragment.navController
         with(binding) {
-            mainBottomNavView.setOnItemSelectedListener {
-                val id = it.itemId
-                clickNavButton(id)
-            }
+            NavigationUI.setupWithNavController(mainBottomNavView, navController)
         }
-
         // 광고
         initAdMob()
 
-    }
-
-    private fun clickNavButton(resInt: Int): Boolean {
-
-        var visibleTag: String = ""
-
-//        for (fragment in supportFragmentManager.fragments) {
-//            if (fragment.isVisible) {
-//                visibleTag = fragment.tag.toString()
-//            }
-//        }
-//
-//        val slideInDirection: Int
-//        val slideOutDirection: Int
-//        when (visibleTag) {
-//            "app" -> {
-//                slideInDirection = R.anim.slide_right_to_left
-//                slideOutDirection = R.anim.slide_left_to_right
-//            }
-//            "alarm" -> {
-//                slideOutDirection = R.anim.slide_right_to_left
-//                slideInDirection = R.anim.slide_left_to_right
-//            }
-//            else -> {
-//                slideInDirection = R.anim.slide_right_to_left
-//                slideOutDirection = R.anim.slide_left_to_right
-//            }
-//        }
-
-        Log.d(TAG, "clickNavButton: visibleTag $visibleTag")
-
-        supportFragmentManager.commitNow {
-            when (resInt) {
-                R.id.home -> {
-                    setCustomAnimations(
-                        R.anim.slide_right_to_left,
-                        R.anim.fade_out,
-                        R.anim.fade_in,
-                        R.anim.slide_left_to_right,
-                    )
-                    replace(R.id.frame_layout, mainAppFragment, "app")
-                }
-                R.id.alarm_list -> {
-                    setCustomAnimations(
-                        R.anim.slide_right_to_left,
-                        R.anim.fade_out,
-                        R.anim.fade_in,
-                        R.anim.slide_left_to_right,
-                    )
-                    replace(R.id.frame_layout, mainAlarmFragment, "alarm")
-                }
-                else -> {
-                    replace(R.id.frame_layout, mainAppFragment, "app")
-                }
-            }
-
-        }
-        return true
     }
 
     lateinit var mAdView: AdView

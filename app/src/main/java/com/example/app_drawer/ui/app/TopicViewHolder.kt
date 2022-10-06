@@ -39,6 +39,7 @@ class TopicViewHolder(
                             action = "ACTION_UP"
                             view.background =
                                 resources.getDrawable(R.drawable.shape_topic, null)
+                            clickCallback(item)
                         }
                         MotionEvent.ACTION_CANCEL -> {
                             action = "ACTION_CANCEL"

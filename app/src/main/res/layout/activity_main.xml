@@ -9,16 +9,27 @@
         android:layout_height="match_parent"
         tools:context=".ui.MainActivity">
 
-        <FrameLayout
-            android:id="@+id/frame_layout"
+        <!--        <FrameLayout-->
+        <!--            android:id="@+id/frame_layout"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="0dp"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/adView"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent">-->
+
+        <!--        </FrameLayout>-->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container_view"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/adView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </FrameLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/nav_graph" />
 
         <com.google.android.gms.ads.AdView
 
@@ -32,7 +43,7 @@
             ads:layout_constraintBottom_toTopOf="@id/main_bottom_nav_view"
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toBottomOf="@id/frame_layout" />
+            ads:layout_constraintTop_toBottomOf="@id/fragment_container_view" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_bottom_nav_view"
