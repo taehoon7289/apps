@@ -6,27 +6,23 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.view.isGone
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.app_drawer.App
 import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
-import com.example.app_drawer.databinding.ComponentPopupBinding
 import com.example.app_drawer.databinding.FragmentMainAppBinding
 import com.example.app_drawer.repository.AlarmRepository
+import com.example.app_drawer.ui.AppInfoPopup
 import com.example.app_drawer.ui.alarm.AlarmDialogFragment
 import com.example.app_drawer.ui.notion.NotionActivity
 import com.example.app_drawer.util.Util
 import com.example.app_drawer.vo.AppInfoVo
-import com.example.app_drawer.vo.PositionVo
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.util.*
@@ -248,52 +244,44 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
          */
 
 
-        val binding = DataBindingUtil.setContentView<ComponentPopupBinding>(
-            this@MainAppFragment.requireActivity(),
-            R.layout.component_popup,
-        )
 
-//        val binding = FramePopupWindowBinding.inflate(
-//            LayoutInflater.from(
-//                this@MainAppFragment.context
-//            )
+        AppInfoPopup(
+            anchorView = view,
+            inflater = this@MainAppFragment.layoutInflater,
+            appInfoVo = item,
+            layoutWidth = ViewGroup.LayoutParams.WRAP_CONTENT,
+            layoutHeight = ViewGroup.LayoutParams.WRAP_CONTENT,
+        ).show()
+
+//        val inflater = LayoutInflater.from(this@MainAppFragment.context)
+//        val popupWindowView = inflater.inflate(R.layout.component_popup, null)
+//
+//        popupWindowView.measure(
+//            ViewGroup.LayoutParams.WRAP_CONTENT,
+//            ViewGroup.LayoutParams.WRAP_CONTENT,
 //        )
-
-        val popupWindowView = binding.root
-
-        binding.model = item
-
-
-        popupWindowView.measure(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-        )
-
-
-        val pX = popupWindowView.measuredWidth.div(2).minus(view.width.div(2))
-        val pY = view.height.plus(popupWindowView.measuredHeight)
-
-        binding.positionModel = PositionVo(
-            x = -pX,
-            y = -pY,
-        )
-
-        val popupWindow = PopupWindow(
-            popupWindowView
-        )
-
-        with(popupWindow) {
-            isFocusable = true
-            isTouchable = true
-            showAsDropDown(
-                view,
-                -pX,
-                -pY,
-                Gravity.NO_GRAVITY,
-            )
-        }
-
-
+//        val popupWindow = PopupWindow(
+//            popupWindowView,
+//            ViewGroup.LayoutParams.WRAP_CONTENT,
+//            ViewGroup.LayoutParams.WRAP_CONTENT,
+//        )
+//
+//        val pX = popupWindowView.measuredWidth.div(2).minus(view.width.div(2))
+//        val pY = view.height.plus(popupWindowView.measuredHeight)
+//
+//        Log.d(TAG, "pX: $pX")
+//        Log.d(TAG, "pY: $pY")
+//
+//        with(popupWindow) {
+//            isFocusable = true
+//            isTouchable = true
+//            showAsDropDown(
+//                view,
+//                -pX,
+//                -pY,
+//                Gravity.NO_GRAVITY,
+//            )
+//        }
     }
 
     private fun executeApp(appInfoVo: AppInfoVo) {

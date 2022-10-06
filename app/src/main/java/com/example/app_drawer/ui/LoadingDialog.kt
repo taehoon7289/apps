@@ -13,7 +13,7 @@ import com.example.app_drawer.R
 import com.example.app_drawer.databinding.ComponentPopupBinding
 import com.example.app_drawer.vo.AppInfoVo
 
-class PopupWindowDialog(
+class LoadingDialog(
     private val appInfoVo: AppInfoVo,
     private val clickCallbackStart: () -> Unit,
     private val clickCallbackLike: () -> Unit,
