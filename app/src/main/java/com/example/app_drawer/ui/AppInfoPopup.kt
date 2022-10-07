@@ -50,7 +50,7 @@ class AppInfoPopup(
             ViewGroup.LayoutParams.WRAP_CONTENT,
         )
         x = contentView.measuredWidth.div(2).minus(anchorView.width.div(2))
-        y = contentView.measuredHeight
+        y = contentView.measuredHeight.plus(anchorView.height)
 
         Log.d(TAG, "initView: x $x")
         Log.d(TAG, "initView: y $y")
@@ -60,7 +60,7 @@ class AppInfoPopup(
 
     fun show() {
         initView()
-        super.showAtLocation(anchorView, 0, 0, Gravity.NO_GRAVITY)
+        super.showAsDropDown(anchorView, -x, -y, Gravity.NO_GRAVITY)
     }
 
 
