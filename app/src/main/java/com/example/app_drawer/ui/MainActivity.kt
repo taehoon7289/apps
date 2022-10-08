@@ -3,7 +3,6 @@ package com.example.app_drawer.ui
 import android.app.AppOpsManager
 import android.os.Bundle
 import android.util.Log
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.app_drawer.BaseActivity
@@ -26,8 +25,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 //    private lateinit var mainAppFragment: MainAppFragment
 //    private lateinit var mainAlarmFragment: MainAlarmFragment
 
-    private lateinit var navController: NavController
-
     // 앱 정보 상태 관리
     @Inject
     lateinit var usageStatsRepository: UsageStatsRepository
@@ -47,7 +44,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         navController = navHostFragment.navController
         with(binding) {
-            NavigationUI.setupWithNavController(mainBottomNavView, navController)
+            NavigationUI.setupWithNavController(mainBottomNavView, navController!!)
         }
         // 광고
         initAdMob()

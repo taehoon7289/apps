@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
@@ -36,6 +37,16 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
 
     override val layoutRes: Int = R.layout.fragment_main_app
+
+//    override val onBackPressedCallback: OnBackPressedCallback =
+//        object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                if (!findNavController().popBackStack()) {
+//                    requireActivity().onBackPressed()
+//                }
+//            }
+//
+//        }
 
     //    // 앱 정보 상태 관리
 //    @Inject

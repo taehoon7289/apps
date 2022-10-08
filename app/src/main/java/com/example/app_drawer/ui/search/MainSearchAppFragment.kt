@@ -9,7 +9,9 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.app_drawer.App
 import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
@@ -36,6 +38,24 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
     private val appListViewModel: AppListViewModel by viewModels()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(TAG, "onAttach: ###################3")
+//        requireActivity().onBackPressed()
+//        requireActivity().onBackPressedDispatcher.addCallback(
+//            this@MainSearchAppFragment,
+//            object : OnBackPressedCallback(true) {
+//                override fun handleOnBackPressed() {
+//                    Log.d(TAG, "handleOnBackPressed: @@@@@@@@@@@@@")
+//                    if (!findNavController().popBackStack()) {
+//                        requireActivity().onBackPressed()
+//                    }
+//                }
+//
+//            }
+//        )
+    }
+
     override fun initView() {
 
         Log.d(TAG, "initView: $arguments")
@@ -61,7 +81,6 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 //                    linearLayout.isGone = it.isEmpty()
 //                    searchedAppViewAdapter.submitList(it)
 //                }
-
         }
 
 

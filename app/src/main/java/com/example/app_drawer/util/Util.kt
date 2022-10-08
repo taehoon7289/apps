@@ -41,6 +41,7 @@ class Util {
         fun getLocalDateTimeToString(
             localDateTime: LocalDateTime, pattern: String = "yyyyMMddHHmmss"
         ): String? {
+
             return localDateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
 
@@ -87,8 +88,24 @@ class Util {
                 connectivityManager.getNetworkCapabilities(network) ?: return false
 
             return when {
-                actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        Log.d(
+                            TAG,
+                            "checkNetworkState: NetworkCapabilities.TRANSPORT_CELLULAR ${actNetwork.signalStrength}"
+                        )
+                    }
+                    true
+                }
+                actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        Log.d(
+                            TAG,
+                            "checkNetworkState NetworkCapabilities.TRANSPORT_WIFI: ${actNetwork.signalStrength}"
+                        )
+                    }
+                    true
+                }
                 else -> false
             }
         }
