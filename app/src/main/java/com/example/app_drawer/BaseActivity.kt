@@ -44,7 +44,7 @@ abstract class BaseActivity<View : ViewDataBinding> : AppCompatActivity() {
 
         if (backDoubleEnableFlag) {
             val flag = navController?.let {
-                it.popBackStack()
+                it.navigateUp()
             } == true
             if (!flag) {
                 customOnBackPressed()
