@@ -16,4 +16,5 @@
     <string name="tooltip_button_unlike">추가</string>
     <string name="tooltip_button_like">해제</string>
     <string name="tooltip_button_alarm">등록</string>
+    <string name="search_view_query_hint">앱이름을 넣어주세요</string>
 </resources>

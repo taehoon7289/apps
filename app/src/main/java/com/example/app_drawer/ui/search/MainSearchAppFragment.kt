@@ -9,19 +9,20 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.example.app_drawer.App
 import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
+import com.example.app_drawer.code.ListViewType
 import com.example.app_drawer.databinding.FragmentMainSearchAppBinding
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.ui.AppInfoPopup
 import com.example.app_drawer.ui.alarm.AlarmDialogFragment
 import com.example.app_drawer.ui.app.AppListViewModel
 import com.example.app_drawer.ui.app.AppViewAdapter
+import com.example.app_drawer.util.Util
 import com.example.app_drawer.vo.AppInfoVo
+import com.example.app_drawer.vo.NavigationInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.util.*
@@ -61,6 +62,19 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
         Log.d(TAG, "initView: $arguments")
 
         with(binding) {
+
+            with(componentToolbar) {
+
+                model = NavigationInfoVo(
+                    title = "앱검색",
+                    type = arguments?.get("subTitle") as ListViewType,
+                )
+                subTitle.setTextColor(
+                    Util.getColorWithAlpha(
+                        0.6f, subTitle.textColors.defaultColor
+                    )
+                )
+            }
 
             searchView.setOnQueryTextFocusChangeListener { v, hasFocus ->
                 Log.d(TAG, "initView: v $v")

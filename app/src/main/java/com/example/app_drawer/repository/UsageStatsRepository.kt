@@ -11,6 +11,7 @@ import android.os.Process
 import android.provider.Settings
 import com.example.app_drawer.App
 import com.example.app_drawer.code.ListViewType
+import com.example.app_drawer.ui.MainActivity
 import com.example.app_drawer.vo.AppInfoVo
 import java.lang.reflect.Field
 import java.util.*
@@ -47,7 +48,6 @@ class UsageStatsRepository {
      * 설정 activity 실행
      */
     fun isOpenSettingIntent() {
-        /*
         val appOps = App.instance.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         appOps.startWatchingMode(AppOpsManager.OPSTR_GET_USAGE_STATS,
             App.instance.applicationContext.packageName,
@@ -68,7 +68,6 @@ class UsageStatsRepository {
                 }
 
             })
-         */
 
         val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)

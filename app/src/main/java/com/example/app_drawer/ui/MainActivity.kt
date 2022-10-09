@@ -1,7 +1,6 @@
 package com.example.app_drawer.ui
 
 import android.app.AppOpsManager
-import android.os.Bundle
 import android.util.Log
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -29,16 +28,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     @Inject
     lateinit var usageStatsRepository: UsageStatsRepository
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "onCreate: ####")
-        super.onCreate(savedInstanceState)
+    override fun initView() {
         val mode = usageStatsRepository.checkForPermissionUsageStats()
         if (mode != AppOpsManager.MODE_ALLOWED) {
             usageStatsRepository.isOpenSettingIntent()
         }
-    }
 
-    override fun initView() {
         // bottomNavView, fragmentContainerView 연동
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment

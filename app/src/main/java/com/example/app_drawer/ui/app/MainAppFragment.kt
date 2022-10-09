@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
@@ -27,6 +26,7 @@ import com.example.app_drawer.ui.alarm.AlarmDialogFragment
 import com.example.app_drawer.ui.notion.NotionActivity
 import com.example.app_drawer.util.Util
 import com.example.app_drawer.vo.AppInfoVo
+import com.example.app_drawer.vo.NavigationInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.util.*
@@ -77,6 +77,10 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             })
 
             with(componentToolbar) {
+                model = NavigationInfoVo(
+                    title = "앱고르기",
+                    type = arguments?.get("type") as ListViewType,
+                )
                 subTitle.setTextColor(
                     Util.getColorWithAlpha(
                         0.6f, subTitle.textColors.defaultColor
@@ -129,43 +133,12 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 title.setTextColor(Util.getColorWithAlpha(0.6f, title.textColors.defaultColor))
                 val topicViewAdapter = TopicViewAdapter(
                     clickCallback = {
-                        Log.d(TAG, "initView????????: ${it.title}")
-                        when (it.type) {
-                            ListViewType.RECENT_USED -> {
-                                findNavController().navigate(
-                                    R.id.main_app_fragment_to_main_search_app_fragment,
-                                    bundleOf("type" to it.type),
-                                )
-                            }
-                            ListViewType.OFTEN_USED -> {
-                                findNavController().navigate(
-                                    R.id.main_app_fragment_to_main_search_app_fragment,
-                                    bundleOf("type" to it.type),
-                                )
-                            }
-                            ListViewType.UN_USED -> {
-                                findNavController().navigate(
-                                    R.id.main_app_fragment_to_main_search_app_fragment,
-                                    bundleOf("type" to it.type),
-                                )
-                            }
-                            ListViewType.INSTALLED -> {
-                                findNavController().navigate(
-                                    R.id.main_app_fragment_to_main_search_app_fragment,
-                                    bundleOf("type" to it.type),
-                                )
-                            }
-                            else -> {
-                                findNavController().navigate(
-                                    R.id.main_app_fragment_to_main_search_app_fragment,
-                                    bundleOf("type" to it.type),
-                                )
-                            }
-                        }
+                        findNavController().navigate(
+                            R.id.main_app_fragment_to_main_search_app_fragment,
+                            bundleOf("type" to it.type)
+                        )
                     },
-                    longClickCallback = {
-                        Log.d(TAG, "initView@@@@@@@@????????: ${it.title}")
-                    },
+                    longClickCallback = {},
                 )
                 recyclerView.adapter = topicViewAdapter
                 // 그리드 레이아웃 설정
