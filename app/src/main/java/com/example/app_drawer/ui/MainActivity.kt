@@ -19,11 +19,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override val backDoubleEnableFlag = true
 
-    private val TAG = "MainActivity"
-
-//    private lateinit var mainAppFragment: MainAppFragment
-//    private lateinit var mainAlarmFragment: MainAlarmFragment
-
     // 앱 정보 상태 관리
     @Inject
     lateinit var usageStatsRepository: UsageStatsRepository
@@ -55,35 +50,35 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         mAdView.adListener = object : AdListener() {
             override fun onAdClicked() {
                 // Code to be executed when the user clicks on an ad.
-                Log.d(TAG, "onAdClicked: ")
+                Log.d(Companion.TAG, "onAdClicked: ")
             }
 
             override fun onAdClosed() {
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.
-                Log.d(TAG, "onAdClosed: ")
+                Log.d(Companion.TAG, "onAdClosed: ")
             }
 
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 // Code to be executed when an ad request fails.
-                Log.d(TAG, "onAdFailedToLoad: ")
+                Log.d(Companion.TAG, "onAdFailedToLoad: ")
             }
 
             override fun onAdImpression() {
                 // Code to be executed when an impression is recorded
                 // for an ad.
-                Log.d(TAG, "onAdImpression: ")
+                Log.d(Companion.TAG, "onAdImpression: ")
             }
 
             override fun onAdLoaded() {
                 // Code to be executed when an ad finishes loading.
-                Log.d(TAG, "onAdLoaded: ")
+                Log.d(Companion.TAG, "onAdLoaded: ")
             }
 
             override fun onAdOpened() {
                 // Code to be executed when an ad opens an overlay that
                 // covers the screen.
-                Log.d(TAG, "onAdOpened: ")
+                Log.d(Companion.TAG, "onAdOpened: ")
             }
         }
 
@@ -96,6 +91,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         onAdOpened()	onAdOpened() 메서드는 광고에서 화면을 가리는 오버레이를 열 때 호출됩니다.
          */
 
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 
 }

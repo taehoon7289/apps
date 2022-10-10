@@ -9,7 +9,9 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import com.example.app_drawer.App
 import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
@@ -18,8 +20,6 @@ import com.example.app_drawer.databinding.FragmentMainSearchAppBinding
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.ui.AppInfoPopup
 import com.example.app_drawer.ui.alarm.AlarmDialogFragment
-import com.example.app_drawer.ui.app.AppListViewModel
-import com.example.app_drawer.ui.app.AppViewAdapter
 import com.example.app_drawer.util.Util
 import com.example.app_drawer.vo.AppInfoVo
 import com.example.app_drawer.vo.NavigationInfoVo
@@ -37,25 +37,10 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
     @Inject
     lateinit var alarmRepository: AlarmRepository
 
-    private val appListViewModel: AppListViewModel by viewModels()
+    private val searchAppListViewModel: SearchAppListViewModel by viewModels()
+    private lateinit var items: LiveData<MutableList<AppInfoVo>>
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d(TAG, "onAttach: ###################3")
-//        requireActivity().onBackPressed()
-//        requireActivity().onBackPressedDispatcher.addCallback(
-//            this@MainSearchAppFragment,
-//            object : OnBackPressedCallback(true) {
-//                override fun handleOnBackPressed() {
-//                    Log.d(TAG, "handleOnBackPressed: @@@@@@@@@@@@@")
-//                    if (!findNavController().popBackStack()) {
-//                        requireActivity().onBackPressed()
-//                    }
-//                }
-//
-//            }
-//        )
-    }
+    private lateinit var navigationInfoVo: NavigationInfoVo
 
     override fun initView() {
 
@@ -65,10 +50,11 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
             with(componentToolbar) {
 
-                model = NavigationInfoVo(
+                navigationInfoVo = NavigationInfoVo(
                     title = "앱검색",
-                    type = arguments?.get("subTitle") as ListViewType,
+                    listViewType = arguments?.get("listViewType") as ListViewType,
                 )
+                model = navigationInfoVo
                 subTitle.setTextColor(
                     Util.getColorWithAlpha(
                         0.6f, subTitle.textColors.defaultColor
@@ -76,25 +62,46 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                 )
             }
 
-            searchView.setOnQueryTextFocusChangeListener { v, hasFocus ->
-                Log.d(TAG, "initView: v $v")
-                Log.d(TAG, "initView: hasFocus $hasFocus")
+            with(searchView) {
+                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        searchAppListViewModel.searchQuery(query ?: "")
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        Log.d(TAG, "onQueryTextChange: newText $newText")
+                        searchAppListViewModel.searchQuery(newText ?: "")
+                        return true
+                    }
+                })
             }
 
-            // 선택된 앱 recyclerView
-            val searchedAppViewAdapter = AppViewAdapter(
-                clickCallback = clickListenerLambda,
-                longClickCallback = longClickListenerLambda,
-            )
-            recyclerView.adapter = searchedAppViewAdapter
-            // item 사이 간격
-            if (recyclerView.itemDecorationCount > 0) {
-                recyclerView.removeItemDecorationAt(0)
+            with(recyclerView) {
+                // 선택된 앱 recyclerView
+                val searchAppViewAdapter = SearchAppViewAdapter(
+                    clickCallback = clickListenerLambda,
+                    longClickCallback = longClickListenerLambda,
+                )
+                adapter = searchAppViewAdapter
+                // item 사이 간격
+                if (recyclerView.itemDecorationCount > 0) {
+                    recyclerView.removeItemDecorationAt(0)
+                }
+                items = when (navigationInfoVo.listViewType) {
+                    ListViewType.RECENT_USED -> searchAppListViewModel.recentUsedItems
+                    ListViewType.OFTEN_USED -> searchAppListViewModel.oftenUsedItems
+                    ListViewType.UN_USED -> searchAppListViewModel.unUsedItems
+                    ListViewType.INSTALLED -> searchAppListViewModel.installedItems
+                    else -> searchAppListViewModel.recentUsedItems
+                }
+                items.observe(this@MainSearchAppFragment) {
+                    Log.d(TAG, "initView: 여기 들어옴??? ${navigationInfoVo.listViewType}")
+                    searchAppViewAdapter.submitList(it)
+                }
             }
-//                appListViewModel.recentUsedItems.observe(this@MainSearchAppFragment) {
-//                    linearLayout.isGone = it.isEmpty()
-//                    searchedAppViewAdapter.submitList(it)
-//                }
+
+
         }
 
 
@@ -103,7 +110,7 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: !!! fragment")
-        appListViewModel.reload()
+        searchAppListViewModel.reload()
     }
 
     private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->

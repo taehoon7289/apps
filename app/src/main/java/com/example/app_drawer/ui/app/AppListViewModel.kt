@@ -20,7 +20,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
     private var _recentUsedItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
         usageStatsRepository.getAppInfoByType(
             ListViewType.RECENT_USED
-        )
+        ).take(10).toMutableList()
     )
 
     val recentUsedItems: LiveData<MutableList<AppInfoVo>>
@@ -29,7 +29,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
     private var _oftenUsedItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
         usageStatsRepository.getAppInfoByType(
             ListViewType.OFTEN_USED
-        )
+        ).take(10).toMutableList()
     )
 
     val oftenUsedItems: LiveData<MutableList<AppInfoVo>>

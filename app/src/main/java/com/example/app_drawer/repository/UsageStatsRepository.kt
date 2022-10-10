@@ -152,7 +152,7 @@ class UsageStatsRepository {
     /**
      * 타입별 앱 정보 생성
      */
-    fun getAppInfoByType(type: ListViewType): MutableList<AppInfoVo> {
+    fun getAppInfoByType(type: ListViewType? = null): MutableList<AppInfoVo> {
         // 현재 패키지 제외
         val items = items.filter {
             it.packageName != App.instance.packageName
@@ -161,14 +161,14 @@ class UsageStatsRepository {
             ListViewType.RECENT_USED -> {
                 items.filter {
                     (it.lastTimeStamp ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp
-                }.sortedByDescending { it.lastTimeStamp }.take(10).toMutableList()
+                }.sortedByDescending { it.lastTimeStamp }.toMutableList()
             }
             ListViewType.OFTEN_USED -> {
                 items.filter {
                     (it.lastTimeStamp
                         ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp && (it.launchCount
                         ?: 0L) > 0
-                }.sortedByDescending { it.launchCount }.take(10).toMutableList()
+                }.sortedByDescending { it.launchCount }.toMutableList()
             }
             ListViewType.UN_USED -> {
                 items.filter {
@@ -178,6 +178,7 @@ class UsageStatsRepository {
             ListViewType.INSTALLED -> {
                 items.sortedBy { it.label }.toMutableList()
             }
+            else -> items
         }
     }
 

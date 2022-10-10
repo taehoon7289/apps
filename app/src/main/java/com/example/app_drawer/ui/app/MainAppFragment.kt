@@ -18,7 +18,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.app_drawer.App
 import com.example.app_drawer.BaseFragment
 import com.example.app_drawer.R
-import com.example.app_drawer.code.ListViewType
 import com.example.app_drawer.databinding.FragmentMainAppBinding
 import com.example.app_drawer.repository.AlarmRepository
 import com.example.app_drawer.ui.AppInfoPopup
@@ -79,7 +78,6 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             with(componentToolbar) {
                 model = NavigationInfoVo(
                     title = "앱고르기",
-                    type = arguments?.get("type") as ListViewType,
                 )
                 subTitle.setTextColor(
                     Util.getColorWithAlpha(
@@ -135,7 +133,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                     clickCallback = {
                         findNavController().navigate(
                             R.id.main_app_fragment_to_main_search_app_fragment,
-                            bundleOf("type" to it.type)
+                            bundleOf("listViewType" to it.type)
                         )
                     },
                     longClickCallback = {},
