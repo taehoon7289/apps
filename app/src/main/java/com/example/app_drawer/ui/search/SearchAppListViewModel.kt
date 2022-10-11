@@ -57,44 +57,33 @@ class SearchAppListViewModel @Inject constructor(private val usageStatsRepositor
 
     fun reload() {
         usageStatsRepository.createAppInfoList()
-        _recentUsedItems.value = usageStatsRepository.getAppInfoByType(
-            ListViewType.RECENT_USED
-        )
-        _oftenUsedItems.value = usageStatsRepository.getAppInfoByType(
-            ListViewType.OFTEN_USED
-        )
-        _unUsedItems.value = usageStatsRepository.getAppInfoByType(
-            ListViewType.UN_USED
-        )
-        _installedItems.value = usageStatsRepository.getAppInfoByType(
-            ListViewType.INSTALLED
-        )
+        _allItems.value = usageStatsRepository.getAppInfoByType()
     }
 
     fun searchQuery(query: String) {
 
-        _recentUsedItems.value = _recentUsedItems.value?.filter {
+        _recentUsedItems.value = _allItems.value?.filter {
             if (query.isNotEmpty()) {
                 it.label?.contains(query, true) == true
             } else {
                 true
             }
         }?.toMutableList()
-        _oftenUsedItems.value = _oftenUsedItems.value?.filter {
+        _oftenUsedItems.value = _allItems.value?.filter {
             if (query.isNotEmpty()) {
                 it.label?.contains(query, true) == true
             } else {
                 true
             }
         }?.toMutableList()
-        _unUsedItems.value = _unUsedItems.value?.filter {
+        _unUsedItems.value = _allItems.value?.filter {
             if (query.isNotEmpty()) {
                 it.label?.contains(query, true) == true
             } else {
                 true
             }
         }?.toMutableList()
-        _installedItems.value = _installedItems.value?.filter {
+        _installedItems.value = _allItems.value?.filter {
             if (query.isNotEmpty()) {
                 it.label?.contains(query, true) == true
             } else {
