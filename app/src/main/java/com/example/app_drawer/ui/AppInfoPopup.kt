@@ -17,7 +17,12 @@ class AppInfoPopup(
     private val appInfoVo: AppInfoVo? = null,
     private val layoutWidth: Int = 0,
     private val layoutHeight: Int = 0,
-) : BasePopupWindow<ComponentPopupBinding>() {
+
+    private val clickCallbackStart: () -> Unit,
+    private val clickCallbackLike: () -> Unit,
+    private val clickCallbackAlarm: () -> Unit,
+
+    ) : BasePopupWindow<ComponentPopupBinding>() {
     override val layoutRes: Int = R.layout.component_popup
 
     private var x: Int = 0
@@ -41,6 +46,15 @@ class AppInfoPopup(
         if (appInfoVo != null) {
             binding.model = appInfoVo
             binding.content.model = appInfoVo
+            binding.content.linearLayoutStart.setOnClickListener {
+                clickCallbackStart()
+            }
+            binding.content.linearLayoutLike.setOnClickListener {
+                clickCallbackLike()
+            }
+            binding.content.linearLayoutAlarm.setOnClickListener {
+                clickCallbackAlarm()
+            }
         }
 
         contentView = binding.root

@@ -272,6 +272,13 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             appInfoVo = item,
             layoutWidth = ViewGroup.LayoutParams.WRAP_CONTENT,
             layoutHeight = ViewGroup.LayoutParams.WRAP_CONTENT,
+            clickCallbackStart = {
+                executeApp(item)
+            },
+            clickCallbackLike = {},
+            clickCallbackAlarm = {
+                openAlarmSaveView(item)
+            },
         ).show()
 
 //        val inflater = LayoutInflater.from(this@MainAppFragment.context)
