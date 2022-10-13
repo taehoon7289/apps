@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.example.app_drawer.vo.TopicInfoVo" />
+            type="com.minikode.apps.vo.TopicInfoVo" />
     </data>
 
 
