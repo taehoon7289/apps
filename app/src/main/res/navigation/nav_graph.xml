@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/main_app_fragment"
-        android:name="com.example.app_drawer.ui.app.MainAppFragment"
+        android:name="com.minikode.apps.ui.app.MainAppFragment"
         android:label="MainAppFragment">
         <action
             android:id="@+id/main_app_fragment_to_main_alarm_fragment"
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/main_search_app_fragment"
-        android:name="com.example.app_drawer.ui.search.MainSearchAppFragment"
+        android:name="com.minikode.apps.ui.search.MainSearchAppFragment"
         android:label="MainSearchAppFragment">
         <action
             android:id="@+id/main_search_app_fragment_to_main_app_fragment"
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/main_alarm_fragment"
-        android:name="com.example.app_drawer.ui.alarm.MainAlarmFragment"
+        android:name="com.minikode.apps.ui.alarm.MainAlarmFragment"
         android:label="MainAlarmFragment">
         <action
             android:id="@+id/main_alarm_fragment_to_main_app_fragment"

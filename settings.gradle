@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "app_drawer"
+rootProject.name = "apps"
 include ':app'

@@ -22,7 +22,7 @@
         android:label="@string/app_label"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.App_drawer"
+        android:theme="@style/Theme.Apps"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
@@ -39,7 +39,7 @@
         </activity>
         <activity
             android:name=".ui.MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <receiver
             android:name=".receiver.AppBroadcastReceiver"

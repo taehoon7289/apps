@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.example.app_drawer.vo.NavigationInfoVo" />
+            type="com.minikode.apps.vo.NavigationInfoVo" />
     </data>
 
     <androidx.appcompat.widget.Toolbar

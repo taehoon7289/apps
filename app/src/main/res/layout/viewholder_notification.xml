@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.example.app_drawer.vo.NotificationInfoVo" />
+            type="com.minikode.apps.vo.NotificationInfoVo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
