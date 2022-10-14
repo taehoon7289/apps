@@ -14,6 +14,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
+    // layout, id 이상
     override val layoutRes: Int = R.layout.activity_main
 
     override val backDoubleEnableFlag = true
