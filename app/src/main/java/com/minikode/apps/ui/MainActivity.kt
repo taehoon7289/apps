@@ -4,17 +4,17 @@ import android.app.AppOpsManager
 import android.util.Log
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.google.android.gms.ads.*
 import com.minikode.apps.BaseActivity
+import com.minikode.apps.R
 import com.minikode.apps.databinding.ActivityMainBinding
 import com.minikode.apps.repository.UsageStatsRepository
-import com.google.android.gms.ads.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    // layout, id 이상
     override val layoutRes: Int = R.layout.activity_main
 
     override val backDoubleEnableFlag = true

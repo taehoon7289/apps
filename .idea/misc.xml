@@ -1,40 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.185" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/drawable/ic_arrow_up_down.xml" value="0.1145" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/drawable/ic_launcher_background.xml" value="0.185" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/drawable/notification_index_shape.xml" value="0.1145" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/drawable/shape.xml" value="0.1145" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout-land/activity_main.xml" value="0.15564373897707232" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout-land/activity_main_land.xml" value="0.15564373897707232" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/activity_main_horizontal.xml" value="0.18489583333333334" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/activity_notion_web_view.xml" value="0.18489583333333334" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/activity_splash.xml" value="0.17239583333333333" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/alarm_app_info.xml" value="0.1" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/alram_app_info.xml" value="0.19427083333333334" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/app_notification_info.xml" value="0.1" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/component_app_info.xml" value="0.18489583333333334" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/fragment_bind.xml" value="0.24728260869565216" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/notification_info.xml" value="0.18489583333333334" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/runnable_app_info.xml" value="0.1671195652173913" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/sample_my_view.xml" value="0.1578125" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/splash_view.xml" value="0.17239583333333333" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/layout/topic_app_info.xml" value="0.1671195652173913" />
-        <entry key="..\:/projects/workspaces/app_drawer/app/src/main/res/menu/navi_menu.xml" value="0.18385416666666668" />
-      </map>
-    </option>
-  </component>
-  <component name="FrameworkDetectionExcludesConfiguration">
-    <file type="web" url="file://$PROJECT_DIR$" />
-  </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="corretto-11" project-jdk-type="JavaSDK">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
-    <option name="id" value="jpab" />
+    <option name="id" value="Android" />
   </component>
 </project>
