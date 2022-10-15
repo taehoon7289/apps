@@ -15,8 +15,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class AppListViewModel @Inject constructor(private val usageStatsRepository: UsageStatsRepository) :
-    ViewModel() {
+class AppListViewModel @Inject constructor(
+    private val usageStatsRepository: UsageStatsRepository,
+) : ViewModel() {
     private var _recentUsedItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
         usageStatsRepository.getAppInfoByType(
             ListViewType.RECENT_USED
@@ -58,6 +59,11 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
     val topicItems: LiveData<MutableList<TopicInfoVo>>
         get() = _topicItems
 
+    private var _likeItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData()
+
+    val likeItems: LiveData<MutableList<AppInfoVo>>
+        get() = _likeItems
+
     fun reload() {
         usageStatsRepository.createAppInfoList()
         _recentUsedItems.value = usageStatsRepository.getAppInfoByType(
@@ -72,6 +78,9 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
         _installedItems.value = usageStatsRepository.getAppInfoByType(
             ListViewType.INSTALLED
         )
+        _likeItems.value = usageStatsRepository.getAppInfoByType().filter {
+            it.likeFlag
+        }.toMutableList()
         val topics = mutableListOf<TopicInfoVo>()
         topics.add(
             TopicInfoVo(
@@ -124,6 +133,7 @@ class AppListViewModel @Inject constructor(private val usageStatsRepository: Usa
                 )
             )
         )
+
         _topicItems.value = topics
     }
 

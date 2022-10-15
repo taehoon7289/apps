@@ -18,6 +18,7 @@ import com.minikode.apps.R
 import com.minikode.apps.code.ListViewType
 import com.minikode.apps.databinding.FragmentMainSearchAppBinding
 import com.minikode.apps.repository.AlarmRepository
+import com.minikode.apps.repository.LikeRepository
 import com.minikode.apps.ui.AppInfoPopup
 import com.minikode.apps.ui.alarm.AlarmDialogFragment
 import com.minikode.apps.util.Util
@@ -36,6 +37,9 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
     @Inject
     lateinit var alarmRepository: AlarmRepository
+
+    @Inject
+    lateinit var likeRepository: LikeRepository
 
     private val searchAppListViewModel: SearchAppListViewModel by viewModels()
     private lateinit var items: LiveData<MutableList<AppInfoVo>>
@@ -88,13 +92,7 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                 if (recyclerView.itemDecorationCount > 0) {
                     recyclerView.removeItemDecorationAt(0)
                 }
-                items = when (navigationInfoVo.listViewType) {
-                    ListViewType.RECENT_USED -> searchAppListViewModel.recentUsedItems
-                    ListViewType.OFTEN_USED -> searchAppListViewModel.oftenUsedItems
-                    ListViewType.UN_USED -> searchAppListViewModel.unUsedItems
-                    ListViewType.INSTALLED -> searchAppListViewModel.installedItems
-                    else -> searchAppListViewModel.recentUsedItems
-                }
+                items = reloadItems()
                 items.observe(this@MainSearchAppFragment) {
                     Log.d(TAG, "initView: 여기 들어옴??? ${navigationInfoVo.listViewType}")
                     searchAppViewAdapter.submitList(it)
@@ -105,6 +103,14 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
         }
 
 
+    }
+
+    private fun reloadItems() = when (navigationInfoVo.listViewType) {
+        ListViewType.RECENT_USED -> searchAppListViewModel.recentUsedItems
+        ListViewType.OFTEN_USED -> searchAppListViewModel.oftenUsedItems
+        ListViewType.UN_USED -> searchAppListViewModel.unUsedItems
+        ListViewType.INSTALLED -> searchAppListViewModel.installedItems
+        else -> searchAppListViewModel.recentUsedItems
     }
 
     override fun onStart() {
@@ -150,7 +156,11 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
             clickCallbackStart = {
                 executeApp(item)
             },
-            clickCallbackLike = {},
+            clickCallbackLike = {
+                toggleLike(item)
+//                searchAppListViewModel.reload()
+//                reloadItems()
+            },
             clickCallbackAlarm = {
                 openAlarmSaveView(item)
             },
@@ -189,6 +199,21 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
     private fun executeApp(appInfoVo: AppInfoVo) {
         this@MainSearchAppFragment.startActivity(appInfoVo.execIntent)
+    }
+
+    private fun toggleLike(appInfoVo: AppInfoVo) {
+        if (!appInfoVo.likeFlag) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                likeRepository.saveLike(appInfoVo)
+                appInfoVo.likeFlag = true
+                Toast.makeText(this@MainSearchAppFragment.activity, "추가되었습니다", Toast.LENGTH_LONG)
+                    .show()
+            }
+        } else {
+            likeRepository.removeLike(appInfoVo)
+            appInfoVo.likeFlag = false
+            Toast.makeText(this@MainSearchAppFragment.activity, "삭제되었습니다", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun openAlarmSaveView(appInfoVo: AppInfoVo) {

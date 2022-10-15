@@ -12,19 +12,27 @@ import android.provider.Settings
 import android.util.Log
 import com.minikode.apps.App
 import com.minikode.apps.code.ListViewType
+import com.minikode.apps.room.database.BaseDatabase
 import com.minikode.apps.ui.MainActivity
+import com.minikode.apps.util.Util
 import com.minikode.apps.vo.AppInfoVo
+import com.minikode.apps.vo.LikeInfoVo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.lang.reflect.Field
 import java.util.*
 
-
-class UsageStatsRepository {
+class UsageStatsRepository() {
 
     companion object {
         private const val TAG = "UsageStatsRepository"
     }
 
     private lateinit var items: MutableList<AppInfoVo>
+
+    private val baseDb = BaseDatabase.getDatabase(App.instance)
 
     init {
         createAppInfoList()
@@ -150,6 +158,35 @@ class UsageStatsRepository {
         return items
     }
 
+    private fun getItems(): MutableList<LikeInfoVo> = runBlocking {
+        val likeEntities = selectLike()
+        Log.d(TAG, "getItems: likeEntities $likeEntities")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return@runBlocking likeEntities.map {
+                val packageName = it.packageName!!
+                val packageManager = App.instance.packageManager
+                val iconDrawable = packageManager.getApplicationIcon(packageName)
+                val label =
+                    packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
+
+                val likeInfoVo = LikeInfoVo(
+                    likeNo = it.likeNo,
+                    createDate = Util.getStringToLocalDateTime(str = it.createDate!!),
+                    packageName = packageName,
+                    iconDrawable = iconDrawable,
+                    label = label.toString(),
+                )
+                likeInfoVo
+            }.toMutableList()
+        }
+        return@runBlocking mutableListOf<LikeInfoVo>()
+    }
+
+    private suspend fun selectLike() =
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            baseDb.likeDao().findAllLikeNoDesc()
+        }
+
     fun createAppInfoList() {
         items = mergeUsageStats(getLauncherAppList())
     }
@@ -159,7 +196,11 @@ class UsageStatsRepository {
      */
     fun getAppInfoByType(type: ListViewType? = null): MutableList<AppInfoVo> {
         // 현재 패키지 제외
-        val items = items.filter {
+        val likeInfoVoList = getItems()
+        val items = items.onEach {
+            it.likeFlag =
+                likeInfoVoList.any { item -> item.packageName == it.packageName } == true
+        }.filter {
             it.packageName != App.instance.packageName
         }.toMutableList()
         return when (type) {

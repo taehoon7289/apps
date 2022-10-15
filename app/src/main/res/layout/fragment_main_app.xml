@@ -48,22 +48,10 @@
 
                 <include
                     android:id="@+id/component_topic"
+
                     layout="@layout/component_topic" />
-
                 <include
-                    android:id="@+id/component_topic_recent"
-                    layout="@layout/component_topic_app" />
-
-                <include
-                    android:id="@+id/component_topic_often"
-                    layout="@layout/component_topic_app" />
-
-                <include
-                    android:id="@+id/component_topic_unused"
-                    layout="@layout/component_topic_app" />
-
-                <include
-                    android:id="@+id/component_topic_installed"
+                    android:id="@+id/component_topic_liked"
                     layout="@layout/component_topic_app" />
 
             </LinearLayout>

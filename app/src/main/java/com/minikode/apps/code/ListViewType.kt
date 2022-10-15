@@ -7,4 +7,5 @@ enum class ListViewType(
     OFTEN_USED("자주"),
     UN_USED("미실행"),
     INSTALLED("설치"),
+    LIKED("즐겨찾기"),
 }

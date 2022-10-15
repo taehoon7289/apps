@@ -30,4 +30,6 @@ data class AppInfoVo(
     var totalTimeVisible: Long? = null,
 
     var launchCount: Long? = null,
+
+    var likeFlag: Boolean = false,
 )

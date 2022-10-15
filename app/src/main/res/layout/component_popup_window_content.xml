@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="model"
             type="com.minikode.apps.vo.AppInfoVo" />
@@ -94,18 +96,39 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/icon_like"
+                    android:id="@+id/image_view_icon_like"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:background="@drawable/ic_action_unlike"
-                    android:backgroundTint="?attr/colorPrimary" />
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:visibility="@{model.likeFlag ? View.GONE : View.VISIBLE}" />
 
                 <TextView
+                    android:id="@+id/text_view_icon_like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tooltip_button_unlike"
                     android:textColor="?attr/colorPrimary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:visibility="@{model.likeFlag ? View.GONE : View.VISIBLE}" />
+
+                <ImageView
+                    android:id="@+id/image_view_icon_unlike"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/ic_action_like"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:visibility="@{!model.likeFlag ? View.GONE : View.VISIBLE}" />
+
+                <TextView
+                    android:id="@+id/text_view_icon_unlike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tooltip_button_like"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="12sp"
+                    android:visibility="@{!model.likeFlag ? View.GONE : View.VISIBLE}" />
+
             </LinearLayout>
 
             <View

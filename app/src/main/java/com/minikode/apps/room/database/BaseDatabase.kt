@@ -5,11 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.minikode.apps.dao.AlarmDao
+import com.minikode.apps.dao.LikeDao
 import com.minikode.apps.entity.AlarmEntity
+import com.minikode.apps.entity.LikeEntity
 
-@Database(entities = [AlarmEntity::class], version = 1)
+@Database(entities = [AlarmEntity::class, LikeEntity::class], version = 1)
 abstract class BaseDatabase : RoomDatabase() {
     abstract fun alarmDao(): AlarmDao
+    abstract fun likeDao(): LikeDao
 
     companion object {
         @Volatile

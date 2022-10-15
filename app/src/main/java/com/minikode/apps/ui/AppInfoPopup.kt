@@ -46,14 +46,24 @@ class AppInfoPopup(
         if (appInfoVo != null) {
             binding.model = appInfoVo
             binding.content.model = appInfoVo
+
+//            binding.content.imageViewIconLike.isGone = appInfoVo.likeFlag
+//            binding.content.textViewIconLike.isGone = appInfoVo.likeFlag
+//
+//            binding.content.imageViewIconUnlike.isGone = !appInfoVo.likeFlag
+//            binding.content.textViewIconUnlike.isGone = !appInfoVo.likeFlag
+
             binding.content.linearLayoutStart.setOnClickListener {
                 clickCallbackStart()
+                dismiss()
             }
             binding.content.linearLayoutLike.setOnClickListener {
                 clickCallbackLike()
+                dismiss()
             }
             binding.content.linearLayoutAlarm.setOnClickListener {
                 clickCallbackAlarm()
+                dismiss()
             }
         }
 

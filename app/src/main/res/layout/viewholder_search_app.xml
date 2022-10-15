@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="model"
             type="com.minikode.apps.vo.AppInfoVo" />
@@ -16,17 +18,38 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp">
 
-        <ImageView
-            android:id="@+id/search_app_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="20dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@{model.iconDrawable}"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/search_app_info_constraint"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/search_app_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="20dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@{model.iconDrawable}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/app_like_on"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/ic_view_star"
+                android:visibility="@{!model.likeFlag ? View.GONE : View.VISIBLE}"
+                app:layout_constraintEnd_toEndOf="@id/search_app_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/search_app_info_constraint"
@@ -34,7 +57,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/search_app_icon"
+            app:layout_constraintStart_toEndOf="@id/constraint_layout_image_view"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView

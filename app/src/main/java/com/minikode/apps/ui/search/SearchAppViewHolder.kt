@@ -1,6 +1,7 @@
 package com.minikode.apps.ui.search
 
 import android.view.View
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.minikode.apps.databinding.ViewholderSearchAppBinding
 import com.minikode.apps.vo.AppInfoVo
@@ -12,17 +13,21 @@ class SearchAppViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: AppInfoVo) {
-        binding.model = item
-        binding.viewholderSearchLinear.apply {
-            setOnClickListener {
-                clickCallback(item)
+        with(binding) {
+            model = item
+            viewholderSearchLinear.apply {
+                setOnClickListener {
+                    clickCallback(item)
 
+                }
+                setOnLongClickListener {
+                    longClickCallback(root, item)
+                    true
+                }
             }
-            setOnLongClickListener {
-                longClickCallback(binding.root, item)
-                true
-            }
+//            appLikeOn.isGone = !item.likeFlag
         }
+
     }
 
     companion object {

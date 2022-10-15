@@ -20,6 +20,7 @@ import com.minikode.apps.BaseFragment
 import com.minikode.apps.R
 import com.minikode.apps.databinding.FragmentMainAppBinding
 import com.minikode.apps.repository.AlarmRepository
+import com.minikode.apps.repository.LikeRepository
 import com.minikode.apps.ui.AppInfoPopup
 import com.minikode.apps.ui.alarm.AlarmDialogFragment
 import com.minikode.apps.ui.notion.NotionActivity
@@ -58,6 +59,9 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
     // 예약 알람 정보
     @Inject
     lateinit var alarmRepository: AlarmRepository
+
+    @Inject
+    lateinit var likeRepository: LikeRepository
 
     private val notificationListViewModel: NotificationListViewModel by viewModels()
     private val appListViewModel: AppListViewModel by viewModels()
@@ -150,82 +154,100 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 }
             }
 
-            with(componentTopicRecent) {
-                // 최근 실행된 앱 recyclerView
-                textViewTitle.text = getString(R.string.topic_title_recent)
-                val recentUsedAppViewAdapter = AppViewAdapter(
-                    clickCallback = clickListenerLambda,
-                    longClickCallback = longClickListenerLambda,
-                )
-                recyclerView.adapter = recentUsedAppViewAdapter
-                // item 사이 간격
-                if (recyclerView.itemDecorationCount > 0) {
-                    recyclerView.removeItemDecorationAt(0)
-                }
-                recyclerView.addItemDecoration(appViewHorizontalDecoration)
-                appListViewModel.recentUsedItems.observe(this@MainAppFragment) {
-                    linearLayout.isGone = it.isEmpty()
-                    recentUsedAppViewAdapter.submitList(it)
-                }
-            }
+//            with(componentTopicRecent) {
+//                // 최근 실행된 앱 recyclerView
+//                textViewTitle.text = getString(R.string.topic_title_recent)
+//                val recentUsedAppViewAdapter = AppViewAdapter(
+//                    clickCallback = clickListenerLambda,
+//                    longClickCallback = longClickListenerLambda,
+//                )
+//                recyclerView.adapter = recentUsedAppViewAdapter
+//                // item 사이 간격
+//                if (recyclerView.itemDecorationCount > 0) {
+//                    recyclerView.removeItemDecorationAt(0)
+//                }
+//                recyclerView.addItemDecoration(appViewHorizontalDecoration)
+//                appListViewModel.recentUsedItems.observe(this@MainAppFragment) {
+//                    linearLayout.isGone = it.isEmpty()
+//                    recentUsedAppViewAdapter.submitList(it)
+//                }
+//            }
+//
+//            with(componentTopicOften) {
+//                // 자주 실행하는 앱
+//                textViewTitle.text = getString(R.string.topic_title_often)
+//                val oftenUsedAppViewAdapter = AppViewAdapter(
+//                    clickCallback = clickListenerLambda,
+//                    longClickCallback = longClickListenerLambda,
+//                )
+//                recyclerView.adapter = oftenUsedAppViewAdapter
+//                // item 사이 간격
+//                if (recyclerView.itemDecorationCount > 0) {
+//                    recyclerView.removeItemDecorationAt(0)
+//                }
+//                recyclerView.addItemDecoration(appViewHorizontalDecoration)
+//                appListViewModel.oftenUsedItems.observe(this@MainAppFragment) {
+//                    linearLayout.isGone = it.isEmpty()
+//                    oftenUsedAppViewAdapter.submitList(it)
+//                }
+//            }
+//
+//            with(componentTopicUnused) {
+//                // 아직 실행하지 않은 앱 recyclerView
+//                textViewTitle.text = getString(R.string.topic_title_unused)
+//                val unUsedAppViewAdapter = AppViewAdapter(
+//                    clickCallback = clickListenerLambda,
+//                    longClickCallback = longClickListenerLambda,
+//                )
+//                recyclerView.adapter = unUsedAppViewAdapter
+//                // item 사이 간격
+//                if (recyclerView.itemDecorationCount > 0) {
+//                    recyclerView.removeItemDecorationAt(0)
+//                }
+//                recyclerView.addItemDecoration(appViewHorizontalDecoration)
+//                appListViewModel.unUsedItems.observe(this@MainAppFragment) {
+//                    linearLayout.isGone = it.isEmpty()
+//                    unUsedAppViewAdapter.submitList(it)
+//                }
+//            }
+//
+//            with(componentTopicInstalled) {
+//                // 실행가능한 앱 gridView
+//                textViewTitle.text = getString(R.string.topic_title_installed)
+//                val installedAppViewAdapter = AppViewAdapter(
+//                    clickCallback = clickListenerLambda,
+//                    longClickCallback = longClickListenerLambda,
+//                )
+//                recyclerView.adapter = installedAppViewAdapter
+////                // 그리드 레이아웃 설정
+////                val gridLayoutManager = GridLayoutManager(App.instance, 7)
+////                recyclerView.layoutManager = gridLayoutManager
+//                // 안의 스크롤효과 제거
+////                recyclerView.isNestedScrollingEnabled = false
+//                appListViewModel.installedItems.observe(this@MainAppFragment) {
+//                    linearLayout.isGone = it.isEmpty()
+//                    installedAppViewAdapter.submitList(it)
+//                }
+//            }
 
-            with(componentTopicOften) {
-                // 자주 실행하는 앱
-                textViewTitle.text = getString(R.string.topic_title_often)
-                val oftenUsedAppViewAdapter = AppViewAdapter(
-                    clickCallback = clickListenerLambda,
-                    longClickCallback = longClickListenerLambda,
-                )
-                recyclerView.adapter = oftenUsedAppViewAdapter
-                // item 사이 간격
-                if (recyclerView.itemDecorationCount > 0) {
-                    recyclerView.removeItemDecorationAt(0)
-                }
-                recyclerView.addItemDecoration(appViewHorizontalDecoration)
-                appListViewModel.oftenUsedItems.observe(this@MainAppFragment) {
-                    linearLayout.isGone = it.isEmpty()
-                    oftenUsedAppViewAdapter.submitList(it)
-                }
-            }
-
-            with(componentTopicUnused) {
-                // 아직 실행하지 않은 앱 recyclerView
-                textViewTitle.text = getString(R.string.topic_title_unused)
-                val unUsedAppViewAdapter = AppViewAdapter(
-                    clickCallback = clickListenerLambda,
-                    longClickCallback = longClickListenerLambda,
-                )
-                recyclerView.adapter = unUsedAppViewAdapter
-                // item 사이 간격
-                if (recyclerView.itemDecorationCount > 0) {
-                    recyclerView.removeItemDecorationAt(0)
-                }
-                recyclerView.addItemDecoration(appViewHorizontalDecoration)
-                appListViewModel.unUsedItems.observe(this@MainAppFragment) {
-                    linearLayout.isGone = it.isEmpty()
-                    unUsedAppViewAdapter.submitList(it)
-                }
-            }
-
-            with(componentTopicInstalled) {
+            with(componentTopicLiked) {
                 // 실행가능한 앱 gridView
-                textViewTitle.text = getString(R.string.topic_title_installed)
-                val installedAppViewAdapter = AppViewAdapter(
+                textViewTitle.text = getString(R.string.topic_title_liked)
+                val likedAppViewAdapter = AppViewAdapter(
                     clickCallback = clickListenerLambda,
                     longClickCallback = longClickListenerLambda,
                 )
-                recyclerView.adapter = installedAppViewAdapter
-//                // 그리드 레이아웃 설정
-//                val gridLayoutManager = GridLayoutManager(App.instance, 7)
-//                recyclerView.layoutManager = gridLayoutManager
+                recyclerView.adapter = likedAppViewAdapter
+                // 그리드 레이아웃 설정
+                val gridLayoutManager = GridLayoutManager(App.instance, 7)
+                recyclerView.layoutManager = gridLayoutManager
                 // 안의 스크롤효과 제거
-//                recyclerView.isNestedScrollingEnabled = false
-                appListViewModel.installedItems.observe(this@MainAppFragment) {
+                recyclerView.isNestedScrollingEnabled = false
+                appListViewModel.likeItems.observe(this@MainAppFragment) {
                     linearLayout.isGone = it.isEmpty()
-                    installedAppViewAdapter.submitList(it)
+                    likedAppViewAdapter.submitList(it)
                 }
             }
-
 
         }
 
@@ -275,7 +297,10 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             clickCallbackStart = {
                 executeApp(item)
             },
-            clickCallbackLike = {},
+            clickCallbackLike = {
+                toggleLike(item)
+                appListViewModel.reload()
+            },
             clickCallbackAlarm = {
                 openAlarmSaveView(item)
             },
@@ -314,6 +339,20 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
     private fun executeApp(appInfoVo: AppInfoVo) {
         this@MainAppFragment.startActivity(appInfoVo.execIntent)
+    }
+
+    private fun toggleLike(appInfoVo: AppInfoVo) {
+        if (!appInfoVo.likeFlag) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                likeRepository.saveLike(appInfoVo)
+                appInfoVo.likeFlag = true
+                Toast.makeText(this@MainAppFragment.activity, "추가되었습니다", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            likeRepository.removeLike(appInfoVo)
+            appInfoVo.likeFlag = false
+            Toast.makeText(this@MainAppFragment.activity, "삭제되었습니다", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun openAlarmSaveView(appInfoVo: AppInfoVo) {
