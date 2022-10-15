@@ -1,5 +1,6 @@
 package com.minikode.apps.ui.alarm
 
+import android.os.Build
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,6 +19,9 @@ class AlarmListViewModel @Inject constructor(private val alarmRepository: AlarmR
         get() = _items
 
     fun reload() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            alarmRepository.removeOldItems()
+        }
         _items.value = alarmRepository.getItems()
     }
 

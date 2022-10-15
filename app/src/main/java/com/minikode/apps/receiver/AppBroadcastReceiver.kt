@@ -9,11 +9,18 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.minikode.apps.R
+import com.minikode.apps.repository.AlarmRepository
+import dagger.hilt.android.AndroidEntryPoint
 
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AppBroadcastReceiver : BroadcastReceiver() {
     private val TAG = "AppBroadcastReceiver"
+
+    @Inject
+    lateinit var alarmRepository: AlarmRepository
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context, receiveIntent: Intent) {
@@ -31,6 +38,7 @@ class AppBroadcastReceiver : BroadcastReceiver() {
             val label = it?.getString("label")
             val packageName = it?.getString("packageName")
             val executeDate = it?.get("executeDate")
+            val requestCode = it?.getInt("requestCode")
 
             val intent =
                 context.applicationContext.packageManager.getLaunchIntentForPackage(packageName!!)
@@ -38,6 +46,7 @@ class AppBroadcastReceiver : BroadcastReceiver() {
             if (isAppForeground) {
                 Log.d(TAG, "onReceive: it ${packageName}")
 
+                alarmRepository.removeAlarm(requestCode!!)
                 context.startActivity(intent)
             } else {
                 val CHANNEL_ID = "CHANNEL_ID"
@@ -70,6 +79,7 @@ class AppBroadcastReceiver : BroadcastReceiver() {
                     .setAutoCancel(true)
                     .build()
                 notificationManager.notify(Random().nextInt(), notification)
+                alarmRepository.removeAlarm(requestCode!!)
             }
 
         }

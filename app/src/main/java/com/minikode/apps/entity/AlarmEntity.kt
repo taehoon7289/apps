@@ -13,5 +13,5 @@ class AlarmEntity(
     var executeDate: String? = null,
     var createDate: String? = null,
     var periodType: String? = null,
-
+    var executeMillis: Long? = null,
     )

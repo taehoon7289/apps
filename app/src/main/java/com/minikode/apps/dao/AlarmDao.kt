@@ -17,4 +17,9 @@ interface AlarmDao {
     @Query("SELECT * FROM alarm ORDER BY alarmNo DESC")
     fun findAllAlarmNoDesc(): MutableList<AlarmEntity>
 
+    @Query("DELETE FROM alarm WHERE requestCode = :requestCode")
+    fun deleteByRequestCode(requestCode: Int): Int
+
+    @Query("DELETE FROM alarm WHERE executeMillis <= :executeMillis")
+    fun deleteByExecuteMillisLessEqualThan(executeMillis: Long): Int
 }

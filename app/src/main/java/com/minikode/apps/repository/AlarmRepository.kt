@@ -50,6 +50,7 @@ class AlarmRepository {
         intent.putExtra("executeDate", executeDate.format(DateTimeFormatter.ofPattern("HH:mm")))
 
         val requestCode = Calendar.getInstance().timeInMillis.toInt()
+        intent.putExtra("requestCode", requestCode)
         val pendingIntent = PendingIntent.getBroadcast(
             App.instance,
             requestCode,
@@ -91,6 +92,7 @@ class AlarmRepository {
             packageName = appInfoVo.packageName,
             iconDrawable = appInfoVo.iconDrawable,
             label = appInfoVo.label,
+            executeMillis = longMillis,
         )
         successCallback(alarmInfoVo)
 
@@ -109,13 +111,26 @@ class AlarmRepository {
                 createDate = Util.getLocalDateTimeToString(
                     localDateTime = this.createDate!!
                 ),
-                periodType = this.periodType.toString()
+                periodType = this.periodType.toString(),
+                executeMillis = this.executeMillis,
             )
             CoroutineScope(Dispatchers.IO).launch {
                 insertAlarm(alarmEntity)
             }
         }
+    }
 
+    fun removeAlarm(requestCode: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            deleteAlarmByRequestCode(requestCode)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun removeOldItems() = runBlocking {
+        val now = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Asia/Seoul")).toInstant()
+            .toEpochMilli()
+        deleteAlarmByExecuteMillisLessEqualThan(now)
     }
 
     fun getItems(): MutableList<AlarmInfoVo> = runBlocking {
@@ -138,6 +153,7 @@ class AlarmRepository {
                     packageName = packageName,
                     iconDrawable = iconDrawable,
                     label = label.toString(),
+                    executeMillis = it.executeMillis,
                 )
                 alarmInfoVo
             }.toMutableList()
@@ -159,6 +175,20 @@ class AlarmRepository {
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             baseDb.alarmDao().deleteById(
                 alarmNo = alarmNo
+            )
+        }
+
+    private suspend fun deleteAlarmByExecuteMillisLessEqualThan(executeMillis: Long) =
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            baseDb.alarmDao().deleteByExecuteMillisLessEqualThan(
+                executeMillis = executeMillis
+            )
+        }
+
+    private suspend fun deleteAlarmByRequestCode(requestCode: Int) =
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            baseDb.alarmDao().deleteByRequestCode(
+                requestCode = requestCode
             )
         }
 

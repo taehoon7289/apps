@@ -13,4 +13,5 @@ data class AlarmInfoVo(
     var createDate: LocalDateTime? = null,
     var periodType: AlarmPeriodType? = null,
     var iconDrawable: Drawable? = null,
+    var executeMillis: Long? = null,
 )

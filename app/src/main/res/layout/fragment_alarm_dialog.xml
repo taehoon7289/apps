@@ -21,7 +21,8 @@
                 android:id="@+id/radio_every_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/time_picker_radio_every"/>
+                android:text="@string/time_picker_radio_every"
+                android:visibility="gone" />
 
             <RadioButton
                 android:id="@+id/radio_once"
