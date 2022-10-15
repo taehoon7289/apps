@@ -239,7 +239,18 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 )
                 recyclerView.adapter = likedAppViewAdapter
                 // 그리드 레이아웃 설정
-                val gridLayoutManager = GridLayoutManager(App.instance, 7)
+                val screenWidthDp = resources.configuration.screenWidthDp
+                val spanCount = screenWidthDp.div(70)
+                val gridLayoutManager = GridLayoutManager(App.instance, spanCount)
+                val likedRecyclerViewDecoration =
+                    TopicRecyclerViewDecoration(10, 10, 10, 10, spanCount)
+                recyclerView.addItemDecoration(likedRecyclerViewDecoration)
+//                Log.d(TAG, "initView: width ${resources.displayMetrics.widthPixels}")
+//                Log.d(TAG, "initView: height ${resources.displayMetrics.heightPixels}")
+//                Log.d(TAG, "initView: densityDpi ${resources.displayMetrics.densityDpi}")
+//                Log.d(TAG, "initView: screenWidthDp ${resources.configuration.screenWidthDp}")
+//                Log.d(TAG, "initView: screenHeightDp ${resources.configuration.screenHeightDp}")
+
                 recyclerView.layoutManager = gridLayoutManager
                 // 안의 스크롤효과 제거
                 recyclerView.isNestedScrollingEnabled = false
