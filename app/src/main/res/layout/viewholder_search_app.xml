@@ -79,7 +79,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="top"
-                android:text="@{model.lastTimeStamp.toString()}"
+                android:text="@{model.categoryName}"
                 android:textSize="12sp"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="true"

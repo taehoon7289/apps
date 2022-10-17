@@ -24,6 +24,7 @@
         <!--            android:textSize="15sp" />-->
 
         <TextView
+            android:layout_marginStart="12dp"
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="match_parent"

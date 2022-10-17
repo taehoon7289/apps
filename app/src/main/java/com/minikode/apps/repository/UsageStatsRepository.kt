@@ -5,6 +5,7 @@ import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Process
@@ -128,12 +129,31 @@ class UsageStatsRepository {
     /**
      * 실행 가능한 앱 리스트 가져오기
      */
-    private fun getLauncherAppList(): MutableList<AppInfoVo> {
+    private fun getLauncherAppList(categories: MutableSet<String> = mutableSetOf()): MutableList<AppInfoVo> {
 
         val packageManager = App.instance.packageManager
-        val mainIntent = Intent(Intent.ACTION_MAIN, null);
+        val mainIntent = Intent(Intent.ACTION_MAIN, null)
 
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        for (category in categories) {
+            mainIntent.addCategory(category)
+        }
+
+//        mainIntent.addCategory(Intent.CATEGORY_APP_EMAIL) // 이메일
+//        mainIntent.addCategory(Intent.CATEGORY_APP_FILES) //
+//        mainIntent.addCategory(Intent.CATEGORY_APP_CALENDAR) // 캘린더
+//        mainIntent.addCategory(Intent.CATEGORY_APP_GALLERY) // 갤러리
+//        mainIntent.addCategory(Intent.CATEGORY_APP_CALCULATOR) // 계산기
+//        mainIntent.addCategory(Intent.CATEGORY_APP_CONTACTS) // 연락처
+//        mainIntent.addCategory(Intent.CATEGORY_APP_MESSAGING) // 메세지
+
+//        mainIntent.addCategory(Intent.CATEGORY_APP_BROWSER) // 브라우저앱
+//        mainIntent.addCategory(Intent.CATEGORY_APP_MARKET) // 플레이스토어
+
+//        mainIntent.addCategory(Intent.CATEGORY_APP_MAPS) // 지도
+//        mainIntent.addCategory(Intent.CATEGORY_APP_MUSIC) // 뮤직앱
+
 
         val resolveInfoList: List<ResolveInfo> =
             packageManager.queryIntentActivities(mainIntent, 0);
@@ -145,6 +165,13 @@ class UsageStatsRepository {
             val packageName = resolveInfo.activityInfo.packageName
 
             val label = "${resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager)}"
+            var categoryName = ""
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                categoryName = (ApplicationInfo.getCategoryTitle(
+                    App.instance,
+                    resolveInfo.activityInfo.applicationInfo.category
+                ) ?: "").toString()
+            }
             val execIntent = packageManager.getLaunchIntentForPackage(packageName)
             execIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             val appInfoVo = AppInfoVo(
@@ -152,13 +179,14 @@ class UsageStatsRepository {
                 packageName = packageName,
                 label = label,
                 execIntent = execIntent,
+                categoryName = categoryName,
             )
             items.add(appInfoVo)
         }
         return items
     }
 
-    private fun getItems(): MutableList<LikeInfoVo> = runBlocking {
+    private fun getLikedItems(): MutableList<LikeInfoVo> = runBlocking {
         val likeEntities = selectLike()
         Log.d(TAG, "getItems: likeEntities $likeEntities")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -187,8 +215,8 @@ class UsageStatsRepository {
             baseDb.likeDao().findAllSeqAsc()
         }
 
-    fun createAppInfoList() {
-        items = mergeUsageStats(getLauncherAppList())
+    fun createAppInfoList(categories: MutableSet<String> = mutableSetOf()) {
+        items = mergeUsageStats(getLauncherAppList(categories))
     }
 
     /**
@@ -196,10 +224,9 @@ class UsageStatsRepository {
      */
     fun getAppInfoByType(type: ListViewType? = null): MutableList<AppInfoVo> {
         // 현재 패키지 제외
-        val likeInfoVoList = getItems()
+        val likeInfoVoList = getLikedItems()
         val items = items.onEach {
-            it.likeFlag =
-                likeInfoVoList.any { item -> item.packageName == it.packageName } == true
+            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
         }.filter {
             it.packageName != App.instance.packageName
         }.toMutableList()

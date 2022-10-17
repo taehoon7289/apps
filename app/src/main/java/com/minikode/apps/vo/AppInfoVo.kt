@@ -36,4 +36,6 @@ data class AppInfoVo(
     var likeNo: Long? = null,
 
     var seq: Int? = null,
+
+    var categoryName: String? = null,
 )
