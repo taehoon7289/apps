@@ -1,17 +1,17 @@
 package com.minikode.apps.repository
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.minikode.apps.App
 import com.minikode.apps.entity.LikeEntity
 import com.minikode.apps.room.database.BaseDatabase
 import com.minikode.apps.util.Util
 import com.minikode.apps.vo.AppInfoVo
-import com.minikode.apps.vo.LikeInfoVo
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
-import java.util.*
 
 class LikeRepository {
     companion object {
@@ -31,10 +31,17 @@ class LikeRepository {
                 ),
             )
             CoroutineScope(Dispatchers.IO).launch {
-                insertLike(likeEntity)
+                val likeNo = insertLike(likeEntity)
+                updateLikeSeq(likeNo, likeNo.toInt())
             }
         }
 
+    }
+
+    fun updateSeq(likeNo: Long, seq: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            updateLikeSeq(likeNo, seq)
+        }
     }
 
     fun removeLike(appInfoVo: AppInfoVo) {
@@ -43,34 +50,6 @@ class LikeRepository {
         }
     }
 
-    fun getItems(): MutableList<LikeInfoVo> = runBlocking {
-        val likeEntities = selectLike()
-        Log.d(TAG, "getItems: likeEntities $likeEntities")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return@runBlocking likeEntities.map {
-                val packageName = it.packageName!!
-                val packageManager = App.instance.packageManager
-                val iconDrawable = packageManager.getApplicationIcon(packageName)
-                val label =
-                    packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
-
-                val likeInfoVo = LikeInfoVo(
-                    likeNo = it.likeNo,
-                    createDate = Util.getStringToLocalDateTime(str = it.createDate!!),
-                    packageName = packageName,
-                    iconDrawable = iconDrawable,
-                    label = label.toString(),
-                )
-                likeInfoVo
-            }.toMutableList()
-        }
-        return@runBlocking mutableListOf<LikeInfoVo>()
-    }
-
-    private suspend fun selectLike() =
-        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            baseDb.likeDao().findAllLikeNoDesc()
-        }
 
     private suspend fun insertLike(likeEntity: LikeEntity) =
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
@@ -81,6 +60,14 @@ class LikeRepository {
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             baseDb.likeDao().deleteByPackageName(
                 packageName = packageName
+            )
+        }
+
+    private suspend fun updateLikeSeq(likeNo: Long, seq: Int) =
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            baseDb.likeDao().updateSeq(
+                likeNo = likeNo,
+                seq = seq,
             )
         }
 

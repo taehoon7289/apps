@@ -32,4 +32,8 @@ data class AppInfoVo(
     var launchCount: Long? = null,
 
     var likeFlag: Boolean = false,
+
+    var likeNo: Long? = null,
+
+    var seq: Int? = null,
 )

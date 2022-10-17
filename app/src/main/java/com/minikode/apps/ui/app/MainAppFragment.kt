@@ -1,11 +1,14 @@
 package com.minikode.apps.ui.app
 
 import android.app.AlarmManager
+import android.content.ClipData
+import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
+import android.view.DragEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -154,88 +157,13 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 }
             }
 
-//            with(componentTopicRecent) {
-//                // 최근 실행된 앱 recyclerView
-//                textViewTitle.text = getString(R.string.topic_title_recent)
-//                val recentUsedAppViewAdapter = AppViewAdapter(
-//                    clickCallback = clickListenerLambda,
-//                    longClickCallback = longClickListenerLambda,
-//                )
-//                recyclerView.adapter = recentUsedAppViewAdapter
-//                // item 사이 간격
-//                if (recyclerView.itemDecorationCount > 0) {
-//                    recyclerView.removeItemDecorationAt(0)
-//                }
-//                recyclerView.addItemDecoration(appViewHorizontalDecoration)
-//                appListViewModel.recentUsedItems.observe(this@MainAppFragment) {
-//                    linearLayout.isGone = it.isEmpty()
-//                    recentUsedAppViewAdapter.submitList(it)
-//                }
-//            }
-//
-//            with(componentTopicOften) {
-//                // 자주 실행하는 앱
-//                textViewTitle.text = getString(R.string.topic_title_often)
-//                val oftenUsedAppViewAdapter = AppViewAdapter(
-//                    clickCallback = clickListenerLambda,
-//                    longClickCallback = longClickListenerLambda,
-//                )
-//                recyclerView.adapter = oftenUsedAppViewAdapter
-//                // item 사이 간격
-//                if (recyclerView.itemDecorationCount > 0) {
-//                    recyclerView.removeItemDecorationAt(0)
-//                }
-//                recyclerView.addItemDecoration(appViewHorizontalDecoration)
-//                appListViewModel.oftenUsedItems.observe(this@MainAppFragment) {
-//                    linearLayout.isGone = it.isEmpty()
-//                    oftenUsedAppViewAdapter.submitList(it)
-//                }
-//            }
-//
-//            with(componentTopicUnused) {
-//                // 아직 실행하지 않은 앱 recyclerView
-//                textViewTitle.text = getString(R.string.topic_title_unused)
-//                val unUsedAppViewAdapter = AppViewAdapter(
-//                    clickCallback = clickListenerLambda,
-//                    longClickCallback = longClickListenerLambda,
-//                )
-//                recyclerView.adapter = unUsedAppViewAdapter
-//                // item 사이 간격
-//                if (recyclerView.itemDecorationCount > 0) {
-//                    recyclerView.removeItemDecorationAt(0)
-//                }
-//                recyclerView.addItemDecoration(appViewHorizontalDecoration)
-//                appListViewModel.unUsedItems.observe(this@MainAppFragment) {
-//                    linearLayout.isGone = it.isEmpty()
-//                    unUsedAppViewAdapter.submitList(it)
-//                }
-//            }
-//
-//            with(componentTopicInstalled) {
-//                // 실행가능한 앱 gridView
-//                textViewTitle.text = getString(R.string.topic_title_installed)
-//                val installedAppViewAdapter = AppViewAdapter(
-//                    clickCallback = clickListenerLambda,
-//                    longClickCallback = longClickListenerLambda,
-//                )
-//                recyclerView.adapter = installedAppViewAdapter
-////                // 그리드 레이아웃 설정
-////                val gridLayoutManager = GridLayoutManager(App.instance, 7)
-////                recyclerView.layoutManager = gridLayoutManager
-//                // 안의 스크롤효과 제거
-////                recyclerView.isNestedScrollingEnabled = false
-//                appListViewModel.installedItems.observe(this@MainAppFragment) {
-//                    linearLayout.isGone = it.isEmpty()
-//                    installedAppViewAdapter.submitList(it)
-//                }
-//            }
-
             with(componentTopicLiked) {
-                // 실행가능한 앱 gridView
+                // 즐겨찾기 앱 gridView
                 textViewTitle.text = getString(R.string.topic_title_liked)
                 val likedAppViewAdapter = AppViewAdapter(
                     clickCallback = clickListenerLambda,
                     longClickCallback = longClickListenerLambda,
+                    dragCallback = dragListenerLambda,
                 )
                 recyclerView.adapter = likedAppViewAdapter
                 // 그리드 레이아웃 설정
@@ -271,34 +199,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
         appListViewModel.reload()
     }
 
-    private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
-        executeApp(item)
-    }
-
-    private val longClickListenerLambda: (View, AppInfoVo) -> Unit = { view, item: AppInfoVo ->
-
-        /*
-        val dialog = PopupWindowDialog(
-            appInfoVo = item,
-            clickCallbackStart = {
-                executeApp(item)
-            },
-            clickCallbackLike = {},
-            clickCallbackAlarm = {
-                openAlarmSaveView(item)
-            },
-            x = view.width.div(2),
-            y = view.height,
-        )
-        activity?.supportFragmentManager.let {
-            if (it != null) {
-                dialog.show(it, "popupWindowDialog")
-            }
-        }
-         */
-
-
-
+    private val clickListenerLambda: (View, AppInfoVo) -> Unit = { view, item: AppInfoVo ->
         AppInfoPopup(
             anchorView = view,
             inflater = this@MainAppFragment.layoutInflater,
@@ -316,36 +217,51 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 openAlarmSaveView(item)
             },
         ).show()
+    }
 
-//        val inflater = LayoutInflater.from(this@MainAppFragment.context)
-//        val popupWindowView = inflater.inflate(R.layout.component_popup, null)
-//
-//        popupWindowView.measure(
-//            ViewGroup.LayoutParams.WRAP_CONTENT,
-//            ViewGroup.LayoutParams.WRAP_CONTENT,
-//        )
-//        val popupWindow = PopupWindow(
-//            popupWindowView,
-//            ViewGroup.LayoutParams.WRAP_CONTENT,
-//            ViewGroup.LayoutParams.WRAP_CONTENT,
-//        )
-//
-//        val pX = popupWindowView.measuredWidth.div(2).minus(view.width.div(2))
-//        val pY = view.height.plus(popupWindowView.measuredHeight)
-//
-//        Log.d(TAG, "pX: $pX")
-//        Log.d(TAG, "pY: $pY")
-//
-//        with(popupWindow) {
-//            isFocusable = true
-//            isTouchable = true
-//            showAsDropDown(
-//                view,
-//                -pX,
-//                -pY,
-//                Gravity.NO_GRAVITY,
-//            )
-//        }
+    private val dragListenerLambda: (View, DragEvent, AppInfoVo, Int) -> Unit =
+        { view, event, item: AppInfoVo, position ->
+            when (event.action) {
+                // 드래그 시작될때
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_STARTED ${item.label}")
+                }
+                // 드래그한 view 를 옮기려는 지역으로 들어왔을때
+                DragEvent.ACTION_DRAG_ENTERED -> {
+                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_ENTERED ${item.label} $position")
+
+                }
+                // 드래그한 view 가 영역을 빠져나갈때
+                DragEvent.ACTION_DRAG_EXITED -> {
+                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_EXITED ${item.label}")
+                }
+                // view 를 드래그해서 드랍시켰을때
+                DragEvent.ACTION_DROP -> {
+                    Log.d(TAG, "dragListenerLambda: ACTION_DROP ${item.label}")
+                }
+                // 드래그 종료시
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_ENDED ${item.label}")
+                }
+//                DragEvent.ACTION_DRAG_LOCATION -> {
+//                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_LOCATION")
+//                }
+            }
+        }
+
+    private val longClickListenerLambda: (View, AppInfoVo) -> Unit = { view, item: AppInfoVo ->
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val clipData = ClipData.Item(view.tag as CharSequence)
+            val mimeTypes: Array<String> =
+                mutableListOf(ClipDescription.MIMETYPE_TEXT_PLAIN).toTypedArray()
+            val data = ClipData(view.tag.toString(), mimeTypes, clipData)
+            val shadowBuilder = View.DragShadowBuilder(view)
+            view.startDragAndDrop(data, shadowBuilder, view, 0)
+            view.visibility = View.VISIBLE
+        } else {
+            executeApp(item)
+        }
     }
 
     private fun executeApp(appInfoVo: AppInfoVo) {
@@ -357,12 +273,12 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 likeRepository.saveLike(appInfoVo)
                 appInfoVo.likeFlag = true
-                Toast.makeText(this@MainAppFragment.activity, "추가되었습니다", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainAppFragment.activity, "추가되었습니다", Toast.LENGTH_SHORT).show()
             }
         } else {
             likeRepository.removeLike(appInfoVo)
             appInfoVo.likeFlag = false
-            Toast.makeText(this@MainAppFragment.activity, "삭제되었습니다", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainAppFragment.activity, "삭제되었습니다", Toast.LENGTH_SHORT).show()
         }
     }
 

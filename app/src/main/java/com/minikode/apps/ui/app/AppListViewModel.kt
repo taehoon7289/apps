@@ -80,7 +80,7 @@ class AppListViewModel @Inject constructor(
         )
         _likeItems.value = usageStatsRepository.getAppInfoByType().filter {
             it.likeFlag
-        }.toMutableList()
+        }.sortedBy { it.seq }.toMutableList()
         val topics = mutableListOf<TopicInfoVo>()
         topics.add(
             TopicInfoVo(
@@ -136,5 +136,23 @@ class AppListViewModel @Inject constructor(
 
         _topicItems.value = topics
     }
+
+    fun dragEnter(item: AppInfoVo, oldPosition: Int, newPosition: Int) {
+        if (oldPosition == newPosition) {
+            return
+        }
+        _likeItems.value?.let {
+            val front = it.subList(0, newPosition)
+            val back = it.subList(newPosition, it.size)
+            front.add(item)
+            front.addAll(back)
+            _likeItems.value = front
+        }
+    }
+
+    fun dragEnd(item: AppInfoVo, oldPosition: Int, newPosition: Int) {
+        reload()
+    }
+
 
 }

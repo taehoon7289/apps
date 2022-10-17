@@ -74,7 +74,7 @@ class AppInfoPopup(
             ViewGroup.LayoutParams.WRAP_CONTENT,
         )
         x = contentView.measuredWidth.div(2).minus(anchorView.width.div(2))
-        y = contentView.measuredHeight.plus(anchorView.height)
+        y = contentView.measuredHeight
 
         Log.d(TAG, "initView: x $x")
         Log.d(TAG, "initView: y $y")

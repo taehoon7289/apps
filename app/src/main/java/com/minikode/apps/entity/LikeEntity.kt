@@ -10,5 +10,6 @@ class LikeEntity(
     var packageName: String? = null,
     var label: String? = null,
     var createDate: String? = null,
+    var seq: Int? = null,
 
     )

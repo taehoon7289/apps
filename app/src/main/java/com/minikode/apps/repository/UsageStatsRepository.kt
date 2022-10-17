@@ -24,7 +24,7 @@ import kotlinx.coroutines.withContext
 import java.lang.reflect.Field
 import java.util.*
 
-class UsageStatsRepository() {
+class UsageStatsRepository {
 
     companion object {
         private const val TAG = "UsageStatsRepository"
@@ -184,7 +184,7 @@ class UsageStatsRepository() {
 
     private suspend fun selectLike() =
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            baseDb.likeDao().findAllLikeNoDesc()
+            baseDb.likeDao().findAllSeqAsc()
         }
 
     fun createAppInfoList() {

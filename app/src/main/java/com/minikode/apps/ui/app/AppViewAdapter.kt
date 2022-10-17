@@ -1,5 +1,6 @@
 package com.minikode.apps.ui.app
 
+import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,9 @@ import com.minikode.apps.databinding.ViewholderAppBinding
 import com.minikode.apps.vo.AppInfoVo
 
 class AppViewAdapter(
-    private val clickCallback: (AppInfoVo) -> Unit,
-    private val longClickCallback: (View, AppInfoVo) -> Unit
+    private val clickCallback: (View, AppInfoVo) -> Unit,
+    private val longClickCallback: (View, AppInfoVo) -> Unit,
+    private val dragCallback: (View, DragEvent, AppInfoVo, Int) -> Unit,
 ) :
     ListAdapter<AppInfoVo, AppViewHolder>(object : DiffUtil.ItemCallback<AppInfoVo>() {
         override fun areItemsTheSame(oldItem: AppInfoVo, newItem: AppInfoVo): Boolean {
@@ -34,13 +36,14 @@ class AppViewAdapter(
         return AppViewHolder(
             binding = viewholderAppBinding,
             clickCallback = clickCallback,
-            longClickCallback = longClickCallback
+            longClickCallback = longClickCallback,
+            dragCallback = dragCallback,
         )
 
     }
 
     override fun onBindViewHolder(viewHolder: AppViewHolder, position: Int) {
-        viewHolder.bind(getItem(position), this.mViewGroup)
+        viewHolder.bind(getItem(position), this.mViewGroup, position)
         viewHolder.binding.executePendingBindings()
     }
 
