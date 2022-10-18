@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import com.minikode.apps.App
 import com.minikode.apps.BaseFragment
 import com.minikode.apps.R
@@ -43,9 +42,10 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
     lateinit var likeRepository: LikeRepository
 
     private val searchAppListViewModel: SearchAppListViewModel by viewModels()
-    private lateinit var items: LiveData<MutableList<AppInfoVo>>
 
     private lateinit var navigationInfoVo: NavigationInfoVo
+
+    private var queryText: String = ""
 
     override fun initView() {
 
@@ -71,10 +71,11 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
             with(searchView) {
                 setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
+                        queryText = query ?: ""
                         searchAppListViewModel.searchQuery(
                             topicType = navigationInfoVo.topicType!!,
                             orderType = navigationInfoVo.orderType!!,
-                            query = query ?: ""
+                            query = queryText
                         )
 
                         return true
@@ -82,10 +83,11 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
                     override fun onQueryTextChange(newText: String?): Boolean {
                         Log.d(TAG, "onQueryTextChange: newText $newText")
+                        queryText = newText ?: ""
                         searchAppListViewModel.searchQuery(
                             topicType = navigationInfoVo.topicType!!,
                             orderType = navigationInfoVo.orderType!!,
-                            query = newText ?: ""
+                            query = queryText
                         )
                         return true
                     }
@@ -100,14 +102,12 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                 )
                 adapter = searchAppViewAdapter
                 // item 사이 간격
-                if (recyclerView.itemDecorationCount > 0) {
-                    recyclerView.removeItemDecorationAt(0)
+                if (itemDecorationCount > 0) {
+                    removeItemDecorationAt(0)
                 }
-                searchAppListViewModel.reload()
-                items = reloadItems()
-                items.observe(this@MainSearchAppFragment) {
-                    Log.d(TAG, "initView: 여기 들어옴??? ${navigationInfoVo.orderType}")
+                reloadItems().observe(this@MainSearchAppFragment) {
                     searchAppViewAdapter.submitList(it)
+                    searchAppViewAdapter.notifyDataSetChanged()
                 }
             }
 
@@ -169,7 +169,11 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
             },
             clickCallbackLike = {
                 toggleLike(item)
-//                searchAppListViewModel.reload()
+                searchAppListViewModel.searchQuery(
+                    topicType = navigationInfoVo.topicType!!,
+                    orderType = navigationInfoVo.orderType!!,
+                    query = queryText,
+                )
 //                reloadItems()
             },
             clickCallbackAlarm = {

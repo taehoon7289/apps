@@ -7,7 +7,6 @@ import com.minikode.apps.code.OrderType
 import com.minikode.apps.code.TopicType
 import com.minikode.apps.repository.UsageStatsRepository
 import com.minikode.apps.vo.AppInfoVo
-import com.minikode.apps.vo.TopicInfoVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,7 +15,7 @@ class SearchAppListViewModel @Inject constructor(
     private val usageStatsRepository: UsageStatsRepository
 ) : ViewModel() {
     private var _categoryAppItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
-        searchQuery(
+        usageStatsRepository.getAppInfoByType(
             TopicType.CATEGORY_APP,
             OrderType.RECENT_DESC,
         )
@@ -26,7 +25,7 @@ class SearchAppListViewModel @Inject constructor(
         get() = _categoryAppItems
 
     private var _gameAppItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
-        searchQuery(
+        usageStatsRepository.getAppInfoByType(
             TopicType.GAME_APP,
             OrderType.RECENT_DESC,
         )
@@ -36,7 +35,7 @@ class SearchAppListViewModel @Inject constructor(
         get() = _gameAppItems
 
     private var _allAppItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
-        searchQuery(
+        usageStatsRepository.getAppInfoByType(
             TopicType.ALL_APP,
             OrderType.RECENT_DESC,
         )
@@ -46,7 +45,7 @@ class SearchAppListViewModel @Inject constructor(
         get() = _allAppItems
 
     private var _likeAppItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
-        searchQuery(
+        usageStatsRepository.getAppInfoByType(
             TopicType.LIKE_APP,
             OrderType.RECENT_DESC,
         )
@@ -55,31 +54,37 @@ class SearchAppListViewModel @Inject constructor(
     val likeAppItems: LiveData<MutableList<AppInfoVo>>
         get() = _likeAppItems
 
-    private var _topicItems: MutableLiveData<MutableList<TopicInfoVo>> = MutableLiveData()
-
     fun reload() {
         usageStatsRepository.createAppInfoList()
-        _categoryAppItems.value = searchQuery(
+        searchQuery(
             TopicType.CATEGORY_APP,
             OrderType.RECENT_DESC,
         )
-        _gameAppItems.value = searchQuery(
+        searchQuery(
             TopicType.GAME_APP,
             OrderType.RECENT_DESC,
         )
-        _allAppItems.value = searchQuery(
+        searchQuery(
             TopicType.ALL_APP,
             OrderType.RECENT_DESC,
         )
-        _likeAppItems.value = searchQuery(
+        searchQuery(
             TopicType.LIKE_APP,
             OrderType.RECENT_DESC,
         )
     }
 
-    fun searchQuery(topicType: TopicType, orderType: OrderType, query: String = "") =
-        usageStatsRepository.getAppInfoByType(
+    fun searchQuery(topicType: TopicType, orderType: OrderType, query: String = "") {
+        val items = usageStatsRepository.getAppInfoByType(
             topicType, orderType, query
         )
+        when (topicType) {
+            TopicType.CATEGORY_APP -> _categoryAppItems.value = items
+            TopicType.GAME_APP -> _gameAppItems.value = items
+            TopicType.ALL_APP -> _allAppItems.value = items
+            TopicType.LIKE_APP -> _likeAppItems.value = items
+        }
+    }
+
 
 }

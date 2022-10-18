@@ -63,6 +63,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
     override fun initView() {
 
         notificationListViewModel.reload()
+        appListViewModel.reload()
 
         with(binding) {
 
@@ -179,6 +180,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 appListViewModel.likeAppItems.observe(this@MainAppFragment) {
                     linearLayout.isGone = it.isEmpty()
                     likeAppViewAdapter.submitList(it)
+                    likeAppViewAdapter.notifyDataSetChanged()
                 }
             }
 
@@ -190,7 +192,6 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: !!! fragment")
-        appListViewModel.reload()
     }
 
     private val clickListenerLambda: (View, AppInfoVo) -> Unit = { view, item: AppInfoVo ->
@@ -205,7 +206,8 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             },
             clickCallbackLike = {
                 toggleLike(item)
-                appListViewModel.reload()
+                appListViewModel.reloadLikeAppItems()
+//                appListViewModel.reload()
             },
             clickCallbackAlarm = {
                 openAlarmSaveView(item)

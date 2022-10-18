@@ -68,6 +68,13 @@ class AppListViewModel @Inject constructor(
     val topicItems: LiveData<MutableList<TopicInfoVo>>
         get() = _topicItems
 
+    fun reloadLikeAppItems() {
+        _likeAppItems.value = usageStatsRepository.getAppInfoByType(
+            TopicType.LIKE_APP,
+            OrderType.RECENT_DESC,
+        )
+    }
+
     fun reload() {
         usageStatsRepository.createAppInfoList()
         _categoryAppItems.value = usageStatsRepository.getAppInfoByType(

@@ -165,8 +165,7 @@ class UsageStatsRepository {
                 var categoryName = ""
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     categoryName = (ApplicationInfo.getCategoryTitle(
-                        App.instance,
-                        applicationInfo.category
+                        App.instance, applicationInfo.category
                     ) ?: "").toString()
                 }
                 val execIntent = packageManager.getLaunchIntentForPackage(packageName)
@@ -215,8 +214,7 @@ class UsageStatsRepository {
                     continue
                 }
                 categoryName = (ApplicationInfo.getCategoryTitle(
-                    App.instance,
-                    applicationInfo.category
+                    App.instance, applicationInfo.category
                 ) ?: "").toString()
             } else {
                 continue
@@ -259,8 +257,7 @@ class UsageStatsRepository {
             var categoryName = ""
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 categoryName = (ApplicationInfo.getCategoryTitle(
-                    App.instance,
-                    applicationInfo.category
+                    App.instance, applicationInfo.category
                 ) ?: "").toString()
             }
             val execIntent = packageManager.getLaunchIntentForPackage(packageName)
@@ -307,30 +304,33 @@ class UsageStatsRepository {
         }
 
     fun createAppInfoList() {
-        val likeInfoVoList = getLikedItems()
+
         categoryAppItems = mergeUsageStats(getCategoryAppList())
-        categoryAppItems.onEach {
-            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
-        }
+
         gameAppItems = mergeUsageStats(getGameAppList())
-        gameAppItems.onEach {
-            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
-        }
+
         allAppItems = mergeUsageStats(getAllAppList())
-        allAppItems.onEach {
-            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
-        }.toMutableList()
-        likeAppItems = allAppItems.filter { it.likeFlag }.toMutableList()
+
+
     }
 
     /**
      * 정렬타입별 앱 정보 생성
      */
     fun getAppInfoByType(
-        topicType: TopicType,
-        orderType: OrderType,
-        query: String = ""
+        topicType: TopicType, orderType: OrderType, query: String = ""
     ): MutableList<AppInfoVo> {
+        val likeInfoVoList = getLikedItems()
+        categoryAppItems.onEach {
+            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
+        }
+        gameAppItems.onEach {
+            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
+        }
+        allAppItems.onEach {
+            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
+        }.toMutableList()
+        likeAppItems = allAppItems.filter { it.likeFlag }.toMutableList()
         val items = when (topicType) {
             TopicType.CATEGORY_APP -> categoryAppItems
             TopicType.GAME_APP -> gameAppItems

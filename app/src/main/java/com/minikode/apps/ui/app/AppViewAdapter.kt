@@ -24,9 +24,6 @@ class AppViewAdapter(
         }
     }) {
 
-    private val TAG = "AppUnRecyclerViewAdapte"
-//    private val items: MutableList<AppInfoVo> = mutableListOf()
-
     private lateinit var mViewGroup: ViewGroup
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): AppViewHolder {
@@ -45,6 +42,10 @@ class AppViewAdapter(
     override fun onBindViewHolder(viewHolder: AppViewHolder, position: Int) {
         viewHolder.bind(getItem(position), this.mViewGroup, position)
         viewHolder.binding.executePendingBindings()
+    }
+
+    companion object {
+        private const val TAG = "AppViewAdapter"
     }
 
 }
