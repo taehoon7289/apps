@@ -307,13 +307,20 @@ class UsageStatsRepository {
         }
 
     fun createAppInfoList() {
-        categoryAppItems = mergeUsageStats(getCategoryAppList())
-        gameAppItems = mergeUsageStats(getGameAppList())
-        allAppItems = mergeUsageStats(getAllAppList())
         val likeInfoVoList = getLikedItems()
-        likeAppItems = allAppItems.onEach {
+        categoryAppItems = mergeUsageStats(getCategoryAppList())
+        categoryAppItems.onEach {
             it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
-        }.filter { it.likeFlag }.toMutableList()
+        }
+        gameAppItems = mergeUsageStats(getGameAppList())
+        gameAppItems.onEach {
+            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
+        }
+        allAppItems = mergeUsageStats(getAllAppList())
+        allAppItems.onEach {
+            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
+        }.toMutableList()
+        likeAppItems = allAppItems.filter { it.likeFlag }.toMutableList()
     }
 
     /**
