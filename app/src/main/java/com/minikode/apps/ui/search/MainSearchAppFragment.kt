@@ -15,7 +15,8 @@ import androidx.lifecycle.LiveData
 import com.minikode.apps.App
 import com.minikode.apps.BaseFragment
 import com.minikode.apps.R
-import com.minikode.apps.code.ListViewType
+import com.minikode.apps.code.OrderType
+import com.minikode.apps.code.TopicType
 import com.minikode.apps.databinding.FragmentMainSearchAppBinding
 import com.minikode.apps.repository.AlarmRepository
 import com.minikode.apps.repository.LikeRepository
@@ -56,7 +57,8 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
                 navigationInfoVo = NavigationInfoVo(
                     title = "앱검색",
-                    listViewType = arguments?.get("listViewType") as ListViewType,
+                    topicType = arguments?.get("topicType") as TopicType,
+                    orderType = arguments?.get("orderType") as OrderType,
                 )
                 model = navigationInfoVo
                 subTitle.setTextColor(
@@ -69,13 +71,22 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
             with(searchView) {
                 setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        searchAppListViewModel.searchQuery(query ?: "")
+                        searchAppListViewModel.searchQuery(
+                            topicType = navigationInfoVo.topicType!!,
+                            orderType = navigationInfoVo.orderType!!,
+                            query = query ?: ""
+                        )
+
                         return true
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
                         Log.d(TAG, "onQueryTextChange: newText $newText")
-                        searchAppListViewModel.searchQuery(newText ?: "")
+                        searchAppListViewModel.searchQuery(
+                            topicType = navigationInfoVo.topicType!!,
+                            orderType = navigationInfoVo.orderType!!,
+                            query = newText ?: ""
+                        )
                         return true
                     }
                 })
@@ -92,9 +103,10 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                 if (recyclerView.itemDecorationCount > 0) {
                     recyclerView.removeItemDecorationAt(0)
                 }
+                searchAppListViewModel.reload()
                 items = reloadItems()
                 items.observe(this@MainSearchAppFragment) {
-                    Log.d(TAG, "initView: 여기 들어옴??? ${navigationInfoVo.listViewType}")
+                    Log.d(TAG, "initView: 여기 들어옴??? ${navigationInfoVo.orderType}")
                     searchAppViewAdapter.submitList(it)
                 }
             }
@@ -105,18 +117,17 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
     }
 
-    private fun reloadItems() = when (navigationInfoVo.listViewType) {
-        ListViewType.RECENT_USED -> searchAppListViewModel.recentUsedItems
-        ListViewType.OFTEN_USED -> searchAppListViewModel.oftenUsedItems
-        ListViewType.UN_USED -> searchAppListViewModel.unUsedItems
-        ListViewType.INSTALLED -> searchAppListViewModel.installedItems
-        else -> searchAppListViewModel.recentUsedItems
+    private fun reloadItems() = when (navigationInfoVo.topicType) {
+        TopicType.CATEGORY_APP -> searchAppListViewModel.categoryAppItems
+        TopicType.GAME_APP -> searchAppListViewModel.gameAppItems
+        TopicType.ALL_APP -> searchAppListViewModel.allAppItems
+        TopicType.LIKE_APP -> searchAppListViewModel.likeAppItems
+        else -> searchAppListViewModel.categoryAppItems
     }
 
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart: !!! fragment")
-        searchAppListViewModel.reload()
     }
 
     private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->

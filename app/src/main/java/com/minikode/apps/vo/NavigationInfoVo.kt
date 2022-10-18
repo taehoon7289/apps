@@ -1,9 +1,11 @@
 package com.minikode.apps.vo
 
-import com.minikode.apps.code.ListViewType
+import com.minikode.apps.code.OrderType
+import com.minikode.apps.code.TopicType
 
 data class NavigationInfoVo(
 
     var title: String? = null,
-    var listViewType: ListViewType? = null,
+    var topicType: TopicType? = null,
+    var orderType: OrderType? = null,
 )

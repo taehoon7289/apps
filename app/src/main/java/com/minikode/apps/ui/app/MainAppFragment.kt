@@ -12,6 +12,7 @@ import android.view.DragEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
@@ -41,24 +42,6 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
     override val layoutRes: Int = R.layout.fragment_main_app
 
-//    override val onBackPressedCallback: OnBackPressedCallback =
-//        object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                if (!findNavController().popBackStack()) {
-//                    requireActivity().onBackPressed()
-//                }
-//            }
-//
-//        }
-
-    //    // 앱 정보 상태 관리
-//    @Inject
-//    lateinit var usageStatsRepository: UsageStatsRepository
-//
-//    // 앱 알림정보
-//    @Inject
-//    lateinit var notificationRepository: NotificationRepository
-
     // 예약 알람 정보
     @Inject
     lateinit var alarmRepository: AlarmRepository
@@ -68,6 +51,14 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
     private val notificationListViewModel: NotificationListViewModel by viewModels()
     private val appListViewModel: AppListViewModel by viewModels()
+
+    private val notionResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            Log.d(TAG, "it.resultCode: ${it.resultCode}")
+//            if (it.resultCode == RESULT_OK) {
+//                Log.d(TAG, "initView: result_ok ${it.resultCode}")
+//            }
+        }
 
     override fun initView() {
 
@@ -79,8 +70,11 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             val notificationViewPagerAdapter = NotificationViewPagerAdapter(handlerClickEvent = {
                 val intent = Intent(this@MainAppFragment.activity, NotionActivity::class.java)
                 intent.putExtra("url", it.url)
-                this@MainAppFragment.startActivity(intent)
+//                this@MainAppFragment.startActivity(intent)
+                notionResult.launch(intent)
             })
+
+
 
             with(componentToolbar) {
                 model = NavigationInfoVo(
@@ -140,7 +134,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                     clickCallback = {
                         findNavController().navigate(
                             R.id.main_app_fragment_to_main_search_app_fragment,
-                            bundleOf("listViewType" to it.type)
+                            bundleOf("orderType" to it.orderType, "topicType" to it.topicType),
                         )
                     },
                     longClickCallback = {},
@@ -159,13 +153,13 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
             with(componentTopicLiked) {
                 // 즐겨찾기 앱 gridView
-                textViewTitle.text = getString(R.string.topic_title_liked)
-                val likedAppViewAdapter = AppViewAdapter(
+                textViewTitle.text = getString(R.string.topic_title_like_app)
+                val likeAppViewAdapter = AppViewAdapter(
                     clickCallback = clickListenerLambda,
                     longClickCallback = longClickListenerLambda,
                     dragCallback = dragListenerLambda,
                 )
-                recyclerView.adapter = likedAppViewAdapter
+                recyclerView.adapter = likeAppViewAdapter
                 // 그리드 레이아웃 설정
                 val screenWidthDp = resources.configuration.screenWidthDp
                 val spanCount = screenWidthDp.div(70)
@@ -182,9 +176,9 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 recyclerView.layoutManager = gridLayoutManager
                 // 안의 스크롤효과 제거
                 recyclerView.isNestedScrollingEnabled = false
-                appListViewModel.likeItems.observe(this@MainAppFragment) {
+                appListViewModel.likeAppItems.observe(this@MainAppFragment) {
                     linearLayout.isGone = it.isEmpty()
-                    likedAppViewAdapter.submitList(it)
+                    likeAppViewAdapter.submitList(it)
                 }
             }
 

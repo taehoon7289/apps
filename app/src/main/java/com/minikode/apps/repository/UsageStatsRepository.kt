@@ -12,7 +12,8 @@ import android.os.Process
 import android.provider.Settings
 import android.util.Log
 import com.minikode.apps.App
-import com.minikode.apps.code.ListViewType
+import com.minikode.apps.code.OrderType
+import com.minikode.apps.code.TopicType
 import com.minikode.apps.room.database.BaseDatabase
 import com.minikode.apps.ui.MainActivity
 import com.minikode.apps.util.Util
@@ -31,13 +32,12 @@ class UsageStatsRepository {
         private const val TAG = "UsageStatsRepository"
     }
 
-    private lateinit var items: MutableList<AppInfoVo>
+    private lateinit var categoryAppItems: MutableList<AppInfoVo>
+    private lateinit var gameAppItems: MutableList<AppInfoVo>
+    private lateinit var allAppItems: MutableList<AppInfoVo>
+    private lateinit var likeAppItems: MutableList<AppInfoVo>
 
     private val baseDb = BaseDatabase.getDatabase(App.instance)
-
-    init {
-        createAppInfoList()
-    }
 
     /**
      * 앱 사용정보 권한 체크
@@ -127,33 +127,69 @@ class UsageStatsRepository {
     }
 
     /**
-     * 실행 가능한 앱 리스트 가져오기
+     * 카테고리 앱 리스트 가져오기
      */
-    private fun getLauncherAppList(categories: MutableSet<String> = mutableSetOf()): MutableList<AppInfoVo> {
+    private fun getCategoryAppList(): MutableList<AppInfoVo> {
+        val packageManager = App.instance.packageManager
 
+        val categories = mutableListOf<String>()
+        categories.add(Intent.CATEGORY_APP_EMAIL) // 이메일
+        categories.add(Intent.CATEGORY_APP_FILES)
+        categories.add(Intent.CATEGORY_APP_CALENDAR) // 캘린더
+        categories.add(Intent.CATEGORY_APP_GALLERY) // 갤러리
+        categories.add(Intent.CATEGORY_APP_CALCULATOR) // 계산기
+        categories.add(Intent.CATEGORY_APP_CONTACTS) // 연락처
+        categories.add(Intent.CATEGORY_APP_MESSAGING) // 메세지
+        categories.add(Intent.CATEGORY_APP_BROWSER) // 브라우저앱
+        categories.add(Intent.CATEGORY_APP_MARKET) // 플레이스토어
+        categories.add(Intent.CATEGORY_APP_MAPS) // 지도
+        categories.add(Intent.CATEGORY_APP_MUSIC) // 뮤직앱
+
+        val items: MutableList<AppInfoVo> = mutableListOf()
+        for (category in categories) {
+            val mainIntent = Intent(Intent.ACTION_MAIN, null)
+            mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+            mainIntent.addCategory(category)
+            val resolveInfoList: List<ResolveInfo> =
+                packageManager.queryIntentActivities(mainIntent, 0);
+            for (resolveInfo: ResolveInfo in resolveInfoList) {
+                val iconDrawable = resolveInfo.activityInfo.loadIcon(packageManager)
+                val packageName = resolveInfo.activityInfo.packageName
+                if (packageName == App.instance.packageName) {
+                    continue
+                }
+                val applicationInfo = resolveInfo.activityInfo.applicationInfo
+
+                val label = "${applicationInfo.loadLabel(packageManager)}"
+
+                var categoryName = ""
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    categoryName = (ApplicationInfo.getCategoryTitle(
+                        App.instance,
+                        applicationInfo.category
+                    ) ?: "").toString()
+                }
+                val execIntent = packageManager.getLaunchIntentForPackage(packageName)
+                execIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                val appInfoVo = AppInfoVo(
+                    iconDrawable = iconDrawable,
+                    packageName = packageName,
+                    label = label,
+                    execIntent = execIntent,
+                    categoryName = categoryName,
+                )
+                items.add(appInfoVo)
+            }
+        }
+
+        return items.distinctBy { it.packageName }.toMutableList()
+    }
+
+    private fun getGameAppList(): MutableList<AppInfoVo> {
         val packageManager = App.instance.packageManager
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
 
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        for (category in categories) {
-            mainIntent.addCategory(category)
-        }
-
-//        mainIntent.addCategory(Intent.CATEGORY_APP_EMAIL) // 이메일
-//        mainIntent.addCategory(Intent.CATEGORY_APP_FILES) //
-//        mainIntent.addCategory(Intent.CATEGORY_APP_CALENDAR) // 캘린더
-//        mainIntent.addCategory(Intent.CATEGORY_APP_GALLERY) // 갤러리
-//        mainIntent.addCategory(Intent.CATEGORY_APP_CALCULATOR) // 계산기
-//        mainIntent.addCategory(Intent.CATEGORY_APP_CONTACTS) // 연락처
-//        mainIntent.addCategory(Intent.CATEGORY_APP_MESSAGING) // 메세지
-
-//        mainIntent.addCategory(Intent.CATEGORY_APP_BROWSER) // 브라우저앱
-//        mainIntent.addCategory(Intent.CATEGORY_APP_MARKET) // 플레이스토어
-
-//        mainIntent.addCategory(Intent.CATEGORY_APP_MAPS) // 지도
-//        mainIntent.addCategory(Intent.CATEGORY_APP_MUSIC) // 뮤직앱
-
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
 
         val resolveInfoList: List<ResolveInfo> =
             packageManager.queryIntentActivities(mainIntent, 0);
@@ -163,13 +199,68 @@ class UsageStatsRepository {
 
             val iconDrawable = resolveInfo.activityInfo.loadIcon(packageManager)
             val packageName = resolveInfo.activityInfo.packageName
+            if (packageName == App.instance.packageName) {
+                continue
+            }
+            val applicationInfo = resolveInfo.activityInfo.applicationInfo
 
-            val label = "${resolveInfo.activityInfo.applicationInfo.loadLabel(packageManager)}"
+            val label = "${applicationInfo.loadLabel(packageManager)}"
+
+            var categoryName = ""
+
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (applicationInfo.category != ApplicationInfo.CATEGORY_GAME) {
+                    continue
+                }
+                categoryName = (ApplicationInfo.getCategoryTitle(
+                    App.instance,
+                    applicationInfo.category
+                ) ?: "").toString()
+            } else {
+                continue
+            }
+            val execIntent = packageManager.getLaunchIntentForPackage(packageName)
+            execIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val appInfoVo = AppInfoVo(
+                iconDrawable = iconDrawable,
+                packageName = packageName,
+                label = label,
+                execIntent = execIntent,
+                categoryName = categoryName,
+            )
+            items.add(appInfoVo)
+        }
+        return items
+    }
+
+    private fun getAllAppList(): MutableList<AppInfoVo> {
+        val packageManager = App.instance.packageManager
+        val mainIntent = Intent(Intent.ACTION_MAIN, null)
+
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+
+        val resolveInfoList: List<ResolveInfo> =
+            packageManager.queryIntentActivities(mainIntent, 0);
+
+        val items: MutableList<AppInfoVo> = mutableListOf()
+        for (resolveInfo: ResolveInfo in resolveInfoList) {
+
+            val iconDrawable = resolveInfo.activityInfo.loadIcon(packageManager)
+            val packageName = resolveInfo.activityInfo.packageName
+            if (packageName == App.instance.packageName) {
+                continue
+            }
+            val applicationInfo = resolveInfo.activityInfo.applicationInfo
+
+            val label = "${applicationInfo.loadLabel(packageManager)}"
+
             var categoryName = ""
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 categoryName = (ApplicationInfo.getCategoryTitle(
                     App.instance,
-                    resolveInfo.activityInfo.applicationInfo.category
+                    applicationInfo.category
                 ) ?: "").toString()
             }
             val execIntent = packageManager.getLaunchIntentForPackage(packageName)
@@ -215,43 +306,64 @@ class UsageStatsRepository {
             baseDb.likeDao().findAllSeqAsc()
         }
 
-    fun createAppInfoList(categories: MutableSet<String> = mutableSetOf()) {
-        items = mergeUsageStats(getLauncherAppList(categories))
+    fun createAppInfoList() {
+        categoryAppItems = mergeUsageStats(getCategoryAppList())
+        gameAppItems = mergeUsageStats(getGameAppList())
+        allAppItems = mergeUsageStats(getAllAppList())
+        val likeInfoVoList = getLikedItems()
+        likeAppItems = allAppItems.onEach {
+            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
+        }.filter { it.likeFlag }.toMutableList()
     }
 
     /**
-     * 타입별 앱 정보 생성
+     * 정렬타입별 앱 정보 생성
      */
-    fun getAppInfoByType(type: ListViewType? = null): MutableList<AppInfoVo> {
-        // 현재 패키지 제외
-        val likeInfoVoList = getLikedItems()
-        val items = items.onEach {
-            it.likeFlag = likeInfoVoList.any { item -> item.packageName == it.packageName } == true
+    fun getAppInfoByType(
+        topicType: TopicType,
+        orderType: OrderType,
+        query: String = ""
+    ): MutableList<AppInfoVo> {
+        val items = when (topicType) {
+            TopicType.CATEGORY_APP -> categoryAppItems
+            TopicType.GAME_APP -> gameAppItems
+            TopicType.ALL_APP -> allAppItems
+            TopicType.LIKE_APP -> likeAppItems
         }.filter {
-            it.packageName != App.instance.packageName
-        }.toMutableList()
-        return when (type) {
-            ListViewType.RECENT_USED -> {
+            if (query.isNotEmpty()) {
+                it.label?.contains(query, true) == true
+            } else {
+                true
+            }
+        }
+        return when (orderType) {
+            OrderType.RECENT_DESC -> {
                 items.filter {
                     (it.lastTimeStamp ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp
                 }.sortedByDescending { it.lastTimeStamp }.toMutableList()
             }
-            ListViewType.OFTEN_USED -> {
+            OrderType.OFTEN_DESC -> {
                 items.filter {
                     (it.lastTimeStamp
                         ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp && (it.launchCount
                         ?: 0L) > 0
                 }.sortedByDescending { it.launchCount }.toMutableList()
             }
-            ListViewType.UN_USED -> {
-                items.filter {
-                    (it.lastTimeStamp ?: 0L) == 0L
+            OrderType.NAME_ASC -> {
+                items.sortedBy {
+                    it.label
                 }.toMutableList()
             }
-            ListViewType.INSTALLED -> {
-                items.sortedBy { it.label }.toMutableList()
+            OrderType.USE_TIME_DESC -> {
+                items.sortedByDescending {
+                    it.lastTimeForegroundServiceUsed
+                }.toMutableList()
             }
-            else -> items
+            OrderType.SEQ_ASC -> {
+                items.sortedBy {
+                    it.seq
+                }.toMutableList()
+            }
         }
     }
 

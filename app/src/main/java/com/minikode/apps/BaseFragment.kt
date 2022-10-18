@@ -22,13 +22,14 @@ abstract class BaseFragment<V : ViewDataBinding> : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
+        initView()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this@BaseFragment
-        initView()
+
     }
 
     abstract fun initView()

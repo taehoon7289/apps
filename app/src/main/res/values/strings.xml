@@ -7,11 +7,10 @@
     <string name="menu_title_alarm">알람예약 보기</string>
     <string name="time_picker_radio_every">반복</string>
     <string name="time_picker_radio_once">한번</string>
-    <string name="topic_title_recent">최근 앱</string>
-    <string name="topic_title_often">자주 사용 앱</string>
-    <string name="topic_title_unused">미실행 앱</string>
-    <string name="topic_title_installed">설치된 앱</string>
-    <string name="topic_title_liked">즐겨찾기 앱</string>
+    <string name="topic_title_category_app">앱</string>
+    <string name="topic_title_game_app">게임</string>
+    <string name="topic_title_all_app">전체</string>
+    <string name="topic_title_like_app">즐겨찾기</string>
     <string name="topic_title">빠른 앱 찾기</string>
     <string name="tooltip_button_start">실행</string>
     <string name="tooltip_button_unlike">추가</string>

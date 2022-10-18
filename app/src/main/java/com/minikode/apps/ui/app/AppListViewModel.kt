@@ -7,7 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.minikode.apps.App
 import com.minikode.apps.R
-import com.minikode.apps.code.ListViewType
+import com.minikode.apps.code.OrderType
+import com.minikode.apps.code.TopicType
 import com.minikode.apps.repository.UsageStatsRepository
 import com.minikode.apps.vo.AppInfoVo
 import com.minikode.apps.vo.TopicInfoVo
@@ -18,118 +19,126 @@ import javax.inject.Inject
 class AppListViewModel @Inject constructor(
     private val usageStatsRepository: UsageStatsRepository,
 ) : ViewModel() {
-    private var _recentUsedItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
+    init {
+        usageStatsRepository.createAppInfoList()
+    }
+
+    private var _categoryAppItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
         usageStatsRepository.getAppInfoByType(
-            ListViewType.RECENT_USED
-        ).take(10).toMutableList()
-    )
-
-    val recentUsedItems: LiveData<MutableList<AppInfoVo>>
-        get() = _recentUsedItems
-
-    private var _oftenUsedItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
-        usageStatsRepository.getAppInfoByType(
-            ListViewType.OFTEN_USED
-        ).take(10).toMutableList()
-    )
-
-    val oftenUsedItems: LiveData<MutableList<AppInfoVo>>
-        get() = _oftenUsedItems
-
-    private var _unUsedItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
-        usageStatsRepository.getAppInfoByType(
-            ListViewType.UN_USED
+            TopicType.CATEGORY_APP,
+            OrderType.RECENT_DESC,
         )
     )
 
-    val unUsedItems: LiveData<MutableList<AppInfoVo>>
-        get() = _unUsedItems
+    val categoryAppItems: LiveData<MutableList<AppInfoVo>>
+        get() = _categoryAppItems
 
-    private var _installedItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
+    private var _gameAppItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
         usageStatsRepository.getAppInfoByType(
-            ListViewType.INSTALLED
+            TopicType.GAME_APP,
+            OrderType.RECENT_DESC,
         )
     )
 
-    val installedItems: LiveData<MutableList<AppInfoVo>>
-        get() = _installedItems
+    val gameAppItems: LiveData<MutableList<AppInfoVo>>
+        get() = _gameAppItems
+
+    private var _allAppItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
+        usageStatsRepository.getAppInfoByType(
+            TopicType.ALL_APP,
+            OrderType.RECENT_DESC,
+        )
+    )
+
+    val allAppItems: LiveData<MutableList<AppInfoVo>>
+        get() = _allAppItems
+
+    private var _likeAppItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData(
+        usageStatsRepository.getAppInfoByType(
+            TopicType.LIKE_APP,
+            OrderType.RECENT_DESC,
+        )
+    )
+
+    val likeAppItems: LiveData<MutableList<AppInfoVo>>
+        get() = _likeAppItems
 
     private var _topicItems: MutableLiveData<MutableList<TopicInfoVo>> = MutableLiveData()
 
     val topicItems: LiveData<MutableList<TopicInfoVo>>
         get() = _topicItems
 
-    private var _likeItems: MutableLiveData<MutableList<AppInfoVo>> = MutableLiveData()
-
-    val likeItems: LiveData<MutableList<AppInfoVo>>
-        get() = _likeItems
-
     fun reload() {
         usageStatsRepository.createAppInfoList()
-        _recentUsedItems.value = usageStatsRepository.getAppInfoByType(
-            ListViewType.RECENT_USED
+        _categoryAppItems.value = usageStatsRepository.getAppInfoByType(
+            TopicType.CATEGORY_APP,
+            OrderType.RECENT_DESC,
         )
-        _oftenUsedItems.value = usageStatsRepository.getAppInfoByType(
-            ListViewType.OFTEN_USED
+        _gameAppItems.value = usageStatsRepository.getAppInfoByType(
+            TopicType.GAME_APP,
+            OrderType.RECENT_DESC,
         )
-        _unUsedItems.value = usageStatsRepository.getAppInfoByType(
-            ListViewType.UN_USED
+        _allAppItems.value = usageStatsRepository.getAppInfoByType(
+            TopicType.ALL_APP,
+            OrderType.RECENT_DESC,
         )
-        _installedItems.value = usageStatsRepository.getAppInfoByType(
-            ListViewType.INSTALLED
+        _likeAppItems.value = usageStatsRepository.getAppInfoByType(
+            TopicType.LIKE_APP,
+            OrderType.RECENT_DESC,
         )
-        _likeItems.value = usageStatsRepository.getAppInfoByType().filter {
-            it.likeFlag
-        }.sortedBy { it.seq }.toMutableList()
         val topics = mutableListOf<TopicInfoVo>()
         topics.add(
             TopicInfoVo(
-                appInfoVoList = _recentUsedItems.value,
-                type = ListViewType.RECENT_USED,
-                title = App.instance.getString(R.string.topic_title_recent),
-                description = "${App.instance.getString(R.string.topic_title_recent)}입니다",
+                appInfoVoList = _categoryAppItems.value,
+                topicType = TopicType.CATEGORY_APP,
+                orderType = OrderType.RECENT_DESC,
+                title = App.instance.getString(R.string.topic_title_category_app),
+                description = "${App.instance.getString(R.string.topic_title_category_app)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance, R.drawable.ic_quick_recent
+                    App.instance, R.drawable.ic_quick_category_app
                 )
             )
         )
 
         topics.add(
             TopicInfoVo(
-                appInfoVoList = _oftenUsedItems.value,
-                type = ListViewType.OFTEN_USED,
-                title = App.instance.getString(R.string.topic_title_often),
-                description = "${App.instance.getString(R.string.topic_title_often)}입니다",
+                appInfoVoList = _gameAppItems.value,
+                topicType = TopicType.GAME_APP,
+                orderType = OrderType.OFTEN_DESC,
+                title = App.instance.getString(R.string.topic_title_game_app),
+                description = "${App.instance.getString(R.string.topic_title_game_app)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance, R.drawable.ic_quick_often
+                    App.instance, R.drawable.ic_quick_game_app
                 )
             )
         )
 
         topics.add(
             TopicInfoVo(
-                appInfoVoList = _unUsedItems.value,
-                type = ListViewType.UN_USED,
-                title = App.instance.getString(R.string.topic_title_unused),
-                description = "${App.instance.getString(R.string.topic_title_unused)}입니다",
+                appInfoVoList = _allAppItems.value,
+                topicType = TopicType.ALL_APP,
+                orderType = OrderType.NAME_ASC,
+                title = App.instance.getString(R.string.topic_title_all_app),
+                description = "${App.instance.getString(R.string.topic_title_all_app)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance, R.drawable.ic_quick_unused
+                    App.instance, R.drawable.ic_quick_all_app
                 )
             )
         )
 
         topics.add(
             TopicInfoVo(
-                appInfoVoList = _installedItems.value,
-                type = ListViewType.INSTALLED,
-                title = App.instance.getString(R.string.topic_title_installed),
-                description = "${App.instance.getString(R.string.topic_title_installed)}입니다",
+                appInfoVoList = _likeAppItems.value,
+                topicType = TopicType.LIKE_APP,
+                orderType = OrderType.USE_TIME_DESC,
+                title = App.instance.getString(R.string.topic_title_like_app),
+                description = "${App.instance.getString(R.string.topic_title_like_app)}입니다",
                 color = Color.RED,
                 icon = ContextCompat.getDrawable(
-                    App.instance, R.drawable.ic_quick_installed
+                    App.instance, R.drawable.ic_quick_like_app
                 )
             )
         )
@@ -141,12 +150,12 @@ class AppListViewModel @Inject constructor(
         if (oldPosition == newPosition) {
             return
         }
-        _likeItems.value?.let {
+        _likeAppItems.value?.let {
             val front = it.subList(0, newPosition)
             val back = it.subList(newPosition, it.size)
             front.add(item)
             front.addAll(back)
-            _likeItems.value = front
+            _likeAppItems.value = front
         }
     }
 
