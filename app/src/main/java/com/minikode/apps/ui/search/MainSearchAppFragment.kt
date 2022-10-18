@@ -97,8 +97,20 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
             with(recyclerView) {
                 // 선택된 앱 recyclerView
                 val searchAppViewAdapter = SearchAppViewAdapter(
-                    clickCallback = clickListenerLambda,
-                    longClickCallback = longClickListenerLambda,
+                    clickCallbackStart = { item ->
+                        executeApp(item)
+                    },
+                    clickCallbackLike = { item ->
+                        toggleLike(item)
+                        searchAppListViewModel.searchQuery(
+                            topicType = navigationInfoVo.topicType!!,
+                            orderType = navigationInfoVo.orderType!!,
+                            query = queryText
+                        )
+                    },
+                    clickCallbackAlarm = { item ->
+                        openAlarmSaveView(item)
+                    },
                 )
                 adapter = searchAppViewAdapter
                 // item 사이 간격
