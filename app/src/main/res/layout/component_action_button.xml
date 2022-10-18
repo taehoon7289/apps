@@ -64,7 +64,7 @@
                 android:id="@+id/image_view_icon_like"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/ic_action_unlike"
+                android:background="@drawable/ic_action_like"
                 android:backgroundTint="?attr/colorPrimary"
                 android:visibility="@{model.likeFlag ? View.GONE : View.VISIBLE}" />
 
@@ -81,7 +81,7 @@
                 android:id="@+id/image_view_icon_unlike"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/ic_action_like"
+                android:background="@drawable/ic_action_unlike"
                 android:backgroundTint="?attr/colorPrimary"
                 android:visibility="@{!model.likeFlag ? View.GONE : View.VISIBLE}" />
 
