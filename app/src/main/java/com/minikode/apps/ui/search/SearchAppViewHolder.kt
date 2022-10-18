@@ -1,5 +1,7 @@
 package com.minikode.apps.ui.search
 
+import android.view.Gravity
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.minikode.apps.databinding.ViewholderSearchAppBinding
 import com.minikode.apps.vo.AppInfoVo
@@ -16,13 +18,23 @@ class SearchAppViewHolder(
     fun bind(item: AppInfoVo) {
         with(binding) {
             model = item
-            viewholderSearchLinear.apply {
-                actionButton.model = item
-                actionButton.linearLayoutStart.setOnClickListener { clickCallbackStart(item) }
-                actionButton.linearLayoutLike.setOnClickListener { clickCallbackLike(item) }
-                actionButton.linearLayoutAlarm.setOnClickListener { clickCallbackAlarm(item) }
+
+            searchAppInfoConstraint.apply {
+                if (item.categoryName?.isEmpty() == true) {
+                    searchAppLabel.gravity = Gravity.CENTER_VERTICAL
+                    searchAppCategory.isGone = true
+                } else {
+                    searchAppLabel.gravity = Gravity.BOTTOM
+                    searchAppCategory.gravity = Gravity.TOP
+                }
             }
-//            appLikeOn.isGone = !item.likeFlag
+
+            actionButton.apply {
+                model = item
+                linearLayoutStart.setOnClickListener { clickCallbackStart(item) }
+                linearLayoutLike.setOnClickListener { clickCallbackLike(item) }
+                linearLayoutAlarm.setOnClickListener { clickCallbackAlarm(item) }
+            }
         }
 
     }

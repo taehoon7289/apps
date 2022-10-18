@@ -69,16 +69,16 @@
                 android:textSize="15sp"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toTopOf="@id/search_app_time"
+                app:layout_constraintBottom_toTopOf="@id/search_app_category"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/search_app_time"
+                android:id="@+id/search_app_category"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:gravity="top"
+                android:gravity="center"
                 android:text="@{model.categoryName}"
                 android:textSize="12sp"
                 app:layout_constrainedHeight="true"
