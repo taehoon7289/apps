@@ -58,23 +58,23 @@ class SearchAppListViewModel @Inject constructor(
         usageStatsRepository.createAppInfoList()
         searchQuery(
             TopicType.CATEGORY_APP,
-            OrderType.RECENT_DESC,
         )
         searchQuery(
             TopicType.GAME_APP,
-            OrderType.RECENT_DESC,
         )
         searchQuery(
             TopicType.ALL_APP,
-            OrderType.RECENT_DESC,
         )
         searchQuery(
             TopicType.LIKE_APP,
-            OrderType.RECENT_DESC,
         )
     }
 
-    fun searchQuery(topicType: TopicType, orderType: OrderType, query: String = "") {
+    fun searchQuery(
+        topicType: TopicType,
+        orderType: OrderType = OrderType.NAME_ASC,
+        query: String = ""
+    ) {
         val items = usageStatsRepository.getAppInfoByType(
             topicType, orderType, query
         )

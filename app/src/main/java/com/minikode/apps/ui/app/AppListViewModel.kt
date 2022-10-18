@@ -98,7 +98,7 @@ class AppListViewModel @Inject constructor(
             TopicInfoVo(
                 appInfoVoList = _categoryAppItems.value,
                 topicType = TopicType.CATEGORY_APP,
-                orderType = OrderType.RECENT_DESC,
+                orderType = OrderType.NAME_ASC,
                 title = App.instance.getString(R.string.topic_title_category_app),
                 description = "${App.instance.getString(R.string.topic_title_category_app)}입니다",
                 color = Color.RED,
@@ -112,7 +112,7 @@ class AppListViewModel @Inject constructor(
             TopicInfoVo(
                 appInfoVoList = _gameAppItems.value,
                 topicType = TopicType.GAME_APP,
-                orderType = OrderType.OFTEN_DESC,
+                orderType = OrderType.NAME_ASC,
                 title = App.instance.getString(R.string.topic_title_game_app),
                 description = "${App.instance.getString(R.string.topic_title_game_app)}입니다",
                 color = Color.RED,
@@ -140,7 +140,7 @@ class AppListViewModel @Inject constructor(
             TopicInfoVo(
                 appInfoVoList = _likeAppItems.value,
                 topicType = TopicType.LIKE_APP,
-                orderType = OrderType.USE_TIME_DESC,
+                orderType = OrderType.NAME_ASC,
                 title = App.instance.getString(R.string.topic_title_like_app),
                 description = "${App.instance.getString(R.string.topic_title_like_app)}입니다",
                 color = Color.RED,
