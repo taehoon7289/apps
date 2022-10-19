@@ -5,7 +5,7 @@ import com.minikode.apps.entity.LikeEntity
 
 @Dao
 interface LikeDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(likeEntity: LikeEntity): Long
 
     @Delete

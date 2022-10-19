@@ -1,6 +1,7 @@
 package com.minikode.apps.ui.app
 
 import android.graphics.Color
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -73,6 +74,7 @@ class AppListViewModel @Inject constructor(
             TopicType.LIKE_APP,
             OrderType.RECENT_DESC,
         )
+        Log.d(TAG, "reloadLikeAppItems: ${_likeAppItems.value?.size}")
     }
 
     fun reload() {
@@ -170,5 +172,9 @@ class AppListViewModel @Inject constructor(
         reload()
     }
 
+
+    companion object {
+        private const val TAG = "AppListViewModel"
+    }
 
 }

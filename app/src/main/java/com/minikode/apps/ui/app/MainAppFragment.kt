@@ -22,9 +22,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.minikode.apps.App
 import com.minikode.apps.BaseFragment
 import com.minikode.apps.R
+import com.minikode.apps.code.OrderType
+import com.minikode.apps.code.TopicType
 import com.minikode.apps.databinding.FragmentMainAppBinding
 import com.minikode.apps.repository.AlarmRepository
 import com.minikode.apps.repository.LikeRepository
+import com.minikode.apps.repository.UsageStatsRepository
 import com.minikode.apps.ui.AppInfoPopup
 import com.minikode.apps.ui.alarm.AlarmDialogFragment
 import com.minikode.apps.ui.notion.NotionActivity
@@ -41,6 +44,10 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
 
     override val layoutRes: Int = R.layout.fragment_main_app
+
+    // 앱 정보 상태 관리
+    @Inject
+    lateinit var usageStatsRepository: UsageStatsRepository
 
     // 예약 알람 정보
     @Inject
@@ -184,9 +191,21 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 // 안의 스크롤효과 제거
                 recyclerView.isNestedScrollingEnabled = false
                 appListViewModel.likeAppItems.observe(this@MainAppFragment) {
-                    linearLayout.isGone = it.isEmpty()
+                    recyclerView.isGone = it.isEmpty()
+                    linearLayoutAppEmpty.isGone = it.isNotEmpty()
                     likeAppViewAdapter.submitList(it)
                 }
+
+                buttonSaveLikeApp.setOnClickListener {
+                    addLikes(
+                        usageStatsRepository.getAppInfoByType(
+                            TopicType.ALL_APP,
+                            OrderType.OFTEN_DESC,
+                        ).take(10).toMutableList()
+                    )
+                    appListViewModel.reloadLikeAppItems()
+                }
+
             }
 
         }
@@ -283,6 +302,12 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             Toast.makeText(this@MainAppFragment.activity, "삭제되었습니다", Toast.LENGTH_SHORT).show()
         }
         return appInfoVo
+    }
+
+    private fun addLikes(appInfoVoList: MutableList<AppInfoVo>) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            likeRepository.saveLikes(appInfoVoList)
+        }
     }
 
     private fun openAlarmSaveView(appInfoVo: AppInfoVo) {

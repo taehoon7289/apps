@@ -7,9 +7,9 @@
     <string name="menu_title_alarm">알람예약</string>
     <string name="time_picker_radio_every">반복</string>
     <string name="time_picker_radio_once">한번</string>
-    <string name="topic_title_category_app">기본</string>
+    <string name="topic_title_category_app">기본앱</string>
     <string name="topic_title_game_app">게임</string>
-    <string name="topic_title_all_app">전체</string>
+    <string name="topic_title_all_app">모든앱</string>
     <string name="topic_title_like_app">즐겨찾기</string>
     <string name="topic_title">빠른 앱 찾기</string>
     <string name="tooltip_button_start">실행</string>
@@ -17,7 +17,10 @@
     <string name="tooltip_button_like">취소</string>
     <string name="tooltip_button_alarm">등록</string>
     <string name="search_view_query_hint">앱이름을 넣어주세요</string>
-    <string name="confirm_alarm_message">알림예약 등록되었습니다</string>
-    <string name="cancel_alarm_message">알림예약 취소되었습니다</string>
+    <string name="confirm_alarm_message">알람예약 등록되었습니다</string>
+    <string name="cancel_alarm_message">알람예약 취소되었습니다</string>
     <string name="permission_alarm_message">권한이 없습니다</string>
+    <string name="empty_alarm_data">알람예약이 없습니다</string>
+    <string name="empty_like_app_data">즐겨찾기 목록이 없습니다</string>
+    <string name="empty_button_save_like">자주사용앱 추가해보기</string>
 </resources>

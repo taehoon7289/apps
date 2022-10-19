@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/image_view_icon_empty_data"
                     android:layout_centerInParent="true"
-                    android:text="알람예약이 없습니다." />
+                    android:text="@string/empty_alarm_data" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

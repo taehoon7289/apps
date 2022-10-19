@@ -7,10 +7,7 @@ import com.minikode.apps.entity.LikeEntity
 import com.minikode.apps.room.database.BaseDatabase
 import com.minikode.apps.util.Util
 import com.minikode.apps.vo.AppInfoVo
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.time.LocalDateTime
 
 class LikeRepository {
@@ -36,6 +33,29 @@ class LikeRepository {
             }
         }
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun saveLikes(appInfoVoList: MutableList<AppInfoVo>): MutableList<Long> = runBlocking {
+        val likeNos = mutableListOf<Long>()
+        for (appInfoVo in appInfoVoList) {
+            with(appInfoVo) {
+                val likeEntity = LikeEntity(
+                    packageName = this.packageName,
+                    label = this.label,
+                    createDate = Util.getLocalDateTimeToString(
+                        localDateTime = LocalDateTime.now()
+                    ),
+                )
+                val likeNo = CoroutineScope(Dispatchers.IO).async {
+                    val likeNo = insertLike(likeEntity)
+                    updateLikeSeq(likeNo, likeNo.toInt())
+                    likeNo
+                }.await()
+                likeNos.add(likeNo)
+            }
+        }
+        likeNos
     }
 
     fun updateSeq(likeNo: Long, seq: Int) {
