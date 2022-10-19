@@ -8,9 +8,9 @@ import com.minikode.apps.databinding.ViewholderSearchAppBinding
 import com.minikode.apps.vo.AppInfoVo
 
 class SearchAppViewAdapter(
-    private val clickCallbackStart: (AppInfoVo) -> Unit,
-    private val clickCallbackLike: (AppInfoVo) -> Unit,
-    private val clickCallbackAlarm: (AppInfoVo) -> Unit,
+    private val clickCallbackStart: (AppInfoVo, Int) -> Unit,
+    private val clickCallbackLike: (AppInfoVo, Int) -> Unit,
+    private val clickCallbackAlarm: (AppInfoVo, Int) -> Unit,
 ) :
     ListAdapter<AppInfoVo, SearchAppViewHolder>(object : DiffUtil.ItemCallback<AppInfoVo>() {
         override fun areItemsTheSame(oldItem: AppInfoVo, newItem: AppInfoVo): Boolean {
@@ -39,7 +39,7 @@ class SearchAppViewAdapter(
     }
 
     override fun onBindViewHolder(viewHolder: SearchAppViewHolder, position: Int) {
-        viewHolder.bind(getItem(position))
+        viewHolder.bind(getItem(position), position)
         viewHolder.binding.executePendingBindings()
     }
 

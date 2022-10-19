@@ -10,8 +10,8 @@ import com.minikode.apps.databinding.ViewholderAppBinding
 import com.minikode.apps.vo.AppInfoVo
 
 class AppViewAdapter(
-    private val clickCallback: (View, AppInfoVo) -> Unit,
-    private val longClickCallback: (View, AppInfoVo) -> Unit,
+    private val clickCallback: (View, AppInfoVo, Int) -> Unit,
+    private val longClickCallback: (View, AppInfoVo, Int) -> Unit,
     private val dragCallback: (View, DragEvent, AppInfoVo, Int) -> Unit,
 ) :
     ListAdapter<AppInfoVo, AppViewHolder>(object : DiffUtil.ItemCallback<AppInfoVo>() {

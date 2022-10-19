@@ -6,8 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
@@ -19,7 +17,6 @@ import com.minikode.apps.code.TopicType
 import com.minikode.apps.databinding.FragmentMainSearchAppBinding
 import com.minikode.apps.repository.AlarmRepository
 import com.minikode.apps.repository.LikeRepository
-import com.minikode.apps.ui.AppInfoPopup
 import com.minikode.apps.ui.alarm.AlarmDialogFragment
 import com.minikode.apps.util.Util
 import com.minikode.apps.vo.AppInfoVo
@@ -46,6 +43,8 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
     private lateinit var navigationInfoVo: NavigationInfoVo
 
     private var queryText: String = ""
+
+    private lateinit var searchAppViewAdapter: SearchAppViewAdapter
 
     override fun initView() {
 
@@ -96,19 +95,15 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
             with(recyclerView) {
                 // 선택된 앱 recyclerView
-                val searchAppViewAdapter = SearchAppViewAdapter(
-                    clickCallbackStart = { item ->
+
+                searchAppViewAdapter = SearchAppViewAdapter(
+                    clickCallbackStart = { item, _ ->
                         executeApp(item)
                     },
-                    clickCallbackLike = { item ->
-                        toggleLike(item)
-                        searchAppListViewModel.searchQuery(
-                            topicType = navigationInfoVo.topicType!!,
-                            orderType = navigationInfoVo.orderType!!,
-                            query = queryText
-                        )
+                    clickCallbackLike = { item, position ->
+                        searchAppViewAdapter.notifyItemChanged(position, toggleLike(item))
                     },
-                    clickCallbackAlarm = { item ->
+                    clickCallbackAlarm = { item, _ ->
                         openAlarmSaveView(item)
                     },
                 )
@@ -119,7 +114,6 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                 }
                 reloadItems().observe(this@MainSearchAppFragment) {
                     searchAppViewAdapter.submitList(it)
-                    searchAppViewAdapter.notifyDataSetChanged()
                 }
             }
 
@@ -142,93 +136,11 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
         Log.d(TAG, "onStart: !!! fragment")
     }
 
-    private val clickListenerLambda: (AppInfoVo) -> Unit = { item: AppInfoVo ->
-        executeApp(item)
-    }
-
-    private val longClickListenerLambda: (View, AppInfoVo) -> Unit = { view, item: AppInfoVo ->
-
-        /*
-        val dialog = PopupWindowDialog(
-            appInfoVo = item,
-            clickCallbackStart = {
-                executeApp(item)
-            },
-            clickCallbackLike = {},
-            clickCallbackAlarm = {
-                openAlarmSaveView(item)
-            },
-            x = view.width.div(2),
-            y = view.height,
-        )
-        activity?.supportFragmentManager.let {
-            if (it != null) {
-                dialog.show(it, "popupWindowDialog")
-            }
-        }
-         */
-
-
-
-        AppInfoPopup(
-            anchorView = view,
-            inflater = this@MainSearchAppFragment.layoutInflater,
-            appInfoVo = item,
-            layoutWidth = ViewGroup.LayoutParams.WRAP_CONTENT,
-            layoutHeight = ViewGroup.LayoutParams.WRAP_CONTENT,
-            clickCallbackStart = {
-                executeApp(item)
-            },
-            clickCallbackLike = {
-                toggleLike(item)
-                searchAppListViewModel.searchQuery(
-                    topicType = navigationInfoVo.topicType!!,
-                    orderType = navigationInfoVo.orderType!!,
-                    query = queryText,
-                )
-//                reloadItems()
-            },
-            clickCallbackAlarm = {
-                openAlarmSaveView(item)
-            },
-        ).show()
-
-//        val inflater = LayoutInflater.from(this@MainAppFragment.context)
-//        val popupWindowView = inflater.inflate(R.layout.component_popup, null)
-//
-//        popupWindowView.measure(
-//            ViewGroup.LayoutParams.WRAP_CONTENT,
-//            ViewGroup.LayoutParams.WRAP_CONTENT,
-//        )
-//        val popupWindow = PopupWindow(
-//            popupWindowView,
-//            ViewGroup.LayoutParams.WRAP_CONTENT,
-//            ViewGroup.LayoutParams.WRAP_CONTENT,
-//        )
-//
-//        val pX = popupWindowView.measuredWidth.div(2).minus(view.width.div(2))
-//        val pY = view.height.plus(popupWindowView.measuredHeight)
-//
-//        Log.d(TAG, "pX: $pX")
-//        Log.d(TAG, "pY: $pY")
-//
-//        with(popupWindow) {
-//            isFocusable = true
-//            isTouchable = true
-//            showAsDropDown(
-//                view,
-//                -pX,
-//                -pY,
-//                Gravity.NO_GRAVITY,
-//            )
-//        }
-    }
-
     private fun executeApp(appInfoVo: AppInfoVo) {
         this@MainSearchAppFragment.startActivity(appInfoVo.execIntent)
     }
 
-    private fun toggleLike(appInfoVo: AppInfoVo) {
+    private fun toggleLike(appInfoVo: AppInfoVo): AppInfoVo {
         if (!appInfoVo.likeFlag) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 likeRepository.saveLike(appInfoVo)
@@ -241,6 +153,7 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
             appInfoVo.likeFlag = false
             Toast.makeText(this@MainSearchAppFragment.activity, "삭제되었습니다", Toast.LENGTH_LONG).show()
         }
+        return appInfoVo
     }
 
     private fun openAlarmSaveView(appInfoVo: AppInfoVo) {

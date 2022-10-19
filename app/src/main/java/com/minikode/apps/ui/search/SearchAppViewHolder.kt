@@ -9,13 +9,13 @@ import com.minikode.apps.vo.AppInfoVo
 class SearchAppViewHolder(
     val binding: ViewholderSearchAppBinding,
 
-    private val clickCallbackStart: (AppInfoVo) -> Unit,
-    private val clickCallbackLike: (AppInfoVo) -> Unit,
-    private val clickCallbackAlarm: (AppInfoVo) -> Unit,
+    private val clickCallbackStart: (AppInfoVo, Int) -> Unit,
+    private val clickCallbackLike: (AppInfoVo, Int) -> Unit,
+    private val clickCallbackAlarm: (AppInfoVo, Int) -> Unit,
 
     ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: AppInfoVo) {
+    fun bind(item: AppInfoVo, position: Int) {
         with(binding) {
             model = item
 
@@ -31,9 +31,9 @@ class SearchAppViewHolder(
 
             actionButton.apply {
                 model = item
-                linearLayoutStart.setOnClickListener { clickCallbackStart(item) }
-                linearLayoutLike.setOnClickListener { clickCallbackLike(item) }
-                linearLayoutAlarm.setOnClickListener { clickCallbackAlarm(item) }
+                linearLayoutStart.setOnClickListener { clickCallbackStart(item, position) }
+                linearLayoutLike.setOnClickListener { clickCallbackLike(item, position) }
+                linearLayoutAlarm.setOnClickListener { clickCallbackAlarm(item, position) }
             }
         }
 

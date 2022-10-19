@@ -10,8 +10,8 @@ import com.minikode.apps.vo.AppInfoVo
 
 class AppViewHolder(
     val binding: ViewholderAppBinding,
-    private val clickCallback: (View, AppInfoVo) -> Unit,
-    private val longClickCallback: (View, AppInfoVo) -> Unit,
+    private val clickCallback: (View, AppInfoVo, Int) -> Unit,
+    private val longClickCallback: (View, AppInfoVo, Int) -> Unit,
     private val dragCallback: (View, DragEvent, AppInfoVo, Int) -> Unit,
 ) :
     RecyclerView.ViewHolder(binding.root) {
@@ -24,11 +24,11 @@ class AppViewHolder(
             viewholderAppLinear.apply {
                 root.tag = item.packageName
                 setOnClickListener {
-                    clickCallback(root, item)
+                    clickCallback(root, item, position)
 
                 }
                 setOnLongClickListener {
-                    longClickCallback(root, item)
+                    longClickCallback(root, item, position)
                     true
                 }
                 setOnDragListener { view, event ->

@@ -60,6 +60,8 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 //            }
         }
 
+    private lateinit var likeAppViewAdapter: AppViewAdapter
+
     override fun initView() {
 
         notificationListViewModel.reload()
@@ -155,7 +157,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             with(componentTopicLiked) {
                 // 즐겨찾기 앱 gridView
                 textViewTitle.text = getString(R.string.topic_title_like_app)
-                val likeAppViewAdapter = AppViewAdapter(
+                likeAppViewAdapter = AppViewAdapter(
                     clickCallback = clickListenerLambda,
                     longClickCallback = longClickListenerLambda,
                     dragCallback = dragListenerLambda,
@@ -180,7 +182,6 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 appListViewModel.likeAppItems.observe(this@MainAppFragment) {
                     linearLayout.isGone = it.isEmpty()
                     likeAppViewAdapter.submitList(it)
-                    likeAppViewAdapter.notifyDataSetChanged()
                 }
             }
 
@@ -194,26 +195,26 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
         Log.d(TAG, "onStart: !!! fragment")
     }
 
-    private val clickListenerLambda: (View, AppInfoVo) -> Unit = { view, item: AppInfoVo ->
-        AppInfoPopup(
-            anchorView = view,
-            inflater = this@MainAppFragment.layoutInflater,
-            appInfoVo = item,
-            layoutWidth = ViewGroup.LayoutParams.WRAP_CONTENT,
-            layoutHeight = ViewGroup.LayoutParams.WRAP_CONTENT,
-            clickCallbackStart = {
-                executeApp(item)
-            },
-            clickCallbackLike = {
-                toggleLike(item)
-                appListViewModel.reloadLikeAppItems()
-//                appListViewModel.reload()
-            },
-            clickCallbackAlarm = {
-                openAlarmSaveView(item)
-            },
-        ).show()
-    }
+    private val clickListenerLambda: (View, AppInfoVo, Int) -> Unit =
+        { view, appInfoVo: AppInfoVo, position: Int ->
+            AppInfoPopup(
+                anchorView = view,
+                inflater = this@MainAppFragment.layoutInflater,
+                appInfoVo = appInfoVo,
+                position = position,
+                layoutWidth = ViewGroup.LayoutParams.WRAP_CONTENT,
+                layoutHeight = ViewGroup.LayoutParams.WRAP_CONTENT,
+                clickCallbackStart = { item, _ ->
+                    executeApp(item)
+                },
+                clickCallbackLike = { item, _position ->
+                    likeAppViewAdapter.notifyItemChanged(_position, toggleLike(item))
+                },
+                clickCallbackAlarm = { item, _ ->
+                    openAlarmSaveView(item)
+                },
+            ).show()
+        }
 
     private val dragListenerLambda: (View, DragEvent, AppInfoVo, Int) -> Unit =
         { view, event, item: AppInfoVo, position ->
@@ -245,26 +246,27 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             }
         }
 
-    private val longClickListenerLambda: (View, AppInfoVo) -> Unit = { view, item: AppInfoVo ->
+    private val longClickListenerLambda: (View, AppInfoVo, Int) -> Unit =
+        { view, item: AppInfoVo, _ ->
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val clipData = ClipData.Item(view.tag as CharSequence)
-            val mimeTypes: Array<String> =
-                mutableListOf(ClipDescription.MIMETYPE_TEXT_PLAIN).toTypedArray()
-            val data = ClipData(view.tag.toString(), mimeTypes, clipData)
-            val shadowBuilder = View.DragShadowBuilder(view)
-            view.startDragAndDrop(data, shadowBuilder, view, 0)
-            view.visibility = View.VISIBLE
-        } else {
-            executeApp(item)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                val clipData = ClipData.Item(view.tag as CharSequence)
+                val mimeTypes: Array<String> =
+                    mutableListOf(ClipDescription.MIMETYPE_TEXT_PLAIN).toTypedArray()
+                val data = ClipData(view.tag.toString(), mimeTypes, clipData)
+                val shadowBuilder = View.DragShadowBuilder(view)
+                view.startDragAndDrop(data, shadowBuilder, view, 0)
+                view.visibility = View.VISIBLE
+            } else {
+                executeApp(item)
+            }
         }
-    }
 
     private fun executeApp(appInfoVo: AppInfoVo) {
         this@MainAppFragment.startActivity(appInfoVo.execIntent)
     }
 
-    private fun toggleLike(appInfoVo: AppInfoVo) {
+    private fun toggleLike(appInfoVo: AppInfoVo): AppInfoVo {
         if (!appInfoVo.likeFlag) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 likeRepository.saveLike(appInfoVo)
@@ -276,6 +278,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             appInfoVo.likeFlag = false
             Toast.makeText(this@MainAppFragment.activity, "삭제되었습니다", Toast.LENGTH_SHORT).show()
         }
+        return appInfoVo
     }
 
     private fun openAlarmSaveView(appInfoVo: AppInfoVo) {
