@@ -78,10 +78,15 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
             val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)
             val notificationViewPagerAdapter = NotificationViewPagerAdapter(handlerClickEvent = {
-                val intent = Intent(this@MainAppFragment.activity, NotionActivity::class.java)
-                intent.putExtra("url", it.url)
-//                this@MainAppFragment.startActivity(intent)
-                notionResult.launch(intent)
+                Log.d(TAG, "initView: ??? ${it.url}")
+                it.url?.apply {
+                    if (this.isNotEmpty()) {
+                        val intent =
+                            Intent(this@MainAppFragment.activity, NotionActivity::class.java)
+                        intent.putExtra("url", it.url)
+                        notionResult.launch(intent)
+                    }
+                }
             })
 
 
