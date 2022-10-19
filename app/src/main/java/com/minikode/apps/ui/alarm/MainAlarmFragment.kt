@@ -7,6 +7,8 @@ import com.minikode.apps.BaseFragment
 import com.minikode.apps.R
 import com.minikode.apps.databinding.FragmentMainAlarmBinding
 import com.minikode.apps.ui.SwipeController
+import com.minikode.apps.util.Util
+import com.minikode.apps.vo.NavigationInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,22 +25,40 @@ class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>() {
         Log.d(TAG, "initView: reload!!!")
 
         with(binding) {
-            val alarmViewAdapter = AlarmViewAdapter(clickCallback = {
-                Log.d(TAG, "initView: clickCallback")
-            }, longClickCallback = {
-                Log.d(TAG, "initView: longClickCallback")
-            })
-            val alarmViewVerticalDecoration = AlarmViewVerticalDecoration(250f, 100f, 1f, "#BDBDBD")
-            alarmRecyclerView.addItemDecoration(alarmViewVerticalDecoration)
-            alarmRecyclerView.adapter = alarmViewAdapter
 
-            val itemTouchHelper = ItemTouchHelper(SwipeController(alarmViewAdapter))
-            itemTouchHelper.attachToRecyclerView(alarmRecyclerView)
+            with(componentToolbar) {
 
-            alarmListViewModel.items.observe(this@MainAlarmFragment) {
-                Log.d(TAG, "initView: it $it")
-                alarmViewAdapter.submitList(it)
+                model = NavigationInfoVo(
+                    title = "알람예약",
+                )
+                subTitle.setTextColor(
+                    Util.getColorWithAlpha(
+                        0.6f, subTitle.textColors.defaultColor
+                    )
+                )
             }
+
+            with(alarmRecyclerView) {
+                val alarmViewAdapter = AlarmViewAdapter(clickCallback = {
+                    Log.d(TAG, "initView: clickCallback")
+                }, longClickCallback = {
+                    Log.d(TAG, "initView: longClickCallback")
+                })
+                val alarmViewVerticalDecoration =
+                    AlarmViewVerticalDecoration(250f, 100f, 1f, "#BDBDBD")
+                addItemDecoration(alarmViewVerticalDecoration)
+                adapter = alarmViewAdapter
+
+                val itemTouchHelper = ItemTouchHelper(SwipeController(alarmViewAdapter))
+                itemTouchHelper.attachToRecyclerView(this@with)
+
+                alarmListViewModel.items.observe(this@MainAlarmFragment) {
+                    Log.d(TAG, "initView: it $it")
+                    alarmViewAdapter.submitList(it)
+                }
+            }
+
+
         }
 
     }

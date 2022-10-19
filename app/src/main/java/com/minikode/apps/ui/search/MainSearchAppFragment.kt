@@ -40,8 +40,6 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
     private val searchAppListViewModel: SearchAppListViewModel by viewModels()
 
-    private lateinit var navigationInfoVo: NavigationInfoVo
-
     private var queryText: String = ""
 
     private lateinit var searchAppViewAdapter: SearchAppViewAdapter
@@ -50,16 +48,18 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
         Log.d(TAG, "initView: $arguments")
 
+        val topicType = arguments?.get("topicType") as TopicType
+        val orderType = arguments?.get("orderType") as OrderType
+
         with(binding) {
 
             with(componentToolbar) {
 
-                navigationInfoVo = NavigationInfoVo(
-                    title = "앱검색",
-                    topicType = arguments?.get("topicType") as TopicType,
-                    orderType = arguments?.get("orderType") as OrderType,
+                model = NavigationInfoVo(
+                    title = "${topicType.label}검색",
+                    topicType = topicType,
+                    orderType = orderType,
                 )
-                model = navigationInfoVo
                 subTitle.setTextColor(
                     Util.getColorWithAlpha(
                         0.6f, subTitle.textColors.defaultColor
@@ -72,9 +72,7 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         queryText = query ?: ""
                         searchAppListViewModel.searchQuery(
-                            topicType = navigationInfoVo.topicType!!,
-                            orderType = navigationInfoVo.orderType!!,
-                            query = queryText
+                            topicType = topicType, orderType = orderType, query = queryText
                         )
 
                         return true
@@ -84,9 +82,7 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                         Log.d(TAG, "onQueryTextChange: newText $newText")
                         queryText = newText ?: ""
                         searchAppListViewModel.searchQuery(
-                            topicType = navigationInfoVo.topicType!!,
-                            orderType = navigationInfoVo.orderType!!,
-                            query = queryText
+                            topicType = topicType, orderType = orderType, query = queryText
                         )
                         return true
                     }
@@ -112,7 +108,7 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                 if (itemDecorationCount > 0) {
                     removeItemDecorationAt(0)
                 }
-                reloadItems().observe(this@MainSearchAppFragment) {
+                reloadItems(topicType).observe(this@MainSearchAppFragment) {
                     searchAppViewAdapter.submitList(it)
                 }
             }
@@ -123,7 +119,7 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
 
     }
 
-    private fun reloadItems() = when (navigationInfoVo.topicType) {
+    private fun reloadItems(topicType: TopicType) = when (topicType) {
         TopicType.CATEGORY_APP -> searchAppListViewModel.categoryAppItems
         TopicType.GAME_APP -> searchAppListViewModel.gameAppItems
         TopicType.ALL_APP -> searchAppListViewModel.allAppItems
