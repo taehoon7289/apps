@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">APPS</string>
+    <string name="app_description">빠르게 앱 실행하고 예약까지</string>
+    <string name="app_nick_name">APPS</string>
     <string name="app_label">앱스</string>
     <string name="text_confirm">확인</string>
     <string name="text_cancel">취소</string>

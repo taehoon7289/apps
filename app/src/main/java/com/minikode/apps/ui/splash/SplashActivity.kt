@@ -18,7 +18,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     override fun initView() {
         with(binding) {
-            splashTextView.text = resources.getText(R.string.app_name)
+            splashTextView.text = resources.getText(R.string.app_nick_name)
             animationView.speed = 2.0f
             animationView.addAnimatorListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(p0: Animator?) {
