@@ -206,6 +206,13 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                     appListViewModel.reloadLikeAppItems()
                 }
 
+//                componentTopicLiked.imageViewIconEmptyData.setBackgroundResource(
+//                    Util.getColorWithAlpha(
+//                        1.0f,
+//                        R.color.deep_purple_a200,
+//                    )
+//                )
+
             }
 
         }

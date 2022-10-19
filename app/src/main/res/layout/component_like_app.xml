@@ -8,16 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:paddingRight="5dp"
-        android:paddingBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/text_view_title"
@@ -56,7 +50,8 @@
                 android:id="@+id/image_view_icon_empty_data"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_empty_data" />
+                android:src="@drawable/ic_empty_data"
+                app:tint="?attr/colorOnSecondary" />
 
             <TextView
                 android:id="@+id/text_view_empty_data"
@@ -64,14 +59,19 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/image_view_icon_empty_data"
                 android:layout_centerInParent="true"
-                android:text="@string/empty_like_app_data" />
+                android:text="@string/empty_like_app_data"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/button_save_like_app"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="@string/empty_button_save_like" />
+                android:background="@drawable/shape_button_empty_add_like_app"
+                android:text="@string/empty_button_save_like"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

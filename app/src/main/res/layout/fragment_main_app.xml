@@ -46,12 +46,11 @@
 
                 <include
                     android:id="@+id/component_topic"
-
                     layout="@layout/component_topic" />
 
                 <include
                     android:id="@+id/component_topic_liked"
-                    layout="@layout/component_topic_app" />
+                    layout="@layout/component_like_app" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
