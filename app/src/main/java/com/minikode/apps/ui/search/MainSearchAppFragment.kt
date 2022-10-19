@@ -147,7 +147,8 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
         } else {
             likeRepository.removeLike(appInfoVo)
             appInfoVo.likeFlag = false
-            Toast.makeText(this@MainSearchAppFragment.activity, "삭제되었습니다", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainSearchAppFragment.activity, "삭제되었습니다", Toast.LENGTH_SHORT)
+                .show()
         }
         return appInfoVo
     }

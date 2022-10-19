@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import com.minikode.apps.App
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import kotlin.math.max
 import kotlin.math.min
 
@@ -109,6 +110,33 @@ class Util {
                     true
                 }
                 else -> false
+            }
+        }
+
+        const val perDaySeconds = 86400
+        const val perHourSeconds = 3600
+        const val perMinuteSeconds = 60
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun intervalLocalDateTimeToString(
+            startDateTime: LocalDateTime,
+            endDateTime: LocalDateTime,
+            pattern: String = "yyyyMMddHHmmss"
+        ): String {
+            val seconds = startDateTime.until(endDateTime, ChronoUnit.SECONDS)
+            if (seconds > perDaySeconds) {
+                // 24시간 이상
+                val days = seconds.div(perDaySeconds)
+                val hours = seconds.mod(perDaySeconds).div(perHourSeconds)
+                val minutes = seconds.mod(perHourSeconds).div(perMinuteSeconds)
+                return "${days}일${hours}시${minutes}분"
+            } else if (seconds > perHourSeconds) {
+                val hours = seconds.mod(perDaySeconds).div(perHourSeconds)
+                val minutes = seconds.mod(perHourSeconds).div(perMinuteSeconds)
+                return "${hours}시${minutes}분"
+            } else {
+                val minutes = seconds.mod(perHourSeconds).div(perMinuteSeconds)
+                return "${minutes}분"
             }
         }
 
