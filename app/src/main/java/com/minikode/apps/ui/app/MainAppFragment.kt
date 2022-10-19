@@ -85,6 +85,11 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                             Intent(this@MainAppFragment.activity, NotionActivity::class.java)
                         intent.putExtra("url", it.url)
                         notionResult.launch(intent)
+                        Toast.makeText(
+                            this@MainAppFragment.activity,
+                            "알림 페이지로 이동합니다",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             })
