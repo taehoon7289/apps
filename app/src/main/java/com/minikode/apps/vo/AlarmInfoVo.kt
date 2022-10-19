@@ -14,4 +14,5 @@ data class AlarmInfoVo(
     var periodType: AlarmPeriodType? = null,
     var iconDrawable: Drawable? = null,
     var executeMillis: Long? = null,
+    var cancelAvailFlag: Boolean = true,
 )

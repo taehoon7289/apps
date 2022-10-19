@@ -141,13 +141,13 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 likeRepository.saveLike(appInfoVo)
                 appInfoVo.likeFlag = true
-                Toast.makeText(this@MainSearchAppFragment.activity, "추가되었습니다", Toast.LENGTH_LONG)
+                Toast.makeText(this@MainSearchAppFragment.activity, "추가되었습니다", Toast.LENGTH_SHORT)
                     .show()
             }
         } else {
             likeRepository.removeLike(appInfoVo)
             appInfoVo.likeFlag = false
-            Toast.makeText(this@MainSearchAppFragment.activity, "삭제되었습니다", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainSearchAppFragment.activity, "삭제되었습니다", Toast.LENGTH_SHORT).show()
         }
         return appInfoVo
     }
@@ -174,7 +174,7 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                         executeDate.set(Calendar.MINUTE, minute)
                         executeDate.set(Calendar.SECOND, 0)
                         alarmRepository.registerToAlarmManager(periodType,
-                            appInfoVo,
+                            appInfoVo.label!!, appInfoVo.packageName!!, appInfoVo.iconDrawable!!,
                             LocalDateTime.ofInstant(
                                 executeDate.toInstant(), executeDate.timeZone.toZoneId()
                             ),
@@ -183,11 +183,19 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                                 it?.let {
                                     alarmRepository.saveAlarm(it)
                                 }
-                                Toast.makeText(this.activity, "예약됨", Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    this.activity,
+                                    getString(R.string.confirm_alarm_message),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             },
                             {
                                 Log.d(TAG, "bind: failCallback")
-                                Toast.makeText(this.activity, "권한이 없습니다.", Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    this.activity,
+                                    getString(R.string.permission_alarm_message),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             })
 
                     })

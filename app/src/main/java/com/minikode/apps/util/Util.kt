@@ -37,6 +37,8 @@ class Util {
             }
         }
 
+        @JvmStatic
+        @JvmOverloads
         @RequiresApi(Build.VERSION_CODES.O)
         fun getLocalDateTimeToString(
             localDateTime: LocalDateTime, pattern: String = "yyyyMMddHHmmss"

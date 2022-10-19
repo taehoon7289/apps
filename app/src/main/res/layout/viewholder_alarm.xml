@@ -4,6 +4,10 @@
 
     <data>
 
+        <import
+            alias="Util"
+            type="com.minikode.apps.util.Util" />
+
         <variable
             name="model"
             type="com.minikode.apps.vo.AlarmInfoVo" />
@@ -13,15 +17,15 @@
         android:id="@+id/viewholder_alarm_linear"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp">
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
 
         <ImageView
             android:id="@+id/alarm_app_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginRight="20dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingEnd="4dp"
             android:src="@{model.iconDrawable}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/alarm_app_info_constraint"
@@ -32,8 +36,10 @@
             android:id="@+id/alarm_app_info_constraint"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/alarm_app_switch"
+            app:layout_constraintEnd_toEndOf="@id/switch_alarm_cancel_flag"
             app:layout_constraintStart_toEndOf="@id/alarm_app_icon"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -56,7 +62,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="top"
-                android:text="@{model.executeDate.toString()}"
+                android:text="@{Util.getLocalDateTimeToString(model.executeDate, `yyyy-MM-dd HH:mm`)}"
                 android:textSize="12sp"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="true"
@@ -68,9 +74,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/alarm_app_switch"
+            android:id="@+id/switch_alarm_cancel_flag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="@{model.cancelAvailFlag}"
+            android:paddingStart="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/alarm_app_info_constraint"

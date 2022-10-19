@@ -158,8 +158,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 // 즐겨찾기 앱 gridView
                 textViewTitle.setTextColor(
                     Util.getColorWithAlpha(
-                        0.6f,
-                        textViewTitle.textColors.defaultColor
+                        0.6f, textViewTitle.textColors.defaultColor
                     )
                 )
                 likeAppViewAdapter = AppViewAdapter(
@@ -308,7 +307,9 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                         executeDate.set(Calendar.MINUTE, minute)
                         executeDate.set(Calendar.SECOND, 0)
                         alarmRepository.registerToAlarmManager(periodType,
-                            appInfoVo,
+                            appInfoVo.label!!,
+                            appInfoVo.packageName!!,
+                            appInfoVo.iconDrawable!!,
                             LocalDateTime.ofInstant(
                                 executeDate.toInstant(), executeDate.timeZone.toZoneId()
                             ),
@@ -317,11 +318,19 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                                 it?.let {
                                     alarmRepository.saveAlarm(it)
                                 }
-                                Toast.makeText(this.activity, "예약됨", Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    this.activity,
+                                    getString(R.string.confirm_alarm_message),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             },
                             {
                                 Log.d(TAG, "bind: failCallback")
-                                Toast.makeText(this.activity, "권한이 없습니다.", Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    this.activity,
+                                    getString(R.string.permission_alarm_message),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             })
 
                     })

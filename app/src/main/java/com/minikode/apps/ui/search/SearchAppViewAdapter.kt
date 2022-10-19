@@ -40,7 +40,7 @@ class SearchAppViewAdapter(
 
     override fun onBindViewHolder(viewHolder: SearchAppViewHolder, position: Int) {
         viewHolder.bind(getItem(position), position)
-        viewHolder.binding.executePendingBindings()
+//        viewHolder.binding.executePendingBindings()
     }
 
 //    override fun onItemMove(from_position: Int, to_position: Int): Boolean {

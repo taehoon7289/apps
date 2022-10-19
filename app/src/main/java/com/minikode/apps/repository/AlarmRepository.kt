@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -14,7 +15,6 @@ import com.minikode.apps.receiver.AppBroadcastReceiver
 import com.minikode.apps.room.database.BaseDatabase
 import com.minikode.apps.util.Util
 import com.minikode.apps.vo.AlarmInfoVo
-import com.minikode.apps.vo.AppInfoVo
 import kotlinx.coroutines.*
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -35,7 +35,7 @@ class AlarmRepository {
     @RequiresApi(Build.VERSION_CODES.O)
     fun registerToAlarmManager(
         alarmPeriodType: AlarmPeriodType,
-        appInfoVo: AppInfoVo,
+        label: String, packageName: String, iconDrawable: Drawable,
         executeDate: LocalDateTime,
         successCallback: (AlarmInfoVo?) -> Unit = {},
         failCallback: () -> Unit = {},
@@ -45,8 +45,8 @@ class AlarmRepository {
         val intent = Intent(
             App.instance, AppBroadcastReceiver::class.java
         )
-        intent.putExtra("label", appInfoVo.label)
-        intent.putExtra("packageName", appInfoVo.packageName)
+        intent.putExtra("label", label)
+        intent.putExtra("packageName", packageName)
         intent.putExtra("executeDate", executeDate.format(DateTimeFormatter.ofPattern("HH:mm")))
 
         val requestCode = Calendar.getInstance().timeInMillis.toInt()
@@ -89,9 +89,9 @@ class AlarmRepository {
             executeDate = executeDate,
             createDate = LocalDateTime.now(),
             periodType = alarmPeriodType,
-            packageName = appInfoVo.packageName,
-            iconDrawable = appInfoVo.iconDrawable,
-            label = appInfoVo.label,
+            packageName = packageName,
+            iconDrawable = iconDrawable,
+            label = label,
             executeMillis = longMillis,
         )
         successCallback(alarmInfoVo)
