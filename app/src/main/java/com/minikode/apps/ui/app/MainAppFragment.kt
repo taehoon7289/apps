@@ -156,7 +156,12 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
             with(componentTopicLiked) {
                 // 즐겨찾기 앱 gridView
-                textViewTitle.text = getString(R.string.topic_title_like_app)
+                textViewTitle.setTextColor(
+                    Util.getColorWithAlpha(
+                        0.6f,
+                        textViewTitle.textColors.defaultColor
+                    )
+                )
                 likeAppViewAdapter = AppViewAdapter(
                     clickCallback = clickListenerLambda,
                     longClickCallback = longClickListenerLambda,
