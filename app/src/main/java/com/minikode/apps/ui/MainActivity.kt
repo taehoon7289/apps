@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isGone
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.gms.ads.*
@@ -204,6 +205,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun initAdMob() {
         MobileAds.initialize(this) {}
         mAdView = findViewById(R.id.adView)
+        mAdView.isGone = false
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
         mAdView.adListener = object : AdListener() {

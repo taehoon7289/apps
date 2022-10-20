@@ -23,7 +23,22 @@
             android:id="@+id/splash_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_bold"
             android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/splash_text_view_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/splash_text_view_description_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="16sp" />
 
 
     </LinearLayout>
