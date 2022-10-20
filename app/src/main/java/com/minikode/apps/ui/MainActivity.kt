@@ -198,7 +198,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             NavigationUI.setupWithNavController(mainBottomNavView, navController!!)
         }
         // 광고
-        initAdMob()
+//        initAdMob()
     }
 
     private fun initAdMob() {

@@ -32,6 +32,9 @@
         <item name="colorText">@color/black</item>
         <item name="colorTextReverse">@color/white</item>
         <item name="colorSystemDialog">@color/system_dialog</item>
+        <item name="colorSystemError">@color/system_error</item>
+        <item name="colorSystemWarning">@color/system_warning</item>
+        <item name="colorSystemSuccess">@color/system_success</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>

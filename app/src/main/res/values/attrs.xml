@@ -33,5 +33,8 @@
     <attr name="colorSecondary900" format="color"></attr>
 
     <attr name="colorSystemDialog" format="color"></attr>
+    <attr name="colorSystemError" format="color"></attr>
+    <attr name="colorSystemWarning" format="color"></attr>
+    <attr name="colorSystemSuccess" format="color"></attr>
 
 </resources>

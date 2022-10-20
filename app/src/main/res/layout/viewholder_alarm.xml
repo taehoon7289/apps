@@ -62,7 +62,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="top"
-                android:text="@{Util.getLocalDateTimeToString(model.executeDate, `yyyy-MM-dd HH:mm`)}"
+                android:text="@{`알람예약시간 : ` + Util.getLocalDateTimeToString(model.executeDate, `yyyy-MM-dd HH:mm`)}"
                 android:textSize="12sp"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="true"
