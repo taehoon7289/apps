@@ -10,7 +10,7 @@ import com.minikode.apps.databinding.ViewholderAppBinding
 import com.minikode.apps.vo.AppInfoVo
 
 class AppViewAdapter(
-    private val clickCallback: (View, AppInfoVo, Int) -> Unit,
+    private val clickCallback: (View, AppInfoVo, Int, AppViewAdapter) -> Unit,
     private val longClickCallback: (View, AppInfoVo, Int) -> Unit,
     private val dragCallback: (View, DragEvent, AppInfoVo, Int) -> Unit,
 ) :
@@ -32,7 +32,9 @@ class AppViewAdapter(
             ViewholderAppBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
         return AppViewHolder(
             binding = viewholderAppBinding,
-            clickCallback = clickCallback,
+            clickCallback = { view, item, position ->
+                clickCallback(view, item, position, this)
+            },
             longClickCallback = longClickCallback,
             dragCallback = dragCallback,
         )

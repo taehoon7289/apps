@@ -34,7 +34,7 @@ class TopicViewAdapter(
 
     override fun onBindViewHolder(viewHolder: TopicViewHolder, position: Int) {
         viewHolder.bind(getItem(position))
-//        viewHolder.binding.executePendingBindings()
+        viewHolder.binding.executePendingBindings()
     }
 
     companion object {

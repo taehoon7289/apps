@@ -25,6 +25,7 @@ abstract class BaseActivity<View : ViewDataBinding> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = createBinding(layoutRes)
+        initLambdas()
         initView()
 
     }
@@ -88,5 +89,6 @@ abstract class BaseActivity<View : ViewDataBinding> : AppCompatActivity() {
     }
 
     abstract fun initView()
+    abstract fun initLambdas()
 
 }

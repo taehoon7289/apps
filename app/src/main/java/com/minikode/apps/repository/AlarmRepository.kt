@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import com.minikode.apps.App
 import com.minikode.apps.code.AlarmPeriodType
 import com.minikode.apps.entity.AlarmEntity
@@ -45,12 +46,15 @@ class AlarmRepository {
         val intent = Intent(
             App.instance, AppBroadcastReceiver::class.java
         )
-        intent.putExtra("label", label)
-        intent.putExtra("packageName", packageName)
-        intent.putExtra("executeDate", executeDate.format(DateTimeFormatter.ofPattern("HH:mm")))
-
         val requestCode = Calendar.getInstance().timeInMillis.toInt()
-        intent.putExtra("requestCode", requestCode)
+        intent.putExtras(
+            bundleOf(
+                "label" to label,
+                "packageName" to packageName,
+                "executeDate" to executeDate.format(DateTimeFormatter.ofPattern("HH:mm")),
+                "requestCode" to requestCode,
+            )
+        )
         val pendingIntent = PendingIntent.getBroadcast(
             App.instance,
             requestCode,

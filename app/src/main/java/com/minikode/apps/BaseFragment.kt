@@ -14,8 +14,6 @@ abstract class BaseFragment<V : ViewDataBinding> : Fragment() {
 
     protected abstract val layoutRes: Int
 
-//    protected abstract val onBackPressedCallback: OnBackPressedCallback
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,8 +31,6 @@ abstract class BaseFragment<V : ViewDataBinding> : Fragment() {
     }
 
     abstract fun initView()
-
-
 
     companion object {
         private const val TAG = "BaseFragment"

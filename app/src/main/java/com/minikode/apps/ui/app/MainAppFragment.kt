@@ -1,21 +1,11 @@
 package com.minikode.apps.ui.app
 
-import android.app.AlarmManager
-import android.content.ClipData
-import android.content.ClipDescription
-import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.provider.Settings
 import android.util.Log
-import android.view.DragEvent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -25,69 +15,38 @@ import com.minikode.apps.R
 import com.minikode.apps.code.OrderType
 import com.minikode.apps.code.TopicType
 import com.minikode.apps.databinding.FragmentMainAppBinding
-import com.minikode.apps.repository.AlarmRepository
-import com.minikode.apps.repository.LikeRepository
-import com.minikode.apps.repository.UsageStatsRepository
-import com.minikode.apps.ui.AppInfoPopup
-import com.minikode.apps.ui.alarm.AlarmDialogFragment
+import com.minikode.apps.ui.MainActivity
 import com.minikode.apps.ui.notion.NotionActivity
 import com.minikode.apps.util.Util
-import com.minikode.apps.vo.AppInfoVo
 import com.minikode.apps.vo.NavigationInfoVo
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalDateTime
-import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
-
     override val layoutRes: Int = R.layout.fragment_main_app
 
-    // 앱 정보 상태 관리
-    @Inject
-    lateinit var usageStatsRepository: UsageStatsRepository
-
-    // 예약 알람 정보
-    @Inject
-    lateinit var alarmRepository: AlarmRepository
-
-    @Inject
-    lateinit var likeRepository: LikeRepository
-
-    private val notificationListViewModel: NotificationListViewModel by viewModels()
-    private val appListViewModel: AppListViewModel by viewModels()
-
-    private val notionResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            Log.d(TAG, "it.resultCode: ${it.resultCode}")
-//            if (it.resultCode == RESULT_OK) {
-//                Log.d(TAG, "initView: result_ok ${it.resultCode}")
-//            }
-        }
+    private val notificationListViewModel: NotificationListViewModel by activityViewModels()
+    private val appListViewModel: AppListViewModel by activityViewModels()
 
     private lateinit var likeAppViewAdapter: AppViewAdapter
 
     override fun initView() {
-
         notificationListViewModel.reload()
         appListViewModel.reload()
-
         with(binding) {
 
             val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)
             val notificationViewPagerAdapter = NotificationViewPagerAdapter(handlerClickEvent = {
-                Log.d(TAG, "initView: ??? ${it.url}")
                 it.url?.apply {
                     if (this.isNotEmpty()) {
                         val intent =
                             Intent(this@MainAppFragment.activity, NotionActivity::class.java)
                         intent.putExtra("url", it.url)
-                        notionResult.launch(intent)
+                        (activity as MainActivity).notificationActivityResultLambda.launch(intent)
                         Toast.makeText(
                             this@MainAppFragment.activity,
-                            "알림 페이지로 이동합니다",
+                            getString(R.string.move_notification_page),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -98,7 +57,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
             with(componentToolbar) {
                 model = NavigationInfoVo(
-                    title = "앱고르기",
+                    title = getString(R.string.menu_title_app),
                 )
                 subTitle.setTextColor(
                     Util.getColorWithAlpha(
@@ -166,7 +125,6 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 val topicRecyclerViewDecoration = TopicRecyclerViewDecoration(10, 10, 10, 10, 2)
                 recyclerView.addItemDecoration(topicRecyclerViewDecoration)
                 appListViewModel.topicItems.observe(this@MainAppFragment) {
-                    Log.d(TAG, "initView: topicItems ${it?.size}")
                     topicViewAdapter.submitList(it)
                 }
             }
@@ -179,9 +137,9 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                     )
                 )
                 likeAppViewAdapter = AppViewAdapter(
-                    clickCallback = clickListenerLambda,
-                    longClickCallback = longClickListenerLambda,
-                    dragCallback = dragListenerLambda,
+                    clickCallback = (activity as MainActivity).appInfoViewClickListenerLambda,
+                    longClickCallback = (activity as MainActivity).appInfoViewLongClickListenerLambda,
+                    dragCallback = (activity as MainActivity).appInfoViewDragListenerLambda,
                 )
                 recyclerView.adapter = likeAppViewAdapter
                 // 그리드 레이아웃 설정
@@ -207,8 +165,8 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 }
 
                 buttonSaveLikeApp.setOnClickListener {
-                    addLikes(
-                        usageStatsRepository.getAppInfoByType(
+                    (activity as MainActivity).addLikes(
+                        (activity as MainActivity).usageStatsRepository.getAppInfoByType(
                             TopicType.ALL_APP,
                             OrderType.OFTEN_DESC,
                         ).take(10).toMutableList()
@@ -216,184 +174,16 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                     appListViewModel.reloadLikeAppItems()
                 }
 
-//                componentTopicLiked.imageViewIconEmptyData.setBackgroundResource(
-//                    Util.getColorWithAlpha(
-//                        1.0f,
-//                        R.color.deep_purple_a200,
-//                    )
-//                )
-
             }
 
         }
 
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart: !!! fragment")
-    }
-
-    private val clickListenerLambda: (View, AppInfoVo, Int) -> Unit =
-        { view, appInfoVo: AppInfoVo, position: Int ->
-            AppInfoPopup(
-                anchorView = view,
-                inflater = this@MainAppFragment.layoutInflater,
-                appInfoVo = appInfoVo,
-                position = position,
-                layoutWidth = ViewGroup.LayoutParams.WRAP_CONTENT,
-                layoutHeight = ViewGroup.LayoutParams.WRAP_CONTENT,
-                clickCallbackStart = { item, _ ->
-                    executeApp(item)
-                },
-                clickCallbackLike = { item, _position ->
-                    likeAppViewAdapter.notifyItemChanged(_position, toggleLike(item))
-                },
-                clickCallbackAlarm = { item, _ ->
-                    openAlarmSaveView(item)
-                },
-            ).show()
-        }
-
-    private val dragListenerLambda: (View, DragEvent, AppInfoVo, Int) -> Unit =
-        { view, event, item: AppInfoVo, position ->
-            when (event.action) {
-                // 드래그 시작될때
-                DragEvent.ACTION_DRAG_STARTED -> {
-                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_STARTED ${item.label}")
-                }
-                // 드래그한 view 를 옮기려는 지역으로 들어왔을때
-                DragEvent.ACTION_DRAG_ENTERED -> {
-                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_ENTERED ${item.label} $position")
-
-                }
-                // 드래그한 view 가 영역을 빠져나갈때
-                DragEvent.ACTION_DRAG_EXITED -> {
-                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_EXITED ${item.label}")
-                }
-                // view 를 드래그해서 드랍시켰을때
-                DragEvent.ACTION_DROP -> {
-                    Log.d(TAG, "dragListenerLambda: ACTION_DROP ${item.label}")
-                }
-                // 드래그 종료시
-                DragEvent.ACTION_DRAG_ENDED -> {
-                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_ENDED ${item.label}")
-                }
-//                DragEvent.ACTION_DRAG_LOCATION -> {
-//                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_LOCATION")
-//                }
-            }
-        }
-
-    private val longClickListenerLambda: (View, AppInfoVo, Int) -> Unit =
-        { view, item: AppInfoVo, _ ->
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val clipData = ClipData.Item(view.tag as CharSequence)
-                val mimeTypes: Array<String> =
-                    mutableListOf(ClipDescription.MIMETYPE_TEXT_PLAIN).toTypedArray()
-                val data = ClipData(view.tag.toString(), mimeTypes, clipData)
-                val shadowBuilder = View.DragShadowBuilder(view)
-                view.startDragAndDrop(data, shadowBuilder, view, 0)
-                view.visibility = View.VISIBLE
-            } else {
-                executeApp(item)
-            }
-        }
-
-    private fun executeApp(appInfoVo: AppInfoVo) {
-        this@MainAppFragment.startActivity(appInfoVo.execIntent)
-    }
-
-    private fun toggleLike(appInfoVo: AppInfoVo): AppInfoVo {
-        if (!appInfoVo.likeFlag) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                likeRepository.saveLike(appInfoVo)
-                appInfoVo.likeFlag = true
-                Toast.makeText(this@MainAppFragment.activity, "추가되었습니다", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            likeRepository.removeLike(appInfoVo)
-            appInfoVo.likeFlag = false
-            Toast.makeText(this@MainAppFragment.activity, "삭제되었습니다", Toast.LENGTH_SHORT).show()
-        }
-        return appInfoVo
-    }
-
-    private fun addLikes(appInfoVoList: MutableList<AppInfoVo>) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            likeRepository.saveLikes(appInfoVoList)
-        }
-    }
-
-    private fun openAlarmSaveView(appInfoVo: AppInfoVo) {
-        val alarmManager = App.instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            alarmManager.canScheduleExactAlarms()
-        } else {
-            Intent().apply {
-                action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-            }.also {
-                this@MainAppFragment.startActivity(it)
-            }
-            false
-        }
-        if (hasPermission) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val alarmDialogFragment =
-                    AlarmDialogFragment(saveCallback = { periodType, hourOfDay, minute ->
-
-                        val executeDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
-                        executeDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                        executeDate.set(Calendar.MINUTE, minute)
-                        executeDate.set(Calendar.SECOND, 0)
-                        alarmRepository.registerToAlarmManager(periodType,
-                            appInfoVo.label!!,
-                            appInfoVo.packageName!!,
-                            appInfoVo.iconDrawable!!,
-                            LocalDateTime.ofInstant(
-                                executeDate.toInstant(), executeDate.timeZone.toZoneId()
-                            ),
-                            {
-                                Log.d(TAG, "bind: successCallback")
-                                it?.let {
-                                    alarmRepository.saveAlarm(it)
-                                }
-                                Toast.makeText(
-                                    this.activity,
-                                    getString(R.string.confirm_alarm_message),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            },
-                            {
-                                Log.d(TAG, "bind: failCallback")
-                                Toast.makeText(
-                                    this.activity,
-                                    getString(R.string.permission_alarm_message),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            })
-
-                    })
-                activity?.supportFragmentManager?.let {
-                    alarmDialogFragment.show(
-                        it, alarmDialogFragment.tag
-                    )
-                }
-            }
-        }
     }
 
     companion object {
         private const val TAG = "MainAppFragment"
-//        private var instance: MainAppFragment? = null
-//        fun getInstance(): MainAppFragment {
-//            return this.instance ?: synchronized(this) {
-//                this.instance ?: MainAppFragment().also {
-//                    instance = it
-//                }
-//            }
-//        }
     }
+
+
 }

@@ -15,6 +15,7 @@ class NotionActivity : BaseActivity<ActivityNotionBinding>() {
     override val layoutRes: Int = R.layout.activity_notion
     override val backDoubleEnableFlag: Boolean = false
 
+    override fun initLambdas() {}
     override fun initView() {
         with(binding) {
             webviewNotion.webChromeClient = object : WebChromeClient() {
@@ -53,5 +54,6 @@ class NotionActivity : BaseActivity<ActivityNotionBinding>() {
     companion object {
         private const val TAG = "NotionActivity"
     }
+
 }
 

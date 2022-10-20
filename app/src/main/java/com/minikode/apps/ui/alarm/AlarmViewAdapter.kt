@@ -1,5 +1,6 @@
 package com.minikode.apps.ui.alarm
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -22,6 +23,7 @@ class AlarmViewAdapter(
         }
     }) {
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): AlarmViewHolder {
         val viewholderAlarmBinding =
             ViewholderAlarmBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
@@ -29,14 +31,16 @@ class AlarmViewAdapter(
             binding = viewholderAlarmBinding,
             clickCallback = clickCallback,
             longClickCallback = longClickCallback,
-            checkedChangeCallback = checkedChangeCallback,
+            checkedChangeCallback = { alarmInfoVo, position, isChecked ->
+                checkedChangeCallback(alarmInfoVo, position, isChecked)
+            },
         )
 
     }
 
     override fun onBindViewHolder(viewHolder: AlarmViewHolder, position: Int) {
         viewHolder.bind(getItem(position), position)
-//        viewHolder.binding.executePendingBindings()
+        viewHolder.binding.executePendingBindings()
     }
 
 //    override fun onItemMove(from_position: Int, to_position: Int): Boolean {

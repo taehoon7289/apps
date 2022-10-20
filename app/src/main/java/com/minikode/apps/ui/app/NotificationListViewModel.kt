@@ -14,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class NotificationListViewModel @Inject constructor(private val notificationRepository: NotificationRepository) :
     ViewModel() {
-    private val TAG = "NotificationListViewMod"
 
     private var _items: MutableLiveData<MutableList<NotificationInfoVo>> = MutableLiveData(
         mutableListOf()
@@ -24,13 +23,11 @@ class NotificationListViewModel @Inject constructor(private val notificationRepo
         get() = _items
 
 
-    fun clear() {
-
-        _items.value?.clear()
-        _items.value = _items.value
-    }
-
     fun reload() = CoroutineScope(Dispatchers.Main).launch {
         _items.value = notificationRepository.getNotificationList()
+    }
+
+    companion object {
+        private const val TAG = "NotificationListViewMod"
     }
 }

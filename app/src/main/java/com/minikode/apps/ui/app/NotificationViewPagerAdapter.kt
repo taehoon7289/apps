@@ -38,6 +38,7 @@ class NotificationViewPagerAdapter(
 
     override fun onBindViewHolder(viewHolder: NotificationViewHolder, position: Int) {
         viewHolder.bind(getItem(position))
+        viewHolder.binding.executePendingBindings()
     }
 
     companion object {

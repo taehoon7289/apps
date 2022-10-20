@@ -1,6 +1,7 @@
 package com.minikode.apps.ui.splash
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
 import com.minikode.apps.BaseActivity
@@ -9,13 +10,14 @@ import com.minikode.apps.databinding.ActivitySplashBinding
 import com.minikode.apps.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
+@SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     private val TAG = "SplashActivity"
     override val layoutRes: Int = R.layout.activity_splash
 
-
+    override fun initLambdas() {}
     override fun initView() {
         with(binding) {
             splashTextView.text = resources.getText(R.string.app_nick_name)
@@ -47,4 +49,5 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         startActivity(intent)
         finish()
     }
+
 }
