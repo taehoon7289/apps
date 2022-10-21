@@ -65,6 +65,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             Log.d(TAG, "initView: animatedValue $animatedValue")
             Log.d(TAG, "initView: descriptionCode.length ${descriptionCode.length}")
             val size = descriptionCode.length.div(animatedValue).div(100).toInt()
+//            val size = animatedValue.div(100).toInt()
             Log.d(TAG, "initView: size $size")
             binding.splashTextViewDescriptionCode.text =
                 descriptionCode.substring(0, descriptionCode.length.minus(size))
