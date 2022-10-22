@@ -24,10 +24,10 @@
         <!--            android:textSize="15sp" />-->
 
         <TextView
-            android:layout_marginStart="12dp"
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
             android:ellipsize="end"
             android:fontFamily="@font/pretendard_medium"
             android:gravity="center_vertical"

@@ -52,7 +52,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         binding.splashTextViewDescription.text = "${getString(R.string.app_description)}"
 
         val descriptionCode =
-            "if (isClick) {\n    startApp();\n} else if (isAlarm) {\n    startApp();\n}"
+            "if clicked: \n    startApp()\n else if (isReserved) {\n    startApp();\n}"
 
         val animator = ValueAnimator.ofFloat(0f, 1f).setDuration(2000)
         animator.addUpdateListener {
@@ -62,15 +62,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             if (animatedValue < 0.01) {
                 return@addUpdateListener
             }
-            Log.d(TAG, "initView: animatedValue $animatedValue")
-            Log.d(TAG, "initView: descriptionCode.length ${descriptionCode.length}")
-            val size = descriptionCode.length.div(animatedValue).div(100).toInt()
-//            val size = animatedValue.div(100).toInt()
-            Log.d(TAG, "initView: size $size")
+            val percent = animatedValue.times(100).toInt()
+            val size = descriptionCode.length.div(100.0f).times(percent)
             binding.splashTextViewDescriptionCode.text =
-                descriptionCode.substring(0, descriptionCode.length.minus(size))
-
-            Log.d(TAG, "initView: ${it.animatedValue as Float}")
+                descriptionCode.substring(0, size.toInt())
         }
         animator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
