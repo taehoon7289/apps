@@ -51,8 +51,16 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         binding.splashTextView.text = getString(R.string.app_nick_name)
         binding.splashTextViewDescription.text = "${getString(R.string.app_description)}"
 
-        val descriptionCode =
-            "if clicked: \n    startApp()\n else if (isReserved) {\n    startApp();\n}"
+//        val descriptionCode =
+//            "if (클릭): \n    앱실행()\n else if (예약완료) {\n    앱실행예약();\n}\n"
+        var descriptionCode = ""
+        descriptionCode += "if (클릭): \n"
+        descriptionCode += "    앱실행()\n"
+        descriptionCode += "else if (예약완료) {\n"
+        descriptionCode += "    앱실행예약()\n"
+        descriptionCode += "} else {\n"
+        descriptionCode += "    앱찾기()\n"
+        descriptionCode += "}\n"
 
         val animator = ValueAnimator.ofFloat(0f, 1f).setDuration(2000)
         animator.addUpdateListener {
