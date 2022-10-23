@@ -64,6 +64,7 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
                         usageStatsRepository.isOpenSettingIntent()
                     } else {
                         val intent = Intent(this@GuideActivity, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
                         finish()
                     }
