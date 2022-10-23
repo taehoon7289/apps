@@ -34,32 +34,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             splashTextView.text = getString(R.string.app_nick_name)
             splashTextViewDescription.text = "${getString(R.string.app_description)}"
 
-            var descriptionCode = ""
-            descriptionCode += "if (클릭): \n"
-            descriptionCode += "    앱실행()\n"
-            descriptionCode += "else if (예약완료) {\n"
-            descriptionCode += "    앱실행예약()\n"
-            descriptionCode += "} else {\n"
-            descriptionCode += "    앱찾기()\n"
-            descriptionCode += "}\n"
-
             val animator = ValueAnimator.ofFloat(0f, 1f).setDuration(2000)
             animator.addUpdateListener {
                 val animatedValue = it.animatedValue as Float
                 animationView.progress = animatedValue
-
-                if (animatedValue < 0.01) {
-                    return@addUpdateListener
-                }
-                val percent = animatedValue.times(100).toInt()
-                val size = descriptionCode.length.div(100.0f).times(percent)
-                if (loadingSize != size.toInt()) {
-                    Log.d(TAG, "initView: loadingSize $loadingSize")
-                    loadingSize = size.toInt()
-                    splashTextViewDescriptionCode.text =
-                        descriptionCode.substring(0, loadingSize)
-                }
-
             }
             animator.addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(p0: Animator?) {
