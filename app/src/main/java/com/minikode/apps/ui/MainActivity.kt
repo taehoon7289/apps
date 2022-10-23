@@ -199,7 +199,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             NavigationUI.setupWithNavController(mainBottomNavView, navController!!)
         }
         // 광고
-        initAdMob()
+//        initAdMob()
     }
 
     private fun initAdMob() {
@@ -277,12 +277,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             alarmManager.canScheduleExactAlarms()
         } else {
-            Intent().apply {
-                action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-            }.also {
-                startActivity(it)
-            }
-            false
+//            Intent().apply {
+//                action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+//            }.also {
+//                startActivity(it)
+//            }
+            true
         }
         if (hasPermission) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
