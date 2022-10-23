@@ -18,16 +18,16 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:appCategory="productivity"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:description="@string/app_description"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_apps"
         android:label="@string/app_name"
-        android:description="@string/app_description"
         android:roundIcon="@mipmap/ic_apps_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Apps"
         android:usesCleartextTraffic="true"
-        android:appCategory="productivity"
         tools:targetApi="31">
         <activity
             android:name=".ui.notion.NotionActivity"
@@ -57,6 +57,10 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
+
+        <!--        <meta-data-->
+        <!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
+        <!--            android:value="ca-app-pub-9658548369352576~7425486575" />-->
 
     </application>
 
