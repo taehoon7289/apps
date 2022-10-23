@@ -42,6 +42,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             val notificationViewPagerAdapter = NotificationViewPagerAdapter(handlerClickEvent = {
                 if (it.type === NotificationType.GUIDE) {
                     val intent = Intent(this@MainAppFragment.activity, GuideActivity::class.java)
+                    intent.putExtra("backFlag", false)
                     startActivity(intent)
                 }
                 it.url?.apply {

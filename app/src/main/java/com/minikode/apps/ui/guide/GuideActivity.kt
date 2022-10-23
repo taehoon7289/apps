@@ -17,7 +17,7 @@ import javax.inject.Inject
 class GuideActivity : BaseActivity<ActivityGuideBinding>() {
 
     override val layoutRes: Int = R.layout.activity_guide
-    override val backDoubleEnableFlag: Boolean = true
+    override var backDoubleEnableFlag: Boolean = true
 
     // 앱 정보 상태 관리
     @Inject
@@ -25,6 +25,12 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
 
     override fun initLambdas() {}
     override fun initView() {
+
+        intent.extras.let {
+            val backFlag = it?.getBoolean("backFlag", true)
+            backDoubleEnableFlag = backFlag ?: true
+        }
+
         with(binding) {
             val guideInfoVoList = mutableListOf<GuideInfoVo>()
             guideInfoVoList.add(
