@@ -44,7 +44,8 @@ data class NotionDatabaseVo(
             val id: Id,
             val title: Title,
             val type: Type,
-            val url: Url
+            val url: Url,
+            val viewFlag: ViewFlag,
         ) {
             data class CreateDate(
                 val date: Date,
@@ -63,6 +64,34 @@ data class NotionDatabaseVo(
                 val number: Int,
                 val type: String
             )
+
+            data class ViewFlag(
+                val id: String,
+                val rich_text: List<RichText>,
+                val type: String
+            ) {
+                data class RichText(
+                    val annotations: Annotations,
+                    val href: Any,
+                    val plain_text: String,
+                    val text: Text,
+                    val type: String
+                ) {
+                    data class Annotations(
+                        val bold: Boolean,
+                        val code: Boolean,
+                        val color: String,
+                        val italic: Boolean,
+                        val strikethrough: Boolean,
+                        val underline: Boolean
+                    )
+
+                    data class Text(
+                        val content: String,
+                        val link: Any
+                    )
+                }
+            }
 
             data class Title(
                 val id: String,

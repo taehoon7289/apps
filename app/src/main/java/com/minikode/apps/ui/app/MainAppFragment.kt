@@ -12,10 +12,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.minikode.apps.App
 import com.minikode.apps.BaseFragment
 import com.minikode.apps.R
+import com.minikode.apps.code.NotificationType
 import com.minikode.apps.code.OrderType
 import com.minikode.apps.code.TopicType
 import com.minikode.apps.databinding.FragmentMainAppBinding
 import com.minikode.apps.ui.MainActivity
+import com.minikode.apps.ui.guide.GuideActivity
 import com.minikode.apps.ui.notion.NotionActivity
 import com.minikode.apps.util.Util
 import com.minikode.apps.vo.NavigationInfoVo
@@ -38,6 +40,10 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
             val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)
             val notificationViewPagerAdapter = NotificationViewPagerAdapter(handlerClickEvent = {
+                if (it.type === NotificationType.GUIDE) {
+                    val intent = Intent(this@MainAppFragment.activity, GuideActivity::class.java)
+                    startActivity(intent)
+                }
                 it.url?.apply {
                     if (this.isNotEmpty()) {
                         val intent =

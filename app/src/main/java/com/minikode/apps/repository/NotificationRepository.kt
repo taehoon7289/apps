@@ -37,14 +37,20 @@ class NotificationRepository(private val service: NotionApiService) {
                 val title = properties.title.rich_text.firstOrNull()?.plain_text
                 val createDate = properties.createDate.date.start
                 val url = properties.url.url
-                val notificationInfoVo = NotificationInfoVo(
-                    id = id.toLong(),
-                    type = NotificationType.valueOf(type!!),
-                    title = title,
-                    createDate = createDate,
-                    url = url,
-                )
-                notificationInfoVoList.add(notificationInfoVo)
+                val viewFlag = properties.viewFlag.rich_text.firstOrNull()?.plain_text
+                viewFlag?.toInt().let {
+                    if (it == 1) {
+                        val notificationInfoVo = NotificationInfoVo(
+                            id = id.toLong(),
+                            type = NotificationType.valueOf(type!!),
+                            title = title,
+                            createDate = createDate,
+                            url = url,
+                            viewFlag = viewFlag,
+                        )
+                        notificationInfoVoList.add(notificationInfoVo)
+                    }
+                }
             }
         }
 

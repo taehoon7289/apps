@@ -45,6 +45,10 @@
             android:name=".ui.MainActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.guide.GuideActivity"
+            android:exported="false" />
+
         <receiver
             android:name=".receiver.AppBroadcastReceiver"
             android:enabled="true"

@@ -8,4 +8,5 @@ data class NotificationInfoVo(
     var title: String? = null,
     var createDate: String? = null,
     var url: String? = null,
+    var viewFlag: String? = null,
 )
