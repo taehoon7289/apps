@@ -16,7 +16,7 @@
             android:layout_height="200dp"
             app:lottie_autoPlay="false"
             app:lottie_loop="false"
-            app:lottie_rawRes="@raw/splash_lottie"
+            app:lottie_rawRes="@raw/splash_lottie_2"
             tools:targetApi="n" />
 
         <TextView
