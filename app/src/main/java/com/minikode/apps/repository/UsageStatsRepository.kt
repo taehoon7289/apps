@@ -84,7 +84,7 @@ class UsageStatsRepository {
 
         val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        App.instance.startActivity(intent)
+        App.instance.applicationContext.startActivity(intent)
     }
 
     /**
