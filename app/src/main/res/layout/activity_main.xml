@@ -21,6 +21,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/nav_graph" />
 
+        <!-- test -->
         <!--        <com.google.android.gms.ads.AdView-->
         <!--            android:visibility="gone"-->
         <!--            android:id="@+id/adView"-->
@@ -35,6 +36,7 @@
         <!--            ads:layout_constraintStart_toStartOf="parent"-->
         <!--            ads:layout_constraintTop_toBottomOf="@id/fragment_container_view" />-->
 
+        <!-- production -->
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"

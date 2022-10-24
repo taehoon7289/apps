@@ -76,13 +76,15 @@ class AppBroadcastReceiver : BroadcastReceiver() {
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
-                    .setSmallIcon(R.mipmap.ic_apps_round)
+                    .setSmallIcon(R.mipmap.ic_application)
                     .build()
                 notificationManager.notify(Random().nextInt(), notification)
                 alarmRepository.removeAlarm(requestCode!!)
             }
 
         }
+
+        // 스마트하게 예약하고 알람까지
 
     }
 
