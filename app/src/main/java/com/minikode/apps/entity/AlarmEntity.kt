@@ -10,8 +10,7 @@ class AlarmEntity(
     var requestCode: Int? = null,
     var packageName: String? = null,
     var label: String? = null,
-    var executeDate: String? = null,
-    var createDate: String? = null,
+    var executeDate: Long? = null,
+    var createDate: Long? = null,
     var periodType: String? = null,
-    var executeMillis: Long? = null,
-    )
+)

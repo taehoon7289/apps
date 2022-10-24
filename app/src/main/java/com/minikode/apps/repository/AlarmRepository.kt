@@ -14,13 +14,8 @@ import com.minikode.apps.code.AlarmPeriodType
 import com.minikode.apps.entity.AlarmEntity
 import com.minikode.apps.receiver.AppBroadcastReceiver
 import com.minikode.apps.room.database.BaseDatabase
-import com.minikode.apps.util.Util
 import com.minikode.apps.vo.AlarmInfoVo
 import kotlinx.coroutines.*
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AlarmRepository {
@@ -37,7 +32,7 @@ class AlarmRepository {
     fun registerToAlarmManager(
         alarmPeriodType: AlarmPeriodType,
         label: String, packageName: String, iconDrawable: Drawable,
-        executeDate: LocalDateTime,
+        executeDate: Calendar,
         successCallback: (AlarmInfoVo?) -> Unit = {},
         failCallback: () -> Unit = {},
     ) {
@@ -51,7 +46,7 @@ class AlarmRepository {
             bundleOf(
                 "label" to label,
                 "packageName" to packageName,
-                "executeDate" to executeDate.format(DateTimeFormatter.ofPattern("HH:mm")),
+                "executeDate" to executeDate,
                 "requestCode" to requestCode,
             )
         )
@@ -62,8 +57,7 @@ class AlarmRepository {
             PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val longMillis =
-            ZonedDateTime.of(executeDate, ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli()
+        val longMillis = executeDate.timeInMillis
 
         if (alarmPeriodType === AlarmPeriodType.EVERY_DAY) {
             alarmManager.setRepeating(
@@ -91,12 +85,11 @@ class AlarmRepository {
         val alarmInfoVo = AlarmInfoVo(
             requestCode = requestCode,
             executeDate = executeDate,
-            createDate = LocalDateTime.now(),
+            createDate = Calendar.getInstance(),
             periodType = alarmPeriodType,
             packageName = packageName,
             iconDrawable = iconDrawable,
             label = label,
-            executeMillis = longMillis,
         )
         successCallback(alarmInfoVo)
 
@@ -106,17 +99,12 @@ class AlarmRepository {
     fun saveAlarm(alarmInfoVo: AlarmInfoVo) {
         with(alarmInfoVo) {
             val alarmEntity = AlarmEntity(
-                requestCode = this.requestCode,
-                packageName = this.packageName,
-                label = this.label,
-                executeDate = Util.getLocalDateTimeToString(
-                    localDateTime = this.executeDate!!
-                ),
-                createDate = Util.getLocalDateTimeToString(
-                    localDateTime = this.createDate!!
-                ),
-                periodType = this.periodType.toString(),
-                executeMillis = this.executeMillis,
+                requestCode = requestCode,
+                packageName = packageName,
+                label = label,
+                executeDate = executeDate?.timeInMillis,
+                createDate = createDate?.timeInMillis,
+                periodType = periodType.toString(),
             )
             CoroutineScope(Dispatchers.IO).launch {
                 insertAlarm(alarmEntity)
@@ -132,9 +120,8 @@ class AlarmRepository {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun removeOldItems() = runBlocking {
-        val now = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Asia/Seoul")).toInstant()
-            .toEpochMilli()
-        deleteAlarmByExecuteMillisLessEqualThan(now)
+        val now = Calendar.getInstance().timeInMillis
+        deleteAlarmByExecuteDateLessEqualThan(now)
     }
 
     fun getItems(): MutableList<AlarmInfoVo> = runBlocking {
@@ -148,16 +135,21 @@ class AlarmRepository {
                 val label =
                     packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
 
+
+                val executeDate = Calendar.getInstance()
+                executeDate.timeInMillis = it.executeDate!!
+                val createDate = Calendar.getInstance()
+                createDate.timeInMillis = it.createDate!!
+
                 val alarmInfoVo = AlarmInfoVo(
                     alarmNo = it.alarmNo,
                     requestCode = it.requestCode,
-                    executeDate = Util.getStringToLocalDateTime(str = it.executeDate!!),
-                    createDate = Util.getStringToLocalDateTime(str = it.createDate!!),
+                    executeDate = executeDate,
+                    createDate = createDate,
                     periodType = AlarmPeriodType.valueOf(it.periodType!!),
                     packageName = packageName,
                     iconDrawable = iconDrawable,
                     label = label.toString(),
-                    executeMillis = it.executeMillis,
                 )
                 alarmInfoVo
             }.toMutableList()
@@ -182,10 +174,10 @@ class AlarmRepository {
             )
         }
 
-    private suspend fun deleteAlarmByExecuteMillisLessEqualThan(executeMillis: Long) =
+    private suspend fun deleteAlarmByExecuteDateLessEqualThan(executeDate: Long) =
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            baseDb.alarmDao().deleteByExecuteMillisLessEqualThan(
-                executeMillis = executeMillis
+            baseDb.alarmDao().deleteByExecuteDateLessEqualThan(
+                executeDate = executeDate
             )
         }
 

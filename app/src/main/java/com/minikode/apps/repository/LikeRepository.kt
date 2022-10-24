@@ -5,10 +5,9 @@ import androidx.annotation.RequiresApi
 import com.minikode.apps.App
 import com.minikode.apps.entity.LikeEntity
 import com.minikode.apps.room.database.BaseDatabase
-import com.minikode.apps.util.Util
 import com.minikode.apps.vo.AppInfoVo
 import kotlinx.coroutines.*
-import java.time.LocalDateTime
+import java.util.*
 
 class LikeRepository {
     companion object {
@@ -23,9 +22,7 @@ class LikeRepository {
             val likeEntity = LikeEntity(
                 packageName = this.packageName,
                 label = this.label,
-                createDate = Util.getLocalDateTimeToString(
-                    localDateTime = LocalDateTime.now()
-                ),
+                createDate = Calendar.getInstance().timeInMillis,
             )
             CoroutineScope(Dispatchers.IO).launch {
                 val likeNo = insertLike(likeEntity)
@@ -43,9 +40,7 @@ class LikeRepository {
                 val likeEntity = LikeEntity(
                     packageName = this.packageName,
                     label = this.label,
-                    createDate = Util.getLocalDateTimeToString(
-                        localDateTime = LocalDateTime.now()
-                    ),
+                    createDate = Calendar.getInstance().timeInMillis,
                 )
                 val likeNo = CoroutineScope(Dispatchers.IO).async {
                     val likeNo = insertLike(likeEntity)

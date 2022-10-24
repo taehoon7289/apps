@@ -9,9 +9,9 @@ import android.view.View
 import android.widget.ListView
 import androidx.annotation.RequiresApi
 import com.minikode.apps.App
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
+import java.text.SimpleDateFormat
+import java.time.Duration
+import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
@@ -40,19 +40,9 @@ class Util {
 
         @JvmStatic
         @JvmOverloads
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun getLocalDateTimeToString(
-            localDateTime: LocalDateTime, pattern: String = "yyyyMMddHHmmss"
-        ): String? {
-
-            return localDateTime.format(DateTimeFormatter.ofPattern(pattern))
-        }
-
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun getStringToLocalDateTime(
-            str: String, pattern: String = "yyyyMMddHHmmss"
-        ): LocalDateTime? {
-            return LocalDateTime.parse(str, DateTimeFormatter.ofPattern(pattern))
+        fun getCalendarToString(calendar: Calendar, pattern: String = "yyyyMMddHHmmss"): String {
+            val sdf = SimpleDateFormat(pattern)
+            return sdf.format(calendar.time)
         }
 
         fun setListViewHeightBasedOnChildren(listView: ListView) {
@@ -113,31 +103,20 @@ class Util {
             }
         }
 
-        const val perDaySeconds = 86400
-        const val perHourSeconds = 3600
-        const val perMinuteSeconds = 60
-
         @RequiresApi(Build.VERSION_CODES.O)
-        fun intervalLocalDateTimeToString(
-            startDateTime: LocalDateTime,
-            endDateTime: LocalDateTime,
-            pattern: String = "yyyyMMddHHmmss"
+        @JvmStatic
+        fun diffTargetDateTimeToNowDateTime(
+            targetDateTime: Calendar,
         ): String {
-            val seconds = startDateTime.until(endDateTime, ChronoUnit.SECONDS)
-            if (seconds > perDaySeconds) {
-                // 24시간 이상
-                val days = seconds.div(perDaySeconds)
-                val hours = seconds.mod(perDaySeconds).div(perHourSeconds)
-                val minutes = seconds.mod(perHourSeconds).div(perMinuteSeconds)
-                return "${days}일${hours}시${minutes}분"
-            } else if (seconds > perHourSeconds) {
-                val hours = seconds.mod(perDaySeconds).div(perHourSeconds)
-                val minutes = seconds.mod(perHourSeconds).div(perMinuteSeconds)
-                return "${hours}시${minutes}분"
-            } else {
-                val minutes = seconds.mod(perHourSeconds).div(perMinuteSeconds)
-                return "${minutes}분"
-            }
+            val diff =
+                Duration.between(Calendar.getInstance().toInstant(), targetDateTime.toInstant())
+            val days = diff.toDays()
+            val hours = diff.toHours() % 24
+            val minutes = diff.toMinutes() % 60
+            val seconds = diff.seconds % 60
+
+            return "${if (days > 0) "${days}일" else ""}${if (hours > 0) "${hours}시" else ""}${if (minutes > 0) "${minutes}분" else ""}${if (seconds > 0) "${seconds}초" else ""}후 시작"
+
         }
 
         private const val TAG = "Util"

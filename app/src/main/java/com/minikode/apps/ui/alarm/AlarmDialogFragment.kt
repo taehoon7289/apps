@@ -42,7 +42,7 @@ class AlarmDialogFragment(
 
     private fun initView() {
         with(binding) {
-            val nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
+            val nowDate = Calendar.getInstance()
             this@AlarmDialogFragment.hourOfDay = nowDate.get(Calendar.HOUR_OF_DAY)
             this@AlarmDialogFragment.minute = nowDate.get(Calendar.MINUTE)
             timePicker.setOnTimeChangedListener { _, hourOfDay, minute ->

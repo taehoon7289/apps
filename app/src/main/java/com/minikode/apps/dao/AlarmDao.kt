@@ -20,6 +20,6 @@ interface AlarmDao {
     @Query("DELETE FROM alarm WHERE requestCode = :requestCode")
     fun deleteByRequestCode(requestCode: Int): Int
 
-    @Query("DELETE FROM alarm WHERE executeMillis <= :executeMillis")
-    fun deleteByExecuteMillisLessEqualThan(executeMillis: Long): Int
+    @Query("DELETE FROM alarm WHERE executeDate <= :executeDate")
+    fun deleteByExecuteDateLessEqualThan(executeDate: Long): Int
 }

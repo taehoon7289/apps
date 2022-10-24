@@ -9,7 +9,7 @@ class LikeEntity(
     var likeNo: Long? = null,
     var packageName: String? = null,
     var label: String? = null,
-    var createDate: String? = null,
+    var createDate: Long? = null,
     var seq: Int? = null,
 
     )

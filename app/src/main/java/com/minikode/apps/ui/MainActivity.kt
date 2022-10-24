@@ -7,7 +7,6 @@ import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.provider.Settings
 import android.util.Log
 import android.view.DragEvent
 import android.view.View
@@ -31,7 +30,6 @@ import com.minikode.apps.ui.app.AppViewAdapter
 import com.minikode.apps.vo.AlarmInfoVo
 import com.minikode.apps.vo.AppInfoVo
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 
@@ -145,38 +143,36 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         checkedChangeListenerLambda = { item, position, isChecked ->
             if (isChecked) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    alarmRepository
-                        .registerToAlarmManager(
-                            item.periodType!!,
-                            item.label!!, item.packageName!!, item.iconDrawable!!,
-                            item.executeDate!!,
-                            {
-                                Log.d(TAG, "bind: re successCallback")
-                                it?.let {
-                                    alarmRepository.saveAlarm(it)
-                                }
-                                Toast.makeText(
-                                    this,
-                                    getString(R.string.confirm_alarm_message),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            },
-                            {
-                                Log.d(TAG, "bind: failCallback")
-                                Toast.makeText(
-                                    this,
-                                    getString(R.string.permission_alarm_message),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            })
+                    alarmRepository.registerToAlarmManager(item.periodType!!,
+                        item.label!!,
+                        item.packageName!!,
+                        item.iconDrawable!!,
+                        item.executeDate!!,
+                        {
+                            Log.d(TAG, "bind: re successCallback")
+                            it?.let {
+                                alarmRepository.saveAlarm(it)
+                            }
+                            Toast.makeText(
+                                this,
+                                getString(R.string.confirm_alarm_message),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        {
+                            Log.d(TAG, "bind: failCallback")
+                            Toast.makeText(
+                                this,
+                                getString(R.string.permission_alarm_message),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        })
                 }
             } else {
                 // 예약취소
                 alarmRepository.removeAlarm(item.requestCode!!)
                 Toast.makeText(
-                    this,
-                    getString(R.string.cancel_alarm_message),
-                    Toast.LENGTH_SHORT
+                    this, getString(R.string.cancel_alarm_message), Toast.LENGTH_SHORT
                 ).show()
             }
             item.cancelAvailFlag = isChecked
@@ -289,18 +285,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 val alarmDialogFragment =
                     AlarmDialogFragment(saveCallback = { periodType, hourOfDay, minute ->
 
-                        val executeDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
+                        val nowDate = Calendar.getInstance()
+                        val executeDate = Calendar.getInstance()
                         executeDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
                         executeDate.set(Calendar.MINUTE, minute)
                         executeDate.set(Calendar.SECOND, 0)
-                        alarmRepository.registerToAlarmManager(periodType,
-                            appInfoVo.label!!,
-                            appInfoVo.packageName!!,
-                            appInfoVo.iconDrawable!!,
-                            LocalDateTime.ofInstant(
-                                executeDate.toInstant(), executeDate.timeZone.toZoneId()
-                            ),
-                            {
+
+                        if (executeDate.before(nowDate)) {
+                            // 하루 추가
+                            executeDate.add(Calendar.HOUR, 24)
+                        }
+
+                        alarmRepository.registerToAlarmManager(
+                            alarmPeriodType = periodType,
+                            label = appInfoVo.label!!,
+                            packageName = appInfoVo.packageName!!,
+                            iconDrawable = appInfoVo.iconDrawable!!,
+                            executeDate = executeDate,
+                            successCallback = {
                                 Log.d(TAG, "bind: successCallback")
                                 it?.let {
                                     alarmRepository.saveAlarm(it)
@@ -311,7 +313,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             },
-                            {
+                            failCallback = {
                                 Log.d(TAG, "bind: failCallback")
                                 Toast.makeText(
                                     this,

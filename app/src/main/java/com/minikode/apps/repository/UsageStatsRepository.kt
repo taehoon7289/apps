@@ -16,7 +16,6 @@ import com.minikode.apps.code.OrderType
 import com.minikode.apps.code.TopicType
 import com.minikode.apps.room.database.BaseDatabase
 import com.minikode.apps.ui.MainActivity
-import com.minikode.apps.util.Util
 import com.minikode.apps.vo.AppInfoVo
 import com.minikode.apps.vo.LikeInfoVo
 import kotlinx.coroutines.CoroutineScope
@@ -285,9 +284,12 @@ class UsageStatsRepository {
                 val label =
                     packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
 
+                val createDate = Calendar.getInstance()
+                createDate.timeInMillis = it.createDate!!
+
                 val likeInfoVo = LikeInfoVo(
                     likeNo = it.likeNo,
-                    createDate = Util.getStringToLocalDateTime(str = it.createDate!!),
+                    createDate = createDate,
                     packageName = packageName,
                     iconDrawable = iconDrawable,
                     label = label.toString(),
