@@ -33,6 +33,7 @@
         </RadioGroup>
 
         <Spinner
+            android:spinnerMode="dialog"
             android:id="@+id/spinner_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

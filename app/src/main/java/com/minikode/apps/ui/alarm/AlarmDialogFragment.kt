@@ -53,10 +53,9 @@ class AlarmDialogFragment(
 
             Log.d(TAG, "initView: hourOfDay $hourOfDay")
             Log.d(TAG, "initView: minute $minute")
-
             spinnerTimer.adapter = ArrayAdapter(
                 requireActivity(),
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.component_spinner_text_view,
                 mutableListOf(
                     "직접입력",
                     "1분후",
@@ -78,7 +77,6 @@ class AlarmDialogFragment(
                     position: Int,
                     id: Long
                 ) {
-                    Log.d(TAG, "onItemSelected: $position $id")
                     val nowTime = Calendar.getInstance()
                     val nowHour = nowTime.get(Calendar.HOUR_OF_DAY)
                     val nowMinute = nowTime.get(Calendar.MINUTE)
