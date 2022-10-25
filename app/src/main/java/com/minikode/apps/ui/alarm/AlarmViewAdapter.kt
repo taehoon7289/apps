@@ -1,12 +1,16 @@
 package com.minikode.apps.ui.alarm
 
-import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.minikode.apps.databinding.ViewholderAlarmBinding
 import com.minikode.apps.vo.AlarmInfoVo
+import java.util.*
 
 class AlarmViewAdapter(
     private val clickCallback: (AlarmInfoVo) -> Unit,
@@ -23,7 +27,6 @@ class AlarmViewAdapter(
         }
     }) {
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): AlarmViewHolder {
         val viewholderAlarmBinding =
             ViewholderAlarmBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
@@ -41,7 +44,27 @@ class AlarmViewAdapter(
     override fun onBindViewHolder(viewHolder: AlarmViewHolder, position: Int) {
         viewHolder.bind(getItem(position), position)
         viewHolder.binding.executePendingBindings()
+
+        val handler = object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                this@AlarmViewAdapter.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+//                viewHolder.binding.alarmAppTime.invalidate()
+            }
+        }
+
+        val timer = Timer()
+
+        val timerTask = object : TimerTask() {
+            override fun run() {
+                Log.d(TAG, "run: timerTask!!")
+                cancel()
+                handler.sendMessage(handler.obtainMessage())
+            }
+        }
+        timer.schedule(timerTask, 10000)
+
     }
+
 
 //    override fun onItemMove(from_position: Int, to_position: Int): Boolean {
 //        Log.d(TAG, "onItemMove: !!!!!")
