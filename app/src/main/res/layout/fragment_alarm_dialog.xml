@@ -32,6 +32,15 @@
                 android:text="@string/time_picker_radio_once" />
         </RadioGroup>
 
+        <Spinner
+            android:id="@+id/spinner_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/time_picker"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radio_group" />
+
         <TimePicker
             android:id="@+id/time_picker"
             android:layout_width="match_parent"
@@ -40,7 +49,7 @@
             app:layout_constraintBottom_toTopOf="@id/button_linear"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/radio_group">
+            app:layout_constraintTop_toBottomOf="@id/spinner_timer">
 
         </TimePicker>
 
