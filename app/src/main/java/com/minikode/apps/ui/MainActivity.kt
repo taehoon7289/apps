@@ -195,7 +195,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             NavigationUI.setupWithNavController(mainBottomNavView, navController!!)
         }
         // 광고
-//        initAdMob()
+        initAdMob()
     }
 
     private fun initAdMob() {
@@ -218,7 +218,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 // Code to be executed when an ad request fails.
-                Log.d(Companion.TAG, "onAdFailedToLoad: ")
+                Log.d(Companion.TAG, "onAdFailedToLoad: $adError")
             }
 
             override fun onAdImpression() {
