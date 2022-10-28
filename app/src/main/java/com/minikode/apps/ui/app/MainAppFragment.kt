@@ -38,6 +38,10 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
         appListViewModel.reload()
         with(binding) {
 
+            binding.componentToolbar.title.setOnClickListener {
+                (activity as MainActivity).openSupportDialog()
+            }
+
             val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)
             val notificationViewPagerAdapter = NotificationViewPagerAdapter(handlerClickEvent = {
                 if (it.type === NotificationType.GUIDE) {

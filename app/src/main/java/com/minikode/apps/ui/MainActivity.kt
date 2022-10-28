@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isGone
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.android.billingclient.api.*
 import com.google.android.gms.ads.*
 import com.minikode.apps.App
 import com.minikode.apps.BaseActivity
@@ -27,6 +28,7 @@ import com.minikode.apps.repository.LikeRepository
 import com.minikode.apps.repository.UsageStatsRepository
 import com.minikode.apps.ui.alarm.AlarmDialogFragment
 import com.minikode.apps.ui.app.AppViewAdapter
+import com.minikode.apps.ui.support.DonationDialogFragment
 import com.minikode.apps.vo.AlarmInfoVo
 import com.minikode.apps.vo.AppInfoVo
 import dagger.hilt.android.AndroidEntryPoint
@@ -181,11 +183,36 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     }
 
+    private lateinit var billingClient: BillingClient
+
     override fun initView() {
         val mode = usageStatsRepository.checkForPermissionUsageStats()
         if (mode != AppOpsManager.MODE_ALLOWED) {
             usageStatsRepository.isOpenSettingIntent()
         }
+
+        billingClient = BillingClient.newBuilder(this)
+            .setListener(PurchasesUpdatedListener { billingResult, purchases ->
+                //모든 구매 관련 업데이트를 수신한다.
+                Log.d(TAG, "openSupportDialog: 모든 구매 관련 업데이트를 수신한다.")
+                purchasesUpdated(billingResult, purchases)
+            })
+            .enablePendingPurchases()
+            .build()
+
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingServiceDisconnected() {
+                // 연결 실패 시 재시도 로직을 구현.
+                Log.d(TAG, "onBillingServiceDisconnected: ")
+            }
+
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    // 준비 완료가 되면 상품 쿼리를 처리 할 수 있다!
+                    Log.d(TAG, "onBillingSetupFinished: ")
+                }
+            }
+        })
 
         // bottomNavView, fragmentContainerView 연동
         val navHostFragment =
@@ -333,6 +360,74 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     fun addLikes(appInfoVoList: MutableList<AppInfoVo>) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             likeRepository.saveLikes(appInfoVoList)
+        }
+    }
+
+    fun openSupportDialog() {
+
+        querySkuDetails()
+
+        val donationDialogFragment = DonationDialogFragment(
+            clickCallback = {
+                Log.d(TAG, "initView: clickcallback!!!")
+                if (skuDetails != null) {
+                    val flowParams = BillingFlowParams.newBuilder()
+                        .setSkuDetails(skuDetails!!)
+                        .build()
+
+                    val billingResult = billingClient.launchBillingFlow(
+                        this,
+                        flowParams
+                    )
+
+                    //launchBillingFlow()는 BillingResponseCode를 반환한다.
+                    if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                        //오류가 발생 할 경우 여기서 처리
+                    }
+                }
+
+            }
+        )
+        donationDialogFragment.show(
+            supportFragmentManager, donationDialogFragment.tag
+        )
+    }
+
+    private var skuDetails: SkuDetails? = null
+
+    private fun querySkuDetails() {
+        val skuList = ArrayList<String>()
+
+        skuList.add("support_100")
+        skuList.add("support_200")
+
+        val params = SkuDetailsParams.newBuilder().apply {
+            setSkusList(skuList)
+            setType(BillingClient.SkuType.INAPP)        //정기 구독일 경우 BillingClient.SkuType.SUBS
+        }.build()
+
+        billingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
+            // 완료되면 SkuDetails(상품 상세 정보)를 List 형태로 반환한다.
+            Log.d(TAG, "querySkuDetails: billingResult $billingResult")
+            Log.d(TAG, "querySkuDetails: skuDetailsList $skuDetailsList")
+
+            skuDetailsList?.let {
+                skuDetails = skuDetailsList.firstOrNull()
+            }
+
+
+        }
+    }
+
+    private fun purchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+            for (purchase in purchases) {
+                //구매 성공 시 처리
+            }
+        } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
+            // 사용자가 구매를 취소했을 경우 처리
+        } else {
+            // 이외의 오류 처리
         }
     }
 
