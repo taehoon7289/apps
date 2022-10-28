@@ -36,5 +36,6 @@
     <attr name="colorSystemError" format="color"></attr>
     <attr name="colorSystemWarning" format="color"></attr>
     <attr name="colorSystemSuccess" format="color"></attr>
+    <attr name="colorSystemDisabled" format="color"></attr>
 
 </resources>

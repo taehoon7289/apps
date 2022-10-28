@@ -35,6 +35,7 @@
         <item name="colorSystemError">@color/system_error</item>
         <item name="colorSystemWarning">@color/system_warning</item>
         <item name="colorSystemSuccess">@color/system_success</item>
+        <item name="colorSystemDisabled">@color/system_disabled</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
