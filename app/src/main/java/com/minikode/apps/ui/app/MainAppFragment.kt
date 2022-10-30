@@ -30,6 +30,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
     private val notificationListViewModel: NotificationListViewModel by activityViewModels()
     private val appListViewModel: AppListViewModel by activityViewModels()
+    private val donationListViewModel: DonationListViewModel by activityViewModels()
 
     private lateinit var likeAppViewAdapter: AppViewAdapter
 
@@ -38,8 +39,15 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
         appListViewModel.reload()
         with(binding) {
 
-            binding.componentToolbar.title.setOnClickListener {
-                (activity as MainActivity).openSupportDialog()
+            with(componentToolbar) {
+                title.setOnClickListener {
+                    (activity as MainActivity).openSupportDialog()
+                }
+                donationListViewModel.items.observe(this@MainAppFragment) {
+                    if (it.isNotEmpty()) {
+                        textViewDonationValue.text = "후원횟수 : ${it.size}"
+                    }
+                }
             }
 
             val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)

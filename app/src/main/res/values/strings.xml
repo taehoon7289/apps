@@ -28,6 +28,6 @@
     <string name="move_notification_page">알림 페이지로 이동합니다</string>
     <string name="save_like_app">즐겨찾기 추가되었습니다</string>
     <string name="cancel_like_app">즐겨찾기 삭제되었습니다</string>
-    <string name="donation_comment">더 나은 앱 기능과\n환경을 위해 동행해주시는\n후원자님께 마음을 다해 감사의 인사를 전합니다</string>
+    <string name="donation_comment">더 나은 앱 기능과\n앱 개발환경을 위해 동행해주시는\n후원자님께 마음을 다해 감사의 인사를 전합니다</string>
     <string name="donation_button_comment">후원하기</string>
 </resources>

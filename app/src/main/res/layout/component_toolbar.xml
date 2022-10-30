@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ToolbarTheme"
+        app:contentInsetEnd="20dp"
         app:contentInsetStart="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,8 +31,17 @@
                 android:textColor="?attr/colorTitle"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@id/sub_title"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/text_view_donation_value"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_view_donation_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/sub_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/title"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView

@@ -1,10 +1,7 @@
 package com.minikode.apps.di
 
 import com.minikode.apps.NotionApiService
-import com.minikode.apps.repository.AlarmRepository
-import com.minikode.apps.repository.LikeRepository
-import com.minikode.apps.repository.NotificationRepository
-import com.minikode.apps.repository.UsageStatsRepository
+import com.minikode.apps.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,5 +30,8 @@ class RepositoryModule {
     @Singleton
     fun providerUsageStatsRepository() = UsageStatsRepository()
 
+    @Provides
+    @Singleton
+    fun providerDonationRepository() = DonationRepository()
 
 }

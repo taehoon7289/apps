@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.view.isGone
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -24,14 +25,19 @@ import com.minikode.apps.BaseActivity
 import com.minikode.apps.R
 import com.minikode.apps.databinding.ActivityMainBinding
 import com.minikode.apps.repository.AlarmRepository
+import com.minikode.apps.repository.DonationRepository
 import com.minikode.apps.repository.LikeRepository
 import com.minikode.apps.repository.UsageStatsRepository
 import com.minikode.apps.ui.alarm.AlarmDialogFragment
 import com.minikode.apps.ui.app.AppViewAdapter
+import com.minikode.apps.ui.app.DonationListViewModel
 import com.minikode.apps.ui.support.DonationDialogFragment
 import com.minikode.apps.vo.AlarmInfoVo
 import com.minikode.apps.vo.AppInfoVo
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -52,12 +58,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     @Inject
     lateinit var likeRepository: LikeRepository
 
+    @Inject
+    lateinit var donationRepository: DonationRepository
+
     lateinit var notificationActivityResultLambda: ActivityResultLauncher<Intent>
     lateinit var appInfoViewClickListenerLambda: (View, AppInfoVo, Int, AppViewAdapter) -> Unit
     lateinit var appInfoViewLongClickListenerLambda: (View, AppInfoVo, Int) -> Unit
     lateinit var appInfoViewDragListenerLambda: (View, DragEvent, AppInfoVo, Int) -> Unit
     lateinit var checkedChangeListenerLambda: (AlarmInfoVo, Int, Boolean) -> Unit
 
+    private val donationListViewModel: DonationListViewModel by viewModels()
 
     override fun initLambdas() {
         // 알림내용 클릭시 액티비티 이동관련 람다식
@@ -156,9 +166,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                                 alarmRepository.saveAlarm(it)
                             }
                             Toast.makeText(
-                                this,
-                                getString(R.string.confirm_alarm_message),
-                                Toast.LENGTH_SHORT
+                                this, getString(R.string.confirm_alarm_message), Toast.LENGTH_SHORT
                             ).show()
                         },
                         {
@@ -196,9 +204,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 //모든 구매 관련 업데이트를 수신한다.
                 Log.d(TAG, "openSupportDialog: 모든 구매 관련 업데이트를 수신한다.")
                 purchasesUpdated(billingResult, purchases)
-            })
-            .enablePendingPurchases()
-            .build()
+            }).enablePendingPurchases().build()
 
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingServiceDisconnected() {
@@ -323,8 +329,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                             executeDate.add(Calendar.HOUR, 24)
                         }
 
-                        alarmRepository.registerToAlarmManager(
-                            alarmPeriodType = periodType,
+                        alarmRepository.registerToAlarmManager(alarmPeriodType = periodType,
                             label = appInfoVo.label!!,
                             packageName = appInfoVo.packageName!!,
                             iconDrawable = appInfoVo.iconDrawable!!,
@@ -367,27 +372,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         querySkuDetails()
 
-        val donationDialogFragment = DonationDialogFragment(
-            clickCallback = {
-                Log.d(TAG, "initView: clickcallback!!!")
-                if (skuDetails != null) {
-                    val flowParams = BillingFlowParams.newBuilder()
-                        .setSkuDetails(skuDetails!!)
-                        .build()
+        val donationDialogFragment = DonationDialogFragment(clickCallback = {
+            Log.d(TAG, "initView: clickcallback!!!")
+            if (skuDetails != null) {
+                val flowParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetails!!).build()
 
-                    val billingResult = billingClient.launchBillingFlow(
-                        this,
-                        flowParams
-                    )
+                val billingResult = billingClient.launchBillingFlow(
+                    this, flowParams
+                )
 
-                    //launchBillingFlow()는 BillingResponseCode를 반환한다.
-                    if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-                        //오류가 발생 할 경우 여기서 처리
-                    }
+                //launchBillingFlow()는 BillingResponseCode를 반환한다.
+                if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                    //오류가 발생 할 경우 여기서 처리
+                    Toast.makeText(this, "잠시후 다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
-
             }
-        )
+
+        })
         donationDialogFragment.show(
             supportFragmentManager, donationDialogFragment.tag
         )
@@ -419,15 +420,36 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
+    private suspend fun callConsume(purchases: List<Purchase>) {
+        var successCnt = 0
+        for (purchase in purchases) {
+            val consumeParams = ConsumeParams.newBuilder()
+                .setPurchaseToken(purchase.purchaseToken)
+                .build()
+            val result = billingClient.consumePurchase(consumeParams)
+            if (result.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                successCnt++
+            }
+        }
+        if (successCnt == purchases.size) {
+            donationRepository.saveDonation(purchases)
+            Toast.makeText(this, "후원 감사합니다", Toast.LENGTH_SHORT).show()
+            donationListViewModel.reload()
+        }
+
+    }
+
     private fun purchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-            for (purchase in purchases) {
-                //구매 성공 시 처리
+            CoroutineScope(Dispatchers.Main).launch {
+                callConsume(purchases)
             }
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
             // 사용자가 구매를 취소했을 경우 처리
+            Toast.makeText(this, "후원 취소되었습니다", Toast.LENGTH_SHORT).show()
         } else {
             // 이외의 오류 처리
+            Toast.makeText(this, "잠시후 다시 시도해주세요", Toast.LENGTH_SHORT).show()
         }
     }
 
