@@ -78,50 +78,41 @@ class AlarmDialogFragment(
                     id: Long
                 ) {
                     val nowTime = Calendar.getInstance()
-                    val nowHour = nowTime.get(Calendar.HOUR_OF_DAY)
-                    val nowMinute = nowTime.get(Calendar.MINUTE)
+
                     when (position) {
                         1 -> {
-                            timePicker.hour = nowHour
-                            timePicker.minute = nowMinute.plus(1)
+                            nowTime.add(Calendar.MINUTE, 1)
                         }
                         2 -> {
-                            timePicker.hour = nowHour
-                            timePicker.minute = nowMinute.plus(2)
+                            nowTime.add(Calendar.MINUTE, 2)
                         }
                         3 -> {
-                            timePicker.hour = nowHour
-                            timePicker.minute = nowMinute.plus(5)
+                            nowTime.add(Calendar.MINUTE, 5)
                         }
                         4 -> {
-                            timePicker.hour = nowHour
-                            timePicker.minute = nowMinute.plus(10)
+                            nowTime.add(Calendar.MINUTE, 10)
                         }
                         5 -> {
-                            timePicker.hour = nowHour
-                            timePicker.minute = nowMinute.plus(30)
+                            nowTime.add(Calendar.MINUTE, 30)
                         }
                         6 -> {
-                            timePicker.hour = nowHour.plus(1)
-                            timePicker.minute = nowMinute
+                            nowTime.add(Calendar.HOUR_OF_DAY, 1)
                         }
                         7 -> {
-                            timePicker.hour = nowHour.plus(2)
-                            timePicker.minute = nowMinute
+                            nowTime.add(Calendar.HOUR_OF_DAY, 2)
                         }
                         8 -> {
-                            timePicker.hour = nowHour.plus(5)
-                            timePicker.minute = nowMinute
+                            nowTime.add(Calendar.HOUR_OF_DAY, 5)
                         }
                         9 -> {
-                            timePicker.hour = nowHour.plus(10)
-                            timePicker.minute = nowMinute
+                            nowTime.add(Calendar.HOUR_OF_DAY, 10)
                         }
-                        else -> {
-                            timePicker.hour = nowHour
-                            timePicker.minute = nowMinute
-                        }
+                        else -> {}
                     }
+                    val nowHour = nowTime.get(Calendar.HOUR_OF_DAY)
+                    val nowMinute = nowTime.get(Calendar.MINUTE)
+                    timePicker.hour = nowHour
+                    timePicker.minute = nowMinute
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {

@@ -35,8 +35,8 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
     private lateinit var likeAppViewAdapter: AppViewAdapter
 
     override fun initView() {
-        notificationListViewModel.reload()
-        appListViewModel.reload()
+//        notificationListViewModel.reload()
+//        appListViewModel.reload()
         with(binding) {
 
             val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)
@@ -167,6 +167,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 // 안의 스크롤효과 제거
                 recyclerView.isNestedScrollingEnabled = false
                 appListViewModel.likeAppItems.observe(this@MainAppFragment) {
+                    Log.d(TAG, "initView: appListViewModel.likeAppItems.observe ${it.size}")
                     recyclerView.isGone = it.isEmpty()
                     linearLayoutAppEmpty.isGone = it.isNotEmpty()
                     likeAppViewAdapter.submitList(it)

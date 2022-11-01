@@ -44,7 +44,8 @@
             <!--                app:layout_constraintStart_toEndOf="@id/title"-->
             <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-            <ImageView
+            <ImageButton
+                android:scaleType="fitCenter"
                 android:id="@+id/image_view_donation"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

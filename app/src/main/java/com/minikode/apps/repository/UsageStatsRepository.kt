@@ -347,16 +347,10 @@ class UsageStatsRepository {
         }
         return when (orderType) {
             OrderType.RECENT_DESC -> {
-                items.filter {
-                    (it.lastTimeStamp ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp
-                }.sortedByDescending { it.lastTimeStamp }.toMutableList()
+                items.sortedByDescending { it.lastTimeStamp ?: 0L }.toMutableList()
             }
             OrderType.OFTEN_DESC -> {
-                items.filter {
-                    (it.lastTimeStamp
-                        ?: 0L) > 0L && it.firstTimeStamp != it.lastTimeStamp && (it.launchCount
-                        ?: 0L) > 0
-                }.sortedByDescending { it.launchCount }.toMutableList()
+                items.sortedByDescending { it.totalTimeInForeground ?: 0L }.toMutableList()
             }
             OrderType.NAME_ASC -> {
                 items.sortedBy {

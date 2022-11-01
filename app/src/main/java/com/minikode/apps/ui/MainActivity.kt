@@ -22,6 +22,7 @@ import com.android.billingclient.api.*
 import com.google.android.gms.ads.*
 import com.minikode.apps.App
 import com.minikode.apps.BaseActivity
+import com.minikode.apps.BuildConfig
 import com.minikode.apps.R
 import com.minikode.apps.databinding.ActivityMainBinding
 import com.minikode.apps.repository.AlarmRepository
@@ -29,6 +30,7 @@ import com.minikode.apps.repository.DonationRepository
 import com.minikode.apps.repository.LikeRepository
 import com.minikode.apps.repository.UsageStatsRepository
 import com.minikode.apps.ui.alarm.AlarmDialogFragment
+import com.minikode.apps.ui.app.AppListViewModel
 import com.minikode.apps.ui.app.AppViewAdapter
 import com.minikode.apps.ui.app.DonationListViewModel
 import com.minikode.apps.ui.support.DonationDialogFragment
@@ -69,6 +71,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     lateinit var checkedChangeListenerLambda: (AlarmInfoVo, Int, Boolean) -> Unit
 
     private val donationListViewModel: DonationListViewModel by viewModels()
+    private val appListViewModel: AppListViewModel by viewModels()
 
     override fun initLambdas() {
         // 알림내용 클릭시 액티비티 이동관련 람다식
@@ -196,6 +199,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun initView() {
 
+        Log.d(TAG, "initView: BuildConfig.DEBUG ${BuildConfig.DEBUG}")
 
         with(binding.componentToolbar) {
             model = NavigationInfoVo(
@@ -321,6 +325,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             appInfoVo.likeFlag = false
             Toast.makeText(this, getString(R.string.cancel_like_app), Toast.LENGTH_SHORT).show()
         }
+        appListViewModel.reloadLikeAppItems()
         return appInfoVo
     }
 

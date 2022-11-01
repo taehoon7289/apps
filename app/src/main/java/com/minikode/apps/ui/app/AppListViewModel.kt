@@ -64,7 +64,8 @@ class AppListViewModel @Inject constructor(
     val likeAppItems: LiveData<MutableList<AppInfoVo>>
         get() = _likeAppItems
 
-    private var _topicItems: MutableLiveData<MutableList<TopicInfoVo>> = MutableLiveData()
+    private var _topicItems: MutableLiveData<MutableList<TopicInfoVo>> =
+        MutableLiveData(getTopics())
 
     val topicItems: LiveData<MutableList<TopicInfoVo>>
         get() = _topicItems
@@ -95,6 +96,10 @@ class AppListViewModel @Inject constructor(
             TopicType.LIKE_APP,
             OrderType.RECENT_DESC,
         )
+        getTopics()
+    }
+
+    fun getTopics(): MutableList<TopicInfoVo> {
         val topics = mutableListOf<TopicInfoVo>()
         topics.add(
             TopicInfoVo(
@@ -152,7 +157,7 @@ class AppListViewModel @Inject constructor(
             )
         )
 
-        _topicItems.value = topics
+        return topics
     }
 
     fun dragEnter(item: AppInfoVo, oldPosition: Int, newPosition: Int) {

@@ -49,6 +49,25 @@ class NotificationRepository(private val service: NotionApiService) {
                             viewFlag = viewFlag,
                         )
                         notificationInfoVoList.add(notificationInfoVo)
+                    } else {
+                        if (it == 0 && type == NotificationType.VERSION.toString()) {
+                            val notificationInfoVo = NotificationInfoVo(
+                                id = id.toLong(),
+                                type = NotificationType.valueOf(type!!),
+                                title = title,
+                                createDate = createDate,
+                                url = url,
+                                viewFlag = viewFlag,
+                            )
+                            val lastVersion = notificationInfoVo.title
+
+
+
+
+
+                        } else {
+
+                        }
                     }
                 }
             }
