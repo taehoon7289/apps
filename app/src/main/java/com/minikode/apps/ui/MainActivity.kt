@@ -206,13 +206,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     0.6f, subTitle.textColors.defaultColor
                 )
             )
-            title.setOnClickListener {
+            imageViewDonation.setOnClickListener {
                 openSupportDialog()
             }
             donationListViewModel.items.observe(this@MainActivity) {
-                if (it.isNotEmpty()) {
-                    textViewDonationValue.text = "후원횟수 : ${it.size}"
-                }
+//                if (it.isNotEmpty()) {
+//                    subTitle.text = "후원횟수 : ${it.size}"
+//                    Toast.makeText(this@MainActivity, "후원횟수 : ${it.size}", Toast.LENGTH_SHORT)
+//                }
             }
         }
 
@@ -445,9 +446,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private suspend fun callConsume(purchases: List<Purchase>) {
         var successCnt = 0
         for (purchase in purchases) {
-            val consumeParams = ConsumeParams.newBuilder()
-                .setPurchaseToken(purchase.purchaseToken)
-                .build()
+            val consumeParams =
+                ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build()
             val result = billingClient.consumePurchase(consumeParams)
             if (result.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 successCnt++
