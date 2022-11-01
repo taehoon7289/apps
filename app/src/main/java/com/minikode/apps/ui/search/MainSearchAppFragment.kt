@@ -9,8 +9,6 @@ import com.minikode.apps.code.OrderType
 import com.minikode.apps.code.TopicType
 import com.minikode.apps.databinding.FragmentMainSearchAppBinding
 import com.minikode.apps.ui.MainActivity
-import com.minikode.apps.util.Util
-import com.minikode.apps.vo.NavigationInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,20 +27,6 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
         val orderType = arguments?.get("orderType") as OrderType
 
         with(binding) {
-
-            with(componentToolbar) {
-
-                model = NavigationInfoVo(
-                    title = "${topicType.label}검색",
-                    topicType = topicType,
-                    orderType = orderType,
-                )
-                subTitle.setTextColor(
-                    Util.getColorWithAlpha(
-                        0.6f, subTitle.textColors.defaultColor
-                    )
-                )
-            }
 
             with(searchView) {
                 setOnQueryTextListener(object : SearchView.OnQueryTextListener {

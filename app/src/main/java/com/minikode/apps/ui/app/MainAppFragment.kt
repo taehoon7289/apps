@@ -39,17 +39,6 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
         appListViewModel.reload()
         with(binding) {
 
-            with(componentToolbar) {
-                title.setOnClickListener {
-                    (activity as MainActivity).openSupportDialog()
-                }
-                donationListViewModel.items.observe(this@MainAppFragment) {
-                    if (it.isNotEmpty()) {
-                        textViewDonationValue.text = "후원횟수 : ${it.size}"
-                    }
-                }
-            }
-
             val appViewHorizontalDecoration = AppViewHorizontalDecoration(5)
             val notificationViewPagerAdapter = NotificationViewPagerAdapter(handlerClickEvent = {
                 if (it.type === NotificationType.GUIDE) {
@@ -74,16 +63,16 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
 
 
-            with(componentToolbar) {
-                model = NavigationInfoVo(
-                    title = getString(R.string.menu_title_app),
-                )
-                subTitle.setTextColor(
-                    Util.getColorWithAlpha(
-                        0.6f, subTitle.textColors.defaultColor
-                    )
-                )
-            }
+//            with(componentToolbar) {
+//                model = NavigationInfoVo(
+//                    title = getString(R.string.menu_title_app),
+//                )
+//                subTitle.setTextColor(
+//                    Util.getColorWithAlpha(
+//                        0.6f, subTitle.textColors.defaultColor
+//                    )
+//                )
+//            }
 
             with(componentNotification) {
 

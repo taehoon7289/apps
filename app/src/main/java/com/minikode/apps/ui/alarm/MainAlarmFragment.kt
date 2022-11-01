@@ -21,18 +21,6 @@ class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>() {
         alarmListViewModel.reload()
 
         with(binding) {
-            with(componentToolbar) {
-                model = NavigationInfoVo(
-                    title = getString(R.string.menu_title_alarm),
-                )
-                subTitle.setTextColor(
-                    Util.getColorWithAlpha(
-                        0.6f, subTitle.textColors.defaultColor
-                    )
-                )
-            }
-
-
 
             with(alarmRecyclerView) {
 

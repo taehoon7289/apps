@@ -34,6 +34,7 @@ import com.minikode.apps.ui.app.DonationListViewModel
 import com.minikode.apps.ui.support.DonationDialogFragment
 import com.minikode.apps.vo.AlarmInfoVo
 import com.minikode.apps.vo.AppInfoVo
+import com.minikode.apps.vo.NavigationInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -194,6 +195,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private lateinit var billingClient: BillingClient
 
     override fun initView() {
+
+
+        with(binding.componentToolbar) {
+            model = NavigationInfoVo(
+                title = getString(R.string.app_label),
+            )
+            subTitle.setTextColor(
+                com.minikode.apps.util.Util.getColorWithAlpha(
+                    0.6f, subTitle.textColors.defaultColor
+                )
+            )
+            title.setOnClickListener {
+                openSupportDialog()
+            }
+            donationListViewModel.items.observe(this@MainActivity) {
+                if (it.isNotEmpty()) {
+                    textViewDonationValue.text = "후원횟수 : ${it.size}"
+                }
+            }
+        }
+
         val mode = usageStatsRepository.checkForPermissionUsageStats()
         if (mode != AppOpsManager.MODE_ALLOWED) {
             usageStatsRepository.isOpenSettingIntent()
