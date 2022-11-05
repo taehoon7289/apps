@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.minikode.apps.R
 import com.minikode.apps.code.AlarmPeriodType
@@ -19,16 +20,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class AlarmDialogFragment(
-    private val saveCallback: (AlarmPeriodType, Int, Int) -> Unit
-) : BottomSheetDialogFragment() {
-
+class AlarmDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentAlarmDialogBinding
 
     private var alarmPeriodType: AlarmPeriodType = AlarmPeriodType.ONCE
     private var hourOfDay: Int = 0
     private var minute: Int = 0
+
+    private lateinit var saveCallback: (AlarmPeriodType, Int, Int) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -158,7 +158,29 @@ class AlarmDialogFragment(
 
     }
 
+
+    private fun setSaveCallback(callback: (AlarmPeriodType, Int, Int) -> Unit) {
+        saveCallback = callback
+    }
+
+    override fun onDestroyView() {
+        this.dismissAllowingStateLoss()
+        super.onDestroyView()
+    }
+
     companion object {
+
         private const val TAG = "AlarmDialogFragment"
+
+        fun show(
+            callback: (AlarmPeriodType, Int, Int) -> Unit,
+            supportFragmentManager: FragmentManager
+        ) {
+            val alarmDialogFragment = AlarmDialogFragment()
+            alarmDialogFragment.saveCallback = callback
+            alarmDialogFragment.show(supportFragmentManager, "")
+        }
+
+
     }
 }

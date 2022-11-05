@@ -20,10 +20,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.android.billingclient.api.*
 import com.google.android.gms.ads.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.minikode.apps.App
 import com.minikode.apps.BaseActivity
 import com.minikode.apps.BuildConfig
 import com.minikode.apps.R
+import com.minikode.apps.code.AlarmPeriodType
 import com.minikode.apps.databinding.ActivityMainBinding
 import com.minikode.apps.repository.AlarmRepository
 import com.minikode.apps.repository.DonationRepository
@@ -343,8 +345,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         if (hasPermission) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val alarmDialogFragment =
-                    AlarmDialogFragment(saveCallback = { periodType, hourOfDay, minute ->
+//                val alarmDialogFragment = AlarmDialogFragment()
+
+                val saveCallback: (AlarmPeriodType, Int, Int) -> Unit =
+                    { periodType, hourOfDay, minute ->
 
                         val nowDate = Calendar.getInstance()
                         val executeDate = Calendar.getInstance()
@@ -382,10 +386,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                                 ).show()
                             })
 
-                    })
-                alarmDialogFragment.show(
-                    supportFragmentManager, alarmDialogFragment.tag
-                )
+                    }
+//                alarmDialogFragment.setSaveCallback(saveCallback)
+//                alarmDialogFragment.show(
+//                    supportFragmentManager, alarmDialogFragment.tag
+//                )
+
+                AlarmDialogFragment.show(saveCallback, supportFragmentManager)
             }
         }
     }
