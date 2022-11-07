@@ -128,31 +128,39 @@ class AlarmRepository {
         val alarmEntities = selectAlarm()
         Log.d(TAG, "getItems: alarmEntities $alarmEntities")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return@runBlocking alarmEntities.map {
-                val packageName = it.packageName!!
-                val packageManager = App.instance.packageManager
-                val iconDrawable = packageManager.getApplicationIcon(packageName)
-                val label =
-                    packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
+            val packageManager = App.instance.packageManager
+            return@runBlocking alarmEntities
+                .filter {
+                    val intent = packageManager.getLaunchIntentForPackage(it.packageName!!)
+                    if (intent != null) {
+                        true
+                    } else {
+                        deleteAlarm(it.alarmNo!!)
+                        false
+                    }
+                }
+                .map {
+                    val packageName = it.packageName!!
+                    val iconDrawable = packageManager.getApplicationIcon(packageName)
+                    val label =
+                        packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
+                    val executeDate = Calendar.getInstance()
+                    executeDate.timeInMillis = it.executeDate!!
+                    val createDate = Calendar.getInstance()
+                    createDate.timeInMillis = it.createDate!!
 
-
-                val executeDate = Calendar.getInstance()
-                executeDate.timeInMillis = it.executeDate!!
-                val createDate = Calendar.getInstance()
-                createDate.timeInMillis = it.createDate!!
-
-                val alarmInfoVo = AlarmInfoVo(
-                    alarmNo = it.alarmNo,
-                    requestCode = it.requestCode,
-                    executeDate = executeDate,
-                    createDate = createDate,
-                    periodType = AlarmPeriodType.valueOf(it.periodType!!),
-                    packageName = packageName,
-                    iconDrawable = iconDrawable,
-                    label = label.toString(),
-                )
-                alarmInfoVo
-            }.toMutableList()
+                    val alarmInfoVo = AlarmInfoVo(
+                        alarmNo = it.alarmNo,
+                        requestCode = it.requestCode,
+                        executeDate = executeDate,
+                        createDate = createDate,
+                        periodType = AlarmPeriodType.valueOf(it.periodType!!),
+                        packageName = packageName,
+                        iconDrawable = iconDrawable,
+                        label = label.toString(),
+                    )
+                    alarmInfoVo
+                }.toMutableList()
         }
         return@runBlocking mutableListOf<AlarmInfoVo>()
     }

@@ -277,25 +277,32 @@ class UsageStatsRepository {
         val likeEntities = selectLike()
         Log.d(TAG, "getItems: likeEntities $likeEntities")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return@runBlocking likeEntities.map {
-                val packageName = it.packageName!!
-                val packageManager = App.instance.packageManager
-                val iconDrawable = packageManager.getApplicationIcon(packageName)
-                val label =
-                    packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
+            val packageManager = App.instance.packageManager
+            return@runBlocking likeEntities.filter {
+                    val intent = packageManager.getLaunchIntentForPackage(it.packageName!!)
+                    if (intent != null) {
+                        true
+                    } else {
+                        deleteLike(it.packageName!!)
+                        false
+                    }
+                }.map {
+                    val packageName = it.packageName!!
+                    val iconDrawable = packageManager.getApplicationIcon(packageName)
+                    val label =
+                        packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
+                    val createDate = Calendar.getInstance()
+                    createDate.timeInMillis = it.createDate!!
 
-                val createDate = Calendar.getInstance()
-                createDate.timeInMillis = it.createDate!!
-
-                val likeInfoVo = LikeInfoVo(
-                    likeNo = it.likeNo,
-                    createDate = createDate,
-                    packageName = packageName,
-                    iconDrawable = iconDrawable,
-                    label = label.toString(),
-                )
-                likeInfoVo
-            }.toMutableList()
+                    val likeInfoVo = LikeInfoVo(
+                        likeNo = it.likeNo,
+                        createDate = createDate,
+                        packageName = packageName,
+                        iconDrawable = iconDrawable,
+                        label = label.toString(),
+                    )
+                    likeInfoVo
+                }.toMutableList()
         }
         return@runBlocking mutableListOf<LikeInfoVo>()
     }
@@ -303,6 +310,11 @@ class UsageStatsRepository {
     private suspend fun selectLike() =
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             baseDb.likeDao().findAllSeqAsc()
+        }
+
+    private suspend fun deleteLike(packageName: String) =
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            baseDb.likeDao().deleteByPackageName(packageName)
         }
 
     fun createAppInfoList() {
