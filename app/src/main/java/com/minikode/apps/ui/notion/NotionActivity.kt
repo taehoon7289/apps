@@ -1,7 +1,6 @@
 package com.minikode.apps.ui.notion
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -51,10 +50,5 @@ class NotionActivity : BaseActivity<ActivityNotionBinding>() {
             }
         }
     }
-
-    companion object {
-        private const val TAG = "NotionActivity"
-    }
-
 }
 

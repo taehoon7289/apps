@@ -27,7 +27,4 @@ class DonationListViewModel @Inject constructor(private val donationRepository: 
         _items.value = donationRepository.findDonation()
     }
 
-    companion object {
-        private const val TAG = "DonationListViewModel"
-    }
 }

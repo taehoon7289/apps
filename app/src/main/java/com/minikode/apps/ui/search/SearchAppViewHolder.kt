@@ -37,9 +37,4 @@ class SearchAppViewHolder(
 
     }
 
-    companion object {
-        private const val TAG = "SearchAppViewHolder"
-    }
-
-
 }

@@ -10,9 +10,6 @@ import kotlinx.coroutines.*
 import java.util.*
 
 class LikeRepository {
-    companion object {
-        private const val TAG = "LikeRepository"
-    }
 
     private val baseDb = BaseDatabase.getDatabase(App.instance)
 

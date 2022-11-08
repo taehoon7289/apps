@@ -62,8 +62,4 @@ class SearchAppViewAdapter(
 //        Toast.makeText(App.instance, "RightClick", Toast.LENGTH_SHORT).show()
 //    }
 
-    companion object {
-        private const val TAG = "SearchAppViewAdapter"
-    }
-
 }

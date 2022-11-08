@@ -5,7 +5,6 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.AppOpsManager
 import android.content.Intent
-import android.util.Log
 import com.minikode.apps.BaseActivity
 import com.minikode.apps.R
 import com.minikode.apps.databinding.ActivitySplashBinding
@@ -81,9 +80,4 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         startActivity(intent)
         finish()
     }
-
-    companion object {
-        private const val TAG = "SplashActivity"
-    }
-
 }

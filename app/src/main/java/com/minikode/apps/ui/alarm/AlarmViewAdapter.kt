@@ -3,7 +3,6 @@ package com.minikode.apps.ui.alarm
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -83,9 +82,5 @@ class AlarmViewAdapter(
 //    override fun onRightClick(position: Int, viewHolder: RecyclerView.ViewHolder?) {
 //        Toast.makeText(App.instance, "RightClick", Toast.LENGTH_SHORT).show()
 //    }
-
-    companion object {
-        private const val TAG = "AlarmViewAdapter"
-    }
 
 }

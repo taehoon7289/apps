@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import com.minikode.apps.App
@@ -20,9 +19,6 @@ import timber.log.Timber
 import java.util.*
 
 class AlarmRepository {
-    companion object {
-        private const val TAG = "AlarmRepository"
-    }
 
     private val baseDb = BaseDatabase.getDatabase(App.instance)
 

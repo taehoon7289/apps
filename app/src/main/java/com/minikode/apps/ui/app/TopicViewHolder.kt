@@ -2,7 +2,6 @@ package com.minikode.apps.ui.app
 
 import android.annotation.SuppressLint
 import android.graphics.PointF
-import android.util.Log
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import com.minikode.apps.R
@@ -69,10 +68,5 @@ class TopicViewHolder(
         }
 
     }
-
-    companion object {
-        private const val TAG = "TopicViewHolder"
-    }
-
 
 }

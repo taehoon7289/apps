@@ -6,8 +6,6 @@ import com.minikode.apps.BaseFragment
 import com.minikode.apps.R
 import com.minikode.apps.databinding.FragmentMainAlarmBinding
 import com.minikode.apps.ui.MainActivity
-import com.minikode.apps.util.Util
-import com.minikode.apps.vo.NavigationInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,7 +54,4 @@ class MainAlarmFragment : BaseFragment<FragmentMainAlarmBinding>() {
 
     }
 
-    companion object {
-        private const val TAG = "MainAlarmFragment"
-    }
 }

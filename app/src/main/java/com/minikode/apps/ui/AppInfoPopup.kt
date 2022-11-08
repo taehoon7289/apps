@@ -1,6 +1,5 @@
 package com.minikode.apps.ui
 
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -82,8 +81,4 @@ class AppInfoPopup(
         super.showAsDropDown(anchorView, -x, -y, Gravity.NO_GRAVITY)
     }
 
-
-    companion object {
-        private const val TAG = "AppInfoPopup"
-    }
 }

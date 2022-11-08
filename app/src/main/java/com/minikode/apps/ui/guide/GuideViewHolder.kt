@@ -17,8 +17,4 @@ class GuideViewHolder(
 
     }
 
-    companion object {
-        private const val TAG = "GuideViewHolder"
-    }
-
 }

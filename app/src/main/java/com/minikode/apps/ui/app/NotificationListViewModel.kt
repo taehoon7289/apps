@@ -26,8 +26,4 @@ class NotificationListViewModel @Inject constructor(private val notificationRepo
     fun reload() = CoroutineScope(Dispatchers.Main).launch {
         _items.value = notificationRepository.getNotificationList()
     }
-
-    companion object {
-        private const val TAG = "NotificationListViewMod"
-    }
 }

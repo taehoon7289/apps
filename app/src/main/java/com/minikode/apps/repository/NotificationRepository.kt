@@ -1,7 +1,6 @@
 package com.minikode.apps.repository
 
 import android.os.Build
-import android.util.Log
 import com.minikode.apps.NotionApiService
 import com.minikode.apps.code.NotificationType
 import com.minikode.apps.util.Util
@@ -76,12 +75,6 @@ class NotificationRepository(private val service: NotionApiService) {
 
         return notificationInfoVoList
 
-//        throw RuntimeException()
-
-    }
-
-    companion object {
-        private const val TAG = "NotificationRepository"
     }
 
 }

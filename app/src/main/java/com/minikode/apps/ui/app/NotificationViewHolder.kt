@@ -28,8 +28,4 @@ class NotificationViewHolder(
 
     }
 
-    companion object {
-        private const val TAG = "NotificationViewHolder"
-    }
-
 }

@@ -113,10 +113,5 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
 
         }
     }
-
-    companion object {
-        private const val TAG = "GuideActivity"
-    }
-
 }
 

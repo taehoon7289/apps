@@ -36,9 +36,4 @@ class GuideViewPagerAdapter :
         viewHolder.bind(getItem(position))
         viewHolder.binding.executePendingBindings()
     }
-
-    companion object {
-        private const val TAG = "GuideViewPagerAdapter"
-    }
-
 }

@@ -2,7 +2,6 @@ package com.minikode.apps.ui.alarm
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -170,8 +169,6 @@ class AlarmDialogFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-
-        private const val TAG = "AlarmDialogFragment"
 
         fun show(
             callback: (AlarmPeriodType, Int, Int) -> Unit,

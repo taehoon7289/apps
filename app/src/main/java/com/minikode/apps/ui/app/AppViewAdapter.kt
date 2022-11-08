@@ -46,8 +46,4 @@ class AppViewAdapter(
         viewHolder.binding.executePendingBindings()
     }
 
-    companion object {
-        private const val TAG = "AppViewAdapter"
-    }
-
 }

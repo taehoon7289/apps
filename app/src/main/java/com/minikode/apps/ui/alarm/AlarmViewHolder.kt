@@ -43,9 +43,4 @@ class AlarmViewHolder(
 
     }
 
-    companion object {
-        private const val TAG = "AlarmViewHolder"
-    }
-
-
 }

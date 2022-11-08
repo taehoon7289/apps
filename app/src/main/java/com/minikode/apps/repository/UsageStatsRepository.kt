@@ -10,7 +10,6 @@ import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Process
 import android.provider.Settings
-import android.util.Log
 import com.minikode.apps.App
 import com.minikode.apps.code.OrderType
 import com.minikode.apps.code.TopicType
@@ -27,10 +26,6 @@ import java.lang.reflect.Field
 import java.util.*
 
 class UsageStatsRepository {
-
-    companion object {
-        private const val TAG = "UsageStatsRepository"
-    }
 
     private lateinit var categoryAppItems: MutableList<AppInfoVo>
     private lateinit var gameAppItems: MutableList<AppInfoVo>

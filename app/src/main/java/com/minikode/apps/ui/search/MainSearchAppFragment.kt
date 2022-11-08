@@ -1,6 +1,5 @@
 package com.minikode.apps.ui.search
 
-import android.util.Log
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import com.minikode.apps.BaseFragment
@@ -85,9 +84,5 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
         TopicType.GAME_APP -> searchAppListViewModel.gameAppItems
         TopicType.ALL_APP -> searchAppListViewModel.allAppItems
         TopicType.LIKE_APP -> searchAppListViewModel.likeAppItems
-    }
-
-    companion object {
-        private const val TAG = "MainSearchAppFragment"
     }
 }

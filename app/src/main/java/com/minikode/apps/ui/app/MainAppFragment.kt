@@ -1,7 +1,6 @@
 package com.minikode.apps.ui.app
 
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
@@ -20,7 +19,6 @@ import com.minikode.apps.ui.MainActivity
 import com.minikode.apps.ui.guide.GuideActivity
 import com.minikode.apps.ui.notion.NotionActivity
 import com.minikode.apps.util.Util
-import com.minikode.apps.vo.NavigationInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -189,10 +187,5 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
 
 
     }
-
-    companion object {
-        private const val TAG = "MainAppFragment"
-    }
-
 
 }

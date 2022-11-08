@@ -8,9 +8,6 @@ import kotlinx.coroutines.*
 import java.util.*
 
 class DonationRepository {
-    companion object {
-        private const val TAG = "DonationRepository"
-    }
 
     private val baseDb = BaseDatabase.getDatabase(App.instance)
 
