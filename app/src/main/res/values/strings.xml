@@ -33,4 +33,5 @@
     <string name="donation_confirm_comment">후원 감사합니다</string>
     <string name="donation_cancel_comment">후원 취소되었습니다</string>
     <string name="service_error">잠시후 다시 시도해주세요</string>
+    <string name="version_update_comment">업데이트 하시겠습니까?</string>
 </resources>

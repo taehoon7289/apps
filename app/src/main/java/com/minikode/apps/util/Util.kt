@@ -118,6 +118,73 @@ class Util {
 
         }
 
+        /**
+         * 버전 형식 만족하는지 체크
+         */
+        fun checkVersionForm(versionText: String): Boolean {
+            if (versionText.isEmpty()) {
+                return false
+            }
+            val splitVersion = versionText.split("\\.".toRegex()).toMutableList()
+            return if (splitVersion.size != 3) {
+                false
+            } else splitVersion.all { str ->
+                var n = 0
+                n = try {
+                    str.toInt()
+                } catch (e: NumberFormatException) {
+                    return@all false
+                }
+                n >= 0
+            }
+        }
+
+        fun isNumber(s: String?): Boolean {
+            return if (s.isNullOrEmpty()) false else s.all { Character.isDigit(it) }
+        }
+
+        fun checkLastVersion(appVersion: String, serverAppVersion: String): Boolean {
+            if (!checkVersionForm(appVersion)) {
+                return false
+            }
+            if (!checkVersionForm(serverAppVersion)) {
+                return false
+            }
+            val splitAppVersion = appVersion.split("\\.".toRegex()).toMutableList()
+            val splitServerAppVersion = serverAppVersion.split("\\.".toRegex()).toMutableList()
+            for (i in 0..2) {
+                if (!isNumber(splitAppVersion[i]) && !isNumber(splitServerAppVersion[i])) {
+                    return false
+                }
+//                val userValue = splitAppVersion[i].toInt()
+//                val serverValue = splitServerAppVersion[i].toInt()
+//                Timber.d("userValue $userValue")
+//                Timber.d("serverValue $serverValue")
+//                if (serverValue > userValue) {
+//                    return false
+//                }
+//                continue
+            }
+
+            val appServerMajorNumber = splitServerAppVersion[0].padStart(6, '0')
+            val appServerPatchNumber = splitServerAppVersion[1].padStart(6, '0')
+            val appServerMinorNumber = splitServerAppVersion[2].padStart(6, '0')
+
+            val appMajorNumber = splitAppVersion[0].padStart(6, '0')
+            val appPatchNumber = splitAppVersion[1].padStart(6, '0')
+            val appMinorNumber = splitAppVersion[2].padStart(6, '0')
+
+            val serverVersionName =
+                appServerMajorNumber.plus(appServerPatchNumber.plus(appServerMinorNumber))
+            val appVersionName = appMajorNumber.plus(appPatchNumber.plus(appMinorNumber))
+
+            if (serverVersionName > appVersionName) {
+                return false
+            }
+
+            return true
+        }
+
         private const val TAG = "Util"
         private const val MAX_LEN = 2000
     }

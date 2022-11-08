@@ -53,8 +53,6 @@ class MainActivityViewModel @Inject constructor(
                         App.instance.showToast(application.getString(R.string.permission_alarm_message))
                     })
             }
-
-
         }
 
 }

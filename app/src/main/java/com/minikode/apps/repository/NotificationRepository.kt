@@ -1,6 +1,7 @@
 package com.minikode.apps.repository
 
 import android.os.Build
+import com.minikode.apps.BuildConfig
 import com.minikode.apps.NotionApiService
 import com.minikode.apps.code.NotificationType
 import com.minikode.apps.util.Util
@@ -8,7 +9,11 @@ import com.minikode.apps.vo.NotificationInfoVo
 import timber.log.Timber
 
 
-class NotificationRepository(private val service: NotionApiService) {
+class NotificationRepository(
+    private val service: NotionApiService
+) {
+
+    var versionInfoVo: NotificationInfoVo? = null
 
     suspend fun getNotificationList(): MutableList<NotificationInfoVo> {
 
@@ -59,12 +64,31 @@ class NotificationRepository(private val service: NotionApiService) {
                                 url = url,
                                 viewFlag = viewFlag,
                             )
-                            val lastVersion = notificationInfoVo.title
+                            val serverAppVersion = notificationInfoVo.title
 
+                            if (serverAppVersion?.isNotEmpty() == true) {
 
+                                if (!Util.checkLastVersion(
+                                        BuildConfig.VERSION_NAME,
+                                        serverAppVersion
+                                    )
+                                ) {
+                                    versionInfoVo = NotificationInfoVo(
+                                        id = id.toLong(),
+                                        type = NotificationType.valueOf(type!!),
+                                        title = title,
+                                        createDate = createDate,
+                                        url = url,
+                                        viewFlag = viewFlag,
+                                    )
 
+                                } else {
 
+                                }
 
+                            } else {
+
+                            }
                         } else {
 
                         }

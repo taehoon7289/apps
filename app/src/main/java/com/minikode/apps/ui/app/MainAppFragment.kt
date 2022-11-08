@@ -15,6 +15,7 @@ import com.minikode.apps.code.OrderType
 import com.minikode.apps.code.TopicType
 import com.minikode.apps.databinding.FragmentMainAppBinding
 import com.minikode.apps.ui.MainActivity
+import com.minikode.apps.ui.VersionDialog
 import com.minikode.apps.ui.guide.GuideActivity
 import com.minikode.apps.ui.notion.NotionActivity
 import com.minikode.apps.util.Util
@@ -49,7 +50,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                         val intent =
                             Intent(this@MainAppFragment.activity, NotionActivity::class.java)
                         intent.putExtra("url", it.url)
-                        (activity as MainActivity).notificationActivityResultLambda.launch(intent)
+                        (activity as MainActivity).activityResultLambda.launch(intent)
                         App.instance.showToast(getString(R.string.move_notification_page))
                     }
                 }
@@ -103,6 +104,16 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 notificationListViewModel.items.observe(this@MainAppFragment) {
                     linearLayout.isGone = it.isEmpty()
                     notificationViewPagerAdapter.submitList(it)
+                }
+                notificationListViewModel.versionInfoVo.observe(this@MainAppFragment) {
+                    if (it != null) {
+                        VersionDialog.show(it, { vo ->
+                            (activity as MainActivity).openPlayStore()
+                            notificationListViewModel.setNull()
+                        }, {
+                            notificationListViewModel.setNull()
+                        }, supportFragmentManager = this@MainAppFragment.parentFragmentManager)
+                    }
 
                 }
             }

@@ -6,9 +6,8 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
-import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.DragEvent
 import android.view.View
 import android.view.ViewGroup
@@ -65,7 +64,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     @Inject
     lateinit var donationRepository: DonationRepository
 
-    lateinit var notificationActivityResultLambda: ActivityResultLauncher<Intent>
+    lateinit var activityResultLambda: ActivityResultLauncher<Intent>
     lateinit var appInfoViewClickListenerLambda: (View, AppInfoVo, Int, AppViewAdapter) -> Unit
     lateinit var appInfoViewLongClickListenerLambda: (View, AppInfoVo, Int) -> Unit
     lateinit var appInfoViewDragListenerLambda: (View, DragEvent, AppInfoVo, Int) -> Unit
@@ -77,7 +76,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun initLambdas() {
         // 알림내용 클릭시 액티비티 이동관련 람다식
-        notificationActivityResultLambda =
+        activityResultLambda =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 Timber.d("it.resultCode: ${it.resultCode}")
 //            if (it.resultCode == RESULT_OK) {
@@ -192,6 +191,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun initView() {
 
         Timber.d("initView: BuildConfig.DEBUG ${BuildConfig.DEBUG}")
+
+        Timber.d("BuildConfig.VERSION_CODE ${BuildConfig.VERSION_CODE}")
+        Timber.d("BuildConfig.VERSION_NAME ${BuildConfig.VERSION_NAME}")
 
         with(binding.componentToolbar) {
             model = NavigationInfoVo(
@@ -482,8 +484,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-
-        super.onSaveInstanceState(outState, outPersistentState)
+    fun openPlayStore() {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse("market://details?id=${packageName}")
+        activityResultLambda.launch(intent)
     }
+
 }

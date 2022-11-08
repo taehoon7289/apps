@@ -22,8 +22,19 @@ class NotificationListViewModel @Inject constructor(private val notificationRepo
     val items: LiveData<MutableList<NotificationInfoVo>>
         get() = _items
 
+    private var _versionInfoVo: MutableLiveData<NotificationInfoVo?> =
+        MutableLiveData(notificationRepository.versionInfoVo)
+
+    val versionInfoVo: LiveData<NotificationInfoVo?>
+        get() = _versionInfoVo
 
     fun reload() = CoroutineScope(Dispatchers.Main).launch {
         _items.value = notificationRepository.getNotificationList()
     }
+
+    fun setNull() {
+        _versionInfoVo.value = null
+    }
+
+
 }
