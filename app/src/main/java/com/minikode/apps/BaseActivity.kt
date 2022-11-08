@@ -1,7 +1,6 @@
 package com.minikode.apps
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -18,7 +17,6 @@ abstract class BaseActivity<View : ViewDataBinding> : AppCompatActivity() {
 
     private var backKeyPressedTime: Long = 0
 
-    private lateinit var toast: Toast
 
     open val backDoubleEnableFlag: Boolean = false
 
@@ -44,9 +42,7 @@ abstract class BaseActivity<View : ViewDataBinding> : AppCompatActivity() {
 //        }
 
         if (backDoubleEnableFlag) {
-            val flag = navController?.let {
-                it.navigateUp()
-            } == true
+            val flag = navController?.navigateUp() == true
             if (!flag) {
                 customOnBackPressed()
             }
@@ -68,25 +64,16 @@ abstract class BaseActivity<View : ViewDataBinding> : AppCompatActivity() {
     private fun customOnBackPressed() {
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis()
-            showGuide()
+            App.instance.showToast("\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.")
             return
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
             finish()
-            toast.cancel()
+            App.instance.cancelToast()
         }
 
     }
 
-    private fun showGuide() {
-        toast = Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT)
-        toast.show()
-    }
-
-    private fun showGuide(msg: String) {
-        toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT)
-        toast.show()
-    }
 
     abstract fun initView()
     abstract fun initLambdas()

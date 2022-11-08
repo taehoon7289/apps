@@ -1,6 +1,7 @@
 package com.minikode.apps
 
 import android.app.Application
+import android.widget.Toast
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -21,5 +22,17 @@ class App : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
+    }
+
+    private var toast: Toast? = null
+
+    fun showToast(msg: String, duration: Int = Toast.LENGTH_SHORT) {
+        toast?.cancel()
+        toast = Toast.makeText(this, msg, duration)
+        toast?.show()
+    }
+
+    fun cancelToast() {
+        toast?.cancel()
     }
 }

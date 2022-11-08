@@ -30,4 +30,7 @@
     <string name="cancel_like_app">즐겨찾기 삭제되었습니다</string>
     <string name="donation_comment">더 나은 앱 기능과 앱 개발환경을 위해\n동행해주시는 후원자님께\n마음을 다해 감사의 인사를 전합니다</string>
     <string name="donation_button_comment">후원하기</string>
+    <string name="donation_confirm_comment">후원 감사합니다</string>
+    <string name="donation_cancel_comment">후원 취소되었습니다</string>
+    <string name="service_error">잠시후 다시 시도해주세요</string>
 </resources>

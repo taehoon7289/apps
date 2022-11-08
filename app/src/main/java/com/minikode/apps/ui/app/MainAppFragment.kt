@@ -1,7 +1,6 @@
 package com.minikode.apps.ui.app
 
 import android.content.Intent
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
@@ -51,11 +50,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                             Intent(this@MainAppFragment.activity, NotionActivity::class.java)
                         intent.putExtra("url", it.url)
                         (activity as MainActivity).notificationActivityResultLambda.launch(intent)
-                        Toast.makeText(
-                            this@MainAppFragment.activity,
-                            getString(R.string.move_notification_page),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        App.instance.showToast(getString(R.string.move_notification_page))
                     }
                 }
             })

@@ -12,7 +12,6 @@ import android.os.PersistableBundle
 import android.view.DragEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -25,7 +24,6 @@ import com.minikode.apps.App
 import com.minikode.apps.BaseActivity
 import com.minikode.apps.BuildConfig
 import com.minikode.apps.R
-import com.minikode.apps.code.AlarmPeriodType
 import com.minikode.apps.databinding.ActivityMainBinding
 import com.minikode.apps.repository.AlarmRepository
 import com.minikode.apps.repository.DonationRepository
@@ -35,6 +33,7 @@ import com.minikode.apps.ui.alarm.AlarmDialogFragment
 import com.minikode.apps.ui.app.AppListViewModel
 import com.minikode.apps.ui.app.AppViewAdapter
 import com.minikode.apps.ui.app.DonationListViewModel
+import com.minikode.apps.ui.app.MainActivityViewModel
 import com.minikode.apps.ui.support.DonationDialogFragment
 import com.minikode.apps.vo.AlarmInfoVo
 import com.minikode.apps.vo.AppInfoVo
@@ -44,7 +43,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -75,6 +73,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val donationListViewModel: DonationListViewModel by viewModels()
     private val appListViewModel: AppListViewModel by viewModels()
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     override fun initLambdas() {
         // 알림내용 클릭시 액티비티 이동관련 람다식
@@ -170,25 +169,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                             it?.let {
                                 alarmRepository.saveAlarm(it)
                             }
-                            Toast.makeText(
-                                this, getString(R.string.confirm_alarm_message), Toast.LENGTH_SHORT
-                            ).show()
+                            App.instance.showToast(getString(R.string.confirm_alarm_message))
                         },
                         {
                             Timber.d("bind: failCallback")
-                            Toast.makeText(
-                                this,
-                                getString(R.string.permission_alarm_message),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            App.instance.showToast(getString(R.string.permission_alarm_message))
                         })
                 }
             } else {
                 // 예약취소
                 alarmRepository.removeAlarm(item.requestCode!!)
-                Toast.makeText(
-                    this, getString(R.string.cancel_alarm_message), Toast.LENGTH_SHORT
-                ).show()
+                App.instance.showToast(getString(R.string.cancel_alarm_message))
             }
             item.cancelAvailFlag = isChecked
         }
@@ -319,12 +310,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 likeRepository.saveLike(appInfoVo)
                 appInfoVo.likeFlag = true
-                Toast.makeText(this, getString(R.string.save_like_app), Toast.LENGTH_SHORT).show()
+                App.instance.showToast(getString(R.string.save_like_app))
             }
         } else {
             likeRepository.removeLike(appInfoVo)
             appInfoVo.likeFlag = false
-            Toast.makeText(this, getString(R.string.cancel_like_app), Toast.LENGTH_SHORT).show()
+            App.instance.showToast(getString(R.string.cancel_like_app))
         }
         appListViewModel.reloadLikeAppItems()
         return appInfoVo
@@ -346,52 +337,57 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //                val alarmDialogFragment = AlarmDialogFragment()
 
-                val saveCallback: (AlarmPeriodType, Int, Int) -> Unit =
-                    { periodType, hourOfDay, minute ->
-
-                        val nowDate = Calendar.getInstance()
-                        val executeDate = Calendar.getInstance()
-                        executeDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                        executeDate.set(Calendar.MINUTE, minute)
-                        executeDate.set(Calendar.SECOND, 0)
-
-                        if (executeDate.before(nowDate)) {
-                            // 하루 추가
-                            executeDate.add(Calendar.HOUR, 24)
-                        }
-
-                        alarmRepository.registerToAlarmManager(alarmPeriodType = periodType,
-                            label = appInfoVo.label!!,
-                            packageName = appInfoVo.packageName!!,
-                            iconDrawable = appInfoVo.iconDrawable!!,
-                            executeDate = executeDate,
-                            successCallback = {
-                                Timber.d("bind: successCallback")
-                                it?.let {
-                                    alarmRepository.saveAlarm(it)
-                                }
-                                Toast.makeText(
-                                    this,
-                                    getString(R.string.confirm_alarm_message),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            },
-                            failCallback = {
-                                Timber.d("bind: failCallback")
-                                Toast.makeText(
-                                    this,
-                                    getString(R.string.permission_alarm_message),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            })
-
-                    }
+//                val saveCallback: (AlarmPeriodType, Int, Int) -> Unit =
+//                    { periodType, hourOfDay, minute ->
+//
+//                        val nowDate = Calendar.getInstance()
+//                        val executeDate = Calendar.getInstance()
+//                        executeDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
+//                        executeDate.set(Calendar.MINUTE, minute)
+//                        executeDate.set(Calendar.SECOND, 0)
+//
+//                        if (executeDate.before(nowDate)) {
+//                            // 하루 추가
+//                            executeDate.add(Calendar.HOUR, 24)
+//                        }
+//
+//                        alarmRepository.registerToAlarmManager(alarmPeriodType = periodType,
+//                            label = appInfoVo.label!!,
+//                            packageName = appInfoVo.packageName!!,
+//                            iconDrawable = appInfoVo.iconDrawable!!,
+//                            executeDate = executeDate,
+//                            successCallback = {
+//                                Timber.d("bind: successCallback")
+//                                it?.let {
+//                                    alarmRepository.saveAlarm(it)
+//                                }
+//                                Toast.makeText(
+//                                    this,
+//                                    getString(R.string.confirm_alarm_message),
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//                            },
+//                            failCallback = {
+//                                Timber.d("bind: failCallback")
+//                                Toast.makeText(
+//                                    this,
+//                                    getString(R.string.permission_alarm_message),
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//                            })
+//
+//                    }
 //                alarmDialogFragment.setSaveCallback(saveCallback)
 //                alarmDialogFragment.show(
 //                    supportFragmentManager, alarmDialogFragment.tag
 //                )
 
-                AlarmDialogFragment.show(saveCallback, supportFragmentManager)
+                AlarmDialogFragment.show(
+                    appInfoVo = appInfoVo,
+                    confirmCallback = mainActivityViewModel.confirmCallback,
+                    cancelCallback = {},
+                    supportFragmentManager = supportFragmentManager
+                )
             }
         }
     }
@@ -418,7 +414,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 //launchBillingFlow()는 BillingResponseCode를 반환한다.
                 if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
                     //오류가 발생 할 경우 여기서 처리
-                    Toast.makeText(this, "잠시후 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    App.instance.showToast(getString(R.string.service_error))
                 }
             }
 
@@ -466,7 +462,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         if (successCnt == purchases.size) {
             donationRepository.saveDonation(purchases)
-            Toast.makeText(this, "후원 감사합니다", Toast.LENGTH_SHORT).show()
+            App.instance.showToast(getString(R.string.donation_confirm_comment))
             donationListViewModel.reload()
         }
 
@@ -479,10 +475,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
             // 사용자가 구매를 취소했을 경우 처리
-            Toast.makeText(this, "후원 취소되었습니다", Toast.LENGTH_SHORT).show()
+            App.instance.showToast(getString(R.string.donation_cancel_comment))
         } else {
             // 이외의 오류 처리
-            Toast.makeText(this, "잠시후 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+            App.instance.showToast(getString(R.string.service_error))
         }
     }
 

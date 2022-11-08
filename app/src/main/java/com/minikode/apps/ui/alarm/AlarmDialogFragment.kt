@@ -15,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.minikode.apps.R
 import com.minikode.apps.code.AlarmPeriodType
 import com.minikode.apps.databinding.FragmentAlarmDialogBinding
+import com.minikode.apps.vo.AppInfoVo
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.*
@@ -27,8 +28,6 @@ class AlarmDialogFragment : BottomSheetDialogFragment() {
     private var alarmPeriodType: AlarmPeriodType = AlarmPeriodType.ONCE
     private var hourOfDay: Int = 0
     private var minute: Int = 0
-
-    private lateinit var saveCallback: (AlarmPeriodType, Int, Int) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -133,10 +132,11 @@ class AlarmDialogFragment : BottomSheetDialogFragment() {
             }
 
             buttonConfirm.setOnClickListener {
-                saveCallback(alarmPeriodType, hourOfDay, minute)
+                confirmCallback(appInfoVo, alarmPeriodType, hourOfDay, minute)
                 dismiss()
             }
             buttonCancel.setOnClickListener {
+                cancelCallback(appInfoVo)
                 dismiss()
             }
         }
@@ -158,27 +158,26 @@ class AlarmDialogFragment : BottomSheetDialogFragment() {
 
     }
 
-
-    private fun setSaveCallback(callback: (AlarmPeriodType, Int, Int) -> Unit) {
-        saveCallback = callback
-    }
-
-    override fun onDestroyView() {
-        this.dismissAllowingStateLoss()
-        super.onDestroyView()
-    }
-
     companion object {
 
+        lateinit var appInfoVo: AppInfoVo
+        lateinit var confirmCallback: (AppInfoVo, AlarmPeriodType, Int, Int) -> Unit
+        lateinit var cancelCallback: (AppInfoVo) -> Unit
+
         fun show(
-            callback: (AlarmPeriodType, Int, Int) -> Unit,
+            appInfoVo: AppInfoVo,
+            confirmCallback: (AppInfoVo, AlarmPeriodType, Int, Int) -> Unit,
+            cancelCallback: (AppInfoVo) -> Unit,
             supportFragmentManager: FragmentManager
         ) {
             val alarmDialogFragment = AlarmDialogFragment()
-            alarmDialogFragment.saveCallback = callback
-            alarmDialogFragment.show(supportFragmentManager, "")
+            with(alarmDialogFragment) {
+                this@Companion.appInfoVo = appInfoVo
+                this@Companion.confirmCallback = confirmCallback
+                this@Companion.cancelCallback = cancelCallback
+                this@with.show(supportFragmentManager, "")
+            }
         }
-
 
     }
 }
