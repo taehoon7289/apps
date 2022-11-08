@@ -22,6 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.lang.reflect.Field
 import java.util.*
 
@@ -44,8 +45,7 @@ class UsageStatsRepository {
     fun checkForPermissionUsageStats(): Int {
         val appOps = App.instance.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Log.d(
-                TAG,
+            Timber.d(
                 "checkForPermissionUsageStats: App.instance.packageName ${App.instance.packageName}"
             )
             appOps.unsafeCheckOpNoThrow(
@@ -275,34 +275,34 @@ class UsageStatsRepository {
 
     private fun getLikedItems(): MutableList<LikeInfoVo> = runBlocking {
         val likeEntities = selectLike()
-        Log.d(TAG, "getItems: likeEntities $likeEntities")
+        Timber.d("getItems: likeEntities $likeEntities")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val packageManager = App.instance.packageManager
             return@runBlocking likeEntities.filter {
-                    val intent = packageManager.getLaunchIntentForPackage(it.packageName!!)
-                    if (intent != null) {
-                        true
-                    } else {
-                        deleteLike(it.packageName!!)
-                        false
-                    }
-                }.map {
-                    val packageName = it.packageName!!
-                    val iconDrawable = packageManager.getApplicationIcon(packageName)
-                    val label =
-                        packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
-                    val createDate = Calendar.getInstance()
-                    createDate.timeInMillis = it.createDate!!
+                val intent = packageManager.getLaunchIntentForPackage(it.packageName!!)
+                if (intent != null) {
+                    true
+                } else {
+                    deleteLike(it.packageName!!)
+                    false
+                }
+            }.map {
+                val packageName = it.packageName!!
+                val iconDrawable = packageManager.getApplicationIcon(packageName)
+                val label =
+                    packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
+                val createDate = Calendar.getInstance()
+                createDate.timeInMillis = it.createDate!!
 
-                    val likeInfoVo = LikeInfoVo(
-                        likeNo = it.likeNo,
-                        createDate = createDate,
-                        packageName = packageName,
-                        iconDrawable = iconDrawable,
-                        label = label.toString(),
-                    )
-                    likeInfoVo
-                }.toMutableList()
+                val likeInfoVo = LikeInfoVo(
+                    likeNo = it.likeNo,
+                    createDate = createDate,
+                    packageName = packageName,
+                    iconDrawable = iconDrawable,
+                    label = label.toString(),
+                )
+                likeInfoVo
+            }.toMutableList()
         }
         return@runBlocking mutableListOf<LikeInfoVo>()
     }

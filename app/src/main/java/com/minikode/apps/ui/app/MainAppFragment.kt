@@ -22,6 +22,7 @@ import com.minikode.apps.ui.notion.NotionActivity
 import com.minikode.apps.util.Util
 import com.minikode.apps.vo.NavigationInfoVo
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
@@ -62,7 +63,6 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
             })
 
 
-
 //            with(componentToolbar) {
 //                model = NavigationInfoVo(
 //                    title = getString(R.string.menu_title_app),
@@ -82,18 +82,18 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                     ) {
                         super.onPageScrolled(position, positionOffset, positionOffsetPixels)
                         // 스크롤 중에 반응
-                        Log.d(TAG, "onPageScrolled: $position")
+                        Timber.d("onPageScrolled: $position")
                     }
 
                     override fun onPageSelected(position: Int) {
                         super.onPageSelected(position)
                         // 페이지 변경되면 반응
-                        Log.d(TAG, "onPageSelected: $position")
+                        Timber.d("onPageSelected: $position")
                         val items = notificationListViewModel.items.value
                         if (items?.isEmpty() == false) {
                             textviewIndex.text =
                                 "${position + 1}/${notificationListViewModel.items.value?.size ?: 0}"
-                            Log.d(TAG, "onPageSelected: ${textviewIndex.text}")
+                            Timber.d("onPageSelected: ${textviewIndex.text}")
                         } else {
                             textviewIndex.text = ""
                         }
@@ -103,7 +103,7 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                     override fun onPageScrollStateChanged(state: Int) {
                         super.onPageScrollStateChanged(state)
                         // 스크롤 상태에 변경되면 반응 0, 1, 2
-                        Log.d(TAG, "onPageScrollStateChanged: $state")
+                        Timber.d("onPageScrollStateChanged: $state")
                     }
                 })
                 viewPager.adapter = notificationViewPagerAdapter
@@ -157,17 +157,17 @@ class MainAppFragment : BaseFragment<FragmentMainAppBinding>() {
                 val likedRecyclerViewDecoration =
                     TopicRecyclerViewDecoration(10, 10, 10, 10, spanCount)
                 recyclerView.addItemDecoration(likedRecyclerViewDecoration)
-//                Log.d(TAG, "initView: width ${resources.displayMetrics.widthPixels}")
-//                Log.d(TAG, "initView: height ${resources.displayMetrics.heightPixels}")
-//                Log.d(TAG, "initView: densityDpi ${resources.displayMetrics.densityDpi}")
-//                Log.d(TAG, "initView: screenWidthDp ${resources.configuration.screenWidthDp}")
-//                Log.d(TAG, "initView: screenHeightDp ${resources.configuration.screenHeightDp}")
+//                Timber.d("initView: width ${resources.displayMetrics.widthPixels}")
+//                Timber.d("initView: height ${resources.displayMetrics.heightPixels}")
+//                Timber.d("initView: densityDpi ${resources.displayMetrics.densityDpi}")
+//                Timber.d("initView: screenWidthDp ${resources.configuration.screenWidthDp}")
+//                Timber.d("initView: screenHeightDp ${resources.configuration.screenHeightDp}")
 
                 recyclerView.layoutManager = gridLayoutManager
                 // 안의 스크롤효과 제거
                 recyclerView.isNestedScrollingEnabled = false
                 appListViewModel.likeAppItems.observe(this@MainAppFragment) {
-                    Log.d(TAG, "initView: appListViewModel.likeAppItems.observe ${it.size}")
+                    Timber.d("initView: appListViewModel.likeAppItems.observe ${it.size}")
                     recyclerView.isGone = it.isEmpty()
                     linearLayoutAppEmpty.isGone = it.isNotEmpty()
                     likeAppViewAdapter.submitList(it)

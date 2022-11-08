@@ -13,6 +13,7 @@ import com.minikode.apps.repository.UsageStatsRepository
 import com.minikode.apps.ui.MainActivity
 import com.minikode.apps.ui.guide.GuideActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
@@ -41,11 +42,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             }
             animator.addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(p0: Animator?) {
-                    Log.d(TAG, "onAnimationStart: ")
+                    Timber.d("onAnimationStart: ")
                 }
 
                 override fun onAnimationEnd(p0: Animator?) {
-                    Log.d(TAG, "onAnimationEnd: ")
+                    Timber.d("onAnimationEnd: ")
 
                     val mode = usageStatsRepository.checkForPermissionUsageStats()
                     if (mode != AppOpsManager.MODE_ALLOWED) {
@@ -56,11 +57,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                 }
 
                 override fun onAnimationCancel(p0: Animator?) {
-                    Log.d(TAG, "onAnimationCancel: ")
+                    Timber.d("onAnimationCancel: ")
                 }
 
                 override fun onAnimationRepeat(p0: Animator?) {
-                    Log.d(TAG, "onAnimationRepeat: ")
+                    Timber.d("onAnimationRepeat: ")
                 }
             })
             animator.start()

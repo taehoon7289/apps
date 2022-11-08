@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.minikode.apps.R
 import com.minikode.apps.repository.AlarmRepository
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 import java.util.*
 import javax.inject.Inject
@@ -44,7 +45,7 @@ class AppBroadcastReceiver : BroadcastReceiver() {
                 context.applicationContext.packageManager.getLaunchIntentForPackage(packageName!!)
             intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             if (isAppForeground) {
-                Log.d(TAG, "onReceive: it ${packageName}")
+                Timber.d("onReceive: it ${packageName}")
 
                 alarmRepository.removeAlarm(requestCode!!)
                 context.startActivity(intent)

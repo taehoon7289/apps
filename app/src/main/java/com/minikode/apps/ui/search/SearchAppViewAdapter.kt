@@ -46,12 +46,12 @@ class SearchAppViewAdapter(
     }
 
 //    override fun onItemMove(from_position: Int, to_position: Int): Boolean {
-//        Log.d(TAG, "onItemMove: !!!!!")
+//        Timber.d("onItemMove: !!!!!")
 //        return false
 //    }
 //
 //    override fun onItemSwipe(position: Int) {
-//        Log.d(TAG, "onItemSwipe: @@@@@@@@@@@@@@2")
+//        Timber.d("onItemSwipe: @@@@@@@@@@@@@@2")
 //    }
 //
 //    override fun onLeftClick(position: Int, viewHolder: RecyclerView.ViewHolder?) {

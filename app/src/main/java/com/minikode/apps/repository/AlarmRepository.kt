@@ -16,6 +16,7 @@ import com.minikode.apps.receiver.AppBroadcastReceiver
 import com.minikode.apps.room.database.BaseDatabase
 import com.minikode.apps.vo.AlarmInfoVo
 import kotlinx.coroutines.*
+import timber.log.Timber
 import java.util.*
 
 class AlarmRepository {
@@ -126,7 +127,7 @@ class AlarmRepository {
 
     fun getItems(): MutableList<AlarmInfoVo> = runBlocking {
         val alarmEntities = selectAlarm()
-        Log.d(TAG, "getItems: alarmEntities $alarmEntities")
+        Timber.d("getItems: alarmEntities $alarmEntities")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val packageManager = App.instance.packageManager
             return@runBlocking alarmEntities

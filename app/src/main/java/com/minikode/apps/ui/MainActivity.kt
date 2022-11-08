@@ -7,7 +7,8 @@ import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.DragEvent
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.android.billingclient.api.*
 import com.google.android.gms.ads.*
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.minikode.apps.App
 import com.minikode.apps.BaseActivity
 import com.minikode.apps.BuildConfig
@@ -43,6 +43,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -79,9 +80,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         // 알림내용 클릭시 액티비티 이동관련 람다식
         notificationActivityResultLambda =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                Log.d(TAG, "it.resultCode: ${it.resultCode}")
+                Timber.d("it.resultCode: ${it.resultCode}")
 //            if (it.resultCode == RESULT_OK) {
-//                Log.d(TAG, "initView: result_ok ${it.resultCode}")
+//                Timber.d("initView: result_ok ${it.resultCode}")
 //            }
             }
         // 앱 정보 뷰 클릭시 람다식
@@ -126,35 +127,33 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 when (event.action) {
                     // 드래그 시작될때
                     DragEvent.ACTION_DRAG_STARTED -> {
-                        Log.d(
-                            TAG, "dragListenerLambda: ACTION_DRAG_STARTED ${item.label}"
-                        )
+                        Timber.d("dragListenerLambda: ACTION_DRAG_STARTED ${item.label}")
                     }
                     // 드래그한 view 를 옮기려는 지역으로 들어왔을때
                     DragEvent.ACTION_DRAG_ENTERED -> {
-                        Log.d(
-                            TAG, "dragListenerLambda: ACTION_DRAG_ENTERED ${item.label} $position"
+                        Timber.d(
+                            "dragListenerLambda: ACTION_DRAG_ENTERED ${item.label} $position"
                         )
 
                     }
                     // 드래그한 view 가 영역을 빠져나갈때
                     DragEvent.ACTION_DRAG_EXITED -> {
-                        Log.d(
-                            TAG, "dragListenerLambda: ACTION_DRAG_EXITED ${item.label}"
+                        Timber.d(
+                            "dragListenerLambda: ACTION_DRAG_EXITED ${item.label}"
                         )
                     }
                     // view 를 드래그해서 드랍시켰을때
                     DragEvent.ACTION_DROP -> {
-                        Log.d(TAG, "dragListenerLambda: ACTION_DROP ${item.label}")
+                        Timber.d("dragListenerLambda: ACTION_DROP ${item.label}")
                     }
                     // 드래그 종료시
                     DragEvent.ACTION_DRAG_ENDED -> {
-                        Log.d(
-                            TAG, "dragListenerLambda: ACTION_DRAG_ENDED ${item.label}"
+                        Timber.d(
+                            "dragListenerLambda: ACTION_DRAG_ENDED ${item.label}"
                         )
                     }
 //                DragEvent.ACTION_DRAG_LOCATION -> {
-//                    Log.d(TAG, "dragListenerLambda: ACTION_DRAG_LOCATION")
+//                    Timber.d("dragListenerLambda: ACTION_DRAG_LOCATION")
 //                }
                 }
             }
@@ -167,7 +166,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         item.iconDrawable!!,
                         item.executeDate!!,
                         {
-                            Log.d(TAG, "bind: re successCallback")
+                            Timber.d("bind: re successCallback")
                             it?.let {
                                 alarmRepository.saveAlarm(it)
                             }
@@ -176,7 +175,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                             ).show()
                         },
                         {
-                            Log.d(TAG, "bind: failCallback")
+                            Timber.d("bind: failCallback")
                             Toast.makeText(
                                 this,
                                 getString(R.string.permission_alarm_message),
@@ -201,7 +200,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun initView() {
 
-        Log.d(TAG, "initView: BuildConfig.DEBUG ${BuildConfig.DEBUG}")
+        Timber.d("initView: BuildConfig.DEBUG ${BuildConfig.DEBUG}")
 
         with(binding.componentToolbar) {
             model = NavigationInfoVo(
@@ -231,20 +230,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         billingClient = BillingClient.newBuilder(this)
             .setListener(PurchasesUpdatedListener { billingResult, purchases ->
                 //모든 구매 관련 업데이트를 수신한다.
-                Log.d(TAG, "openSupportDialog: 모든 구매 관련 업데이트를 수신한다.")
+                Timber.d("openSupportDialog: 모든 구매 관련 업데이트를 수신한다.")
                 purchasesUpdated(billingResult, purchases)
             }).enablePendingPurchases().build()
 
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingServiceDisconnected() {
                 // 연결 실패 시 재시도 로직을 구현.
-                Log.d(TAG, "onBillingServiceDisconnected: ")
+                Timber.d("onBillingServiceDisconnected: ")
             }
 
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     // 준비 완료가 되면 상품 쿼리를 처리 할 수 있다!
-                    Log.d(TAG, "onBillingSetupFinished: ")
+                    Timber.d("onBillingSetupFinished: ")
                 }
             }
         })
@@ -269,35 +268,35 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         mAdView.adListener = object : AdListener() {
             override fun onAdClicked() {
                 // Code to be executed when the user clicks on an ad.
-                Log.d(Companion.TAG, "onAdClicked: ")
+                Timber.d("onAdClicked: ")
             }
 
             override fun onAdClosed() {
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.
-                Log.d(Companion.TAG, "onAdClosed: ")
+                Timber.d("onAdClosed: ")
             }
 
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 // Code to be executed when an ad request fails.
-                Log.d(Companion.TAG, "onAdFailedToLoad: $adError")
+                Timber.d("onAdFailedToLoad: $adError")
             }
 
             override fun onAdImpression() {
                 // Code to be executed when an impression is recorded
                 // for an ad.
-                Log.d(Companion.TAG, "onAdImpression: ")
+                Timber.d("onAdImpression: ")
             }
 
             override fun onAdLoaded() {
                 // Code to be executed when an ad finishes loading.
-                Log.d(Companion.TAG, "onAdLoaded: ")
+                Timber.d("onAdLoaded: ")
             }
 
             override fun onAdOpened() {
                 // Code to be executed when an ad opens an overlay that
                 // covers the screen.
-                Log.d(Companion.TAG, "onAdOpened: ")
+                Timber.d("onAdOpened: ")
             }
         }
 
@@ -367,7 +366,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                             iconDrawable = appInfoVo.iconDrawable!!,
                             executeDate = executeDate,
                             successCallback = {
-                                Log.d(TAG, "bind: successCallback")
+                                Timber.d("bind: successCallback")
                                 it?.let {
                                     alarmRepository.saveAlarm(it)
                                 }
@@ -378,7 +377,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                                 ).show()
                             },
                             failCallback = {
-                                Log.d(TAG, "bind: failCallback")
+                                Timber.d("bind: failCallback")
                                 Toast.makeText(
                                     this,
                                     getString(R.string.permission_alarm_message),
@@ -408,7 +407,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         querySkuDetails()
 
         val donationDialogFragment = DonationDialogFragment(clickCallback = {
-            Log.d(TAG, "initView: clickcallback!!!")
+            Timber.d("initView: clickcallback!!!")
             if (skuDetails != null) {
                 val flowParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetails!!).build()
 
@@ -444,8 +443,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         billingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
             // 완료되면 SkuDetails(상품 상세 정보)를 List 형태로 반환한다.
-            Log.d(TAG, "querySkuDetails: billingResult $billingResult")
-            Log.d(TAG, "querySkuDetails: skuDetailsList $skuDetailsList")
+            Timber.d("querySkuDetails: billingResult $billingResult")
+            Timber.d("querySkuDetails: skuDetailsList $skuDetailsList")
 
             skuDetailsList?.let {
                 skuDetails = skuDetailsList.firstOrNull()
@@ -487,8 +486,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    companion object {
-        private const val TAG = "MainActivity"
-    }
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
 
+        super.onSaveInstanceState(outState, outPersistentState)
+    }
 }

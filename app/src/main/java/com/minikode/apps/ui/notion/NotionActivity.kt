@@ -9,6 +9,7 @@ import androidx.core.view.isGone
 import com.minikode.apps.BaseActivity
 import com.minikode.apps.R
 import com.minikode.apps.databinding.ActivityNotionBinding
+import timber.log.Timber
 
 class NotionActivity : BaseActivity<ActivityNotionBinding>() {
 
@@ -20,7 +21,7 @@ class NotionActivity : BaseActivity<ActivityNotionBinding>() {
         with(binding) {
             webviewNotion.webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                    Log.d(TAG, "onProgressChanged: $newProgress")
+                    Timber.d("onProgressChanged: $newProgress")
                     super.onProgressChanged(view, newProgress)
                     if (newProgress > 99) {
                         lottieNotion.isGone = true

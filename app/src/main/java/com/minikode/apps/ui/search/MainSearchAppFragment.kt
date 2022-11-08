@@ -10,6 +10,7 @@ import com.minikode.apps.code.TopicType
 import com.minikode.apps.databinding.FragmentMainSearchAppBinding
 import com.minikode.apps.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
@@ -40,7 +41,7 @@ class MainSearchAppFragment : BaseFragment<FragmentMainSearchAppBinding>() {
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
-                        Log.d(TAG, "onQueryTextChange: newText $newText")
+                        Timber.d("onQueryTextChange: newText $newText")
                         queryText = newText ?: ""
                         searchAppListViewModel.searchQuery(
                             topicType = topicType, orderType = orderType, query = queryText

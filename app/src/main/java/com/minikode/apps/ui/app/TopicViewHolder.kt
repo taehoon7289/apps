@@ -9,6 +9,7 @@ import com.minikode.apps.R
 import com.minikode.apps.databinding.ViewholderTopicBinding
 import com.minikode.apps.util.Util
 import com.minikode.apps.vo.TopicInfoVo
+import timber.log.Timber
 
 class TopicViewHolder(
     val binding: ViewholderTopicBinding,
@@ -47,7 +48,7 @@ class TopicViewHolder(
                                 resources.getDrawable(R.drawable.shape_topic, null)
                         }
                     }
-                    Log.i(TAG, "$action at x=${current.x}, y=${current.y}")
+                    Timber.d("$action at x=${current.x}, y=${current.y}")
                     true
                 }
                 setOnClickListener {

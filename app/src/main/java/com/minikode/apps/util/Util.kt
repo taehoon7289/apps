@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ListView
 import androidx.annotation.RequiresApi
 import com.minikode.apps.App
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
@@ -83,8 +84,7 @@ class Util {
             return when {
                 actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        Log.d(
-                            TAG,
+                        Timber.d(
                             "checkNetworkState: NetworkCapabilities.TRANSPORT_CELLULAR ${actNetwork.signalStrength}"
                         )
                     }
@@ -92,8 +92,7 @@ class Util {
                 }
                 actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        Log.d(
-                            TAG,
+                        Timber.d(
                             "checkNetworkState NetworkCapabilities.TRANSPORT_WIFI: ${actNetwork.signalStrength}"
                         )
                     }

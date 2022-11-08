@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.minikode.apps.databinding.ViewholderAlarmBinding
 import com.minikode.apps.vo.AlarmInfoVo
+import timber.log.Timber
 import java.util.*
 
 class AlarmViewAdapter(
@@ -56,7 +57,7 @@ class AlarmViewAdapter(
 
         val timerTask = object : TimerTask() {
             override fun run() {
-                Log.d(TAG, "run: timerTask!!")
+                Timber.d("run: timerTask!!")
                 cancel()
                 handler.sendMessage(handler.obtainMessage())
             }
@@ -67,12 +68,12 @@ class AlarmViewAdapter(
 
 
 //    override fun onItemMove(from_position: Int, to_position: Int): Boolean {
-//        Log.d(TAG, "onItemMove: !!!!!")
+//        Timber.d("onItemMove: !!!!!")
 //        return false
 //    }
 //
 //    override fun onItemSwipe(position: Int) {
-//        Log.d(TAG, "onItemSwipe: @@@@@@@@@@@@@@2")
+//        Timber.d("onItemSwipe: @@@@@@@@@@@@@@2")
 //    }
 //
 //    override fun onLeftClick(position: Int, viewHolder: RecyclerView.ViewHolder?) {

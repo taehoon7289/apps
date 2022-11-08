@@ -14,6 +14,7 @@ import com.minikode.apps.repository.UsageStatsRepository
 import com.minikode.apps.vo.AppInfoVo
 import com.minikode.apps.vo.TopicInfoVo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -75,7 +76,7 @@ class AppListViewModel @Inject constructor(
             TopicType.LIKE_APP,
             OrderType.RECENT_DESC,
         )
-        Log.d(TAG, "reloadLikeAppItems: ${_likeAppItems.value?.size}")
+        Timber.d("reloadLikeAppItems: ${_likeAppItems.value?.size}")
     }
 
     fun reload() {

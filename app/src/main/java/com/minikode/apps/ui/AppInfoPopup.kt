@@ -10,6 +10,7 @@ import com.minikode.apps.BasePopupWindow
 import com.minikode.apps.R
 import com.minikode.apps.databinding.ComponentPopupBinding
 import com.minikode.apps.vo.AppInfoVo
+import timber.log.Timber
 
 class AppInfoPopup(
     private val inflater: LayoutInflater,
@@ -71,8 +72,8 @@ class AppInfoPopup(
         x = contentView.measuredWidth.div(2).minus(anchorView.width.div(2))
         y = contentView.measuredHeight.plus(anchorView.height.div(2))
 
-        Log.d(TAG, "initView: x $x")
-        Log.d(TAG, "initView: y $y")
+        Timber.d("initView: x $x")
+        Timber.d("initView: y $y")
 
     }
 

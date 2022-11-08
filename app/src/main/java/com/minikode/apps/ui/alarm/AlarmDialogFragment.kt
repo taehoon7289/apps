@@ -17,6 +17,7 @@ import com.minikode.apps.R
 import com.minikode.apps.code.AlarmPeriodType
 import com.minikode.apps.databinding.FragmentAlarmDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
@@ -51,8 +52,8 @@ class AlarmDialogFragment : BottomSheetDialogFragment() {
             this@AlarmDialogFragment.hourOfDay = nowDate.get(Calendar.HOUR_OF_DAY)
             this@AlarmDialogFragment.minute = nowDate.get(Calendar.MINUTE)
 
-            Log.d(TAG, "initView: hourOfDay $hourOfDay")
-            Log.d(TAG, "initView: minute $minute")
+            Timber.d("initView: hourOfDay $hourOfDay")
+            Timber.d("initView: minute $minute")
             spinnerTimer.adapter = ArrayAdapter(
                 requireActivity(),
                 R.layout.component_spinner_text_view,
@@ -116,7 +117,7 @@ class AlarmDialogFragment : BottomSheetDialogFragment() {
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    Log.d(TAG, "onNothingSelected: ")
+                    Timber.d("onNothingSelected: ")
                 }
             }
             timePicker.setOnTimeChangedListener { _, hourOfDay, minute ->

@@ -6,6 +6,7 @@ import com.minikode.apps.NotionApiService
 import com.minikode.apps.code.NotificationType
 import com.minikode.apps.util.Util
 import com.minikode.apps.vo.NotificationInfoVo
+import timber.log.Timber
 
 
 class NotificationRepository(private val service: NotionApiService) {
@@ -29,7 +30,7 @@ class NotificationRepository(private val service: NotionApiService) {
         val notificationInfoVoList = mutableListOf<NotificationInfoVo>()
         if (response.isSuccessful) {
             val notionDataVo = response.body()
-            Log.d(TAG, "getNotificationList: ${notionDataVo.toString()}")
+            Timber.d("getNotificationList: ${notionDataVo.toString()}")
             for (result in notionDataVo?.results!!) {
                 val properties = result.properties
                 val id = properties.id.number
