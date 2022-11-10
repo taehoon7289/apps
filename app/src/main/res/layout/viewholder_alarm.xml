@@ -61,15 +61,27 @@
                 android:id="@+id/alarm_app_time"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:gravity="top"
-                android:text="@{`시작시간 : ` + Util.getCalendarToString(model.executeDate, `yy/MM/dd HH:mm`) + `\n` + Util.diffTargetDateTimeToNowDateTime(model.executeDate)}"
+                android:gravity="center_vertical"
+                android:text="@{`시작시간 : ` + Util.getCalendarToString(model.executeDate, `yy/MM/dd HH:mm`)}"
                 android:textSize="12sp"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/alarm_app_remain"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/alarm_app_label" />
+
+            <TextView
+                android:id="@+id/alarm_app_remain"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center_vertical"
+                android:text="@{model.remainDate}"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/alarm_app_time" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

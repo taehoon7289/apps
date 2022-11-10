@@ -1,16 +1,11 @@
 package com.minikode.apps.ui.alarm
 
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.minikode.apps.databinding.ViewholderAlarmBinding
 import com.minikode.apps.vo.AlarmInfoVo
-import timber.log.Timber
-import java.util.*
 
 class AlarmViewAdapter(
     private val clickCallback: (AlarmInfoVo) -> Unit,
@@ -19,11 +14,11 @@ class AlarmViewAdapter(
 ) :
     ListAdapter<AlarmInfoVo, AlarmViewHolder>(object : DiffUtil.ItemCallback<AlarmInfoVo>() {
         override fun areItemsTheSame(oldItem: AlarmInfoVo, newItem: AlarmInfoVo): Boolean {
-            return oldItem == newItem
+            return oldItem.alarmNo == newItem.alarmNo
         }
 
         override fun areContentsTheSame(oldItem: AlarmInfoVo, newItem: AlarmInfoVo): Boolean {
-            return oldItem == newItem
+            return oldItem.remainDate == newItem.remainDate
         }
     }) {
 
@@ -45,23 +40,23 @@ class AlarmViewAdapter(
         viewHolder.bind(getItem(position), position)
         viewHolder.binding.executePendingBindings()
 
-        val handler = object : Handler(Looper.getMainLooper()) {
-            override fun handleMessage(msg: Message) {
-                this@AlarmViewAdapter.notifyItemChanged(viewHolder.absoluteAdapterPosition)
-//                viewHolder.binding.alarmAppTime.invalidate()
-            }
-        }
-
-        val timer = Timer()
-
-        val timerTask = object : TimerTask() {
-            override fun run() {
-                Timber.d("run: timerTask!!")
-                cancel()
-                handler.sendMessage(handler.obtainMessage())
-            }
-        }
-        timer.schedule(timerTask, 10000)
+//        val handler = object : Handler(Looper.getMainLooper()) {
+//            override fun handleMessage(msg: Message) {
+//                this@AlarmViewAdapter.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+////                viewHolder.binding.alarmAppTime.invalidate()
+//            }
+//        }
+//
+//        val timer = Timer()
+//
+//        val timerTask = object : TimerTask() {
+//            override fun run() {
+//                Timber.d("run: timerTask!!")
+//                cancel()
+//                handler.sendMessage(handler.obtainMessage())
+//            }
+//        }
+//        timer.schedule(timerTask, 10000)
 
     }
 
