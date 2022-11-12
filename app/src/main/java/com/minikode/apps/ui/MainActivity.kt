@@ -49,7 +49,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override val layoutRes: Int = R.layout.activity_main
     override val backDoubleEnableFlag = true
-    lateinit var mAdView: AdView
+    private lateinit var mAdView: AdView
 
     // 앱 정보 상태 관리
     @Inject
@@ -155,7 +155,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 //                }
                 }
             }
-        checkedChangeListenerLambda = { item, position, isChecked ->
+        checkedChangeListenerLambda = { item, _, isChecked ->
             if (isChecked) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     alarmRepository.registerToAlarmManager(item.periodType!!,
@@ -400,7 +400,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    fun openSupportDialog() {
+    private fun openSupportDialog() {
 
         querySkuDetails()
 
