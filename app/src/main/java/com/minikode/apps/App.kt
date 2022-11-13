@@ -11,7 +11,6 @@ class App : Application() {
     companion object {
         lateinit var instance: App
             private set
-
     }
 
     override fun onCreate() {
@@ -21,7 +20,6 @@ class App : Application() {
             // Timber 로그 사용
             Timber.plant(Timber.DebugTree())
         }
-
     }
 
     private var toast: Toast? = null
