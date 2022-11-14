@@ -29,6 +29,7 @@ import com.minikode.apps.repository.DonationRepository
 import com.minikode.apps.repository.LikeRepository
 import com.minikode.apps.repository.UsageStatsRepository
 import com.minikode.apps.ui.alarm.AlarmDialogFragment
+import com.minikode.apps.ui.alarm.AlarmListViewModel
 import com.minikode.apps.ui.app.AppListViewModel
 import com.minikode.apps.ui.app.AppViewAdapter
 import com.minikode.apps.ui.app.DonationListViewModel
@@ -73,6 +74,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private val donationListViewModel: DonationListViewModel by viewModels()
     private val appListViewModel: AppListViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
+    private val alarmListViewModel: AlarmListViewModel by viewModels()
 
     override fun initLambdas() {
         // 알림내용 클릭시 액티비티 이동관련 람다식
@@ -155,7 +157,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 //                }
                 }
             }
-        checkedChangeListenerLambda = { item, _, isChecked ->
+        checkedChangeListenerLambda = { item, position, isChecked ->
             if (isChecked) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     alarmRepository.registerToAlarmManager(item.periodType!!,
@@ -180,7 +182,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 alarmRepository.removeAlarm(item.requestCode!!)
                 App.instance.showToast(getString(R.string.cancel_alarm_message))
             }
-            item.cancelAvailFlag = isChecked
+            alarmListViewModel.changeCancelAvailFlagByPosition(position, isChecked)
         }
 
 
