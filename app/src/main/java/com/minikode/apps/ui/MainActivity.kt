@@ -35,6 +35,7 @@ import com.minikode.apps.ui.app.AppViewAdapter
 import com.minikode.apps.ui.app.DonationListViewModel
 import com.minikode.apps.ui.app.MainActivityViewModel
 import com.minikode.apps.ui.support.DonationDialogFragment
+import com.minikode.apps.util.Util
 import com.minikode.apps.vo.AlarmInfoVo
 import com.minikode.apps.vo.AppInfoVo
 import com.minikode.apps.vo.NavigationInfoVo
@@ -202,7 +203,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 title = getString(R.string.app_label),
             )
             subTitle.setTextColor(
-                com.minikode.apps.util.Util.getColorWithAlpha(
+                Util.getColorWithAlpha(
                     0.6f, subTitle.textColors.defaultColor
                 )
             )
