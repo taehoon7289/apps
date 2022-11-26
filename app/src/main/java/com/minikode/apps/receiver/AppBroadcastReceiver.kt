@@ -18,7 +18,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AppBroadcastReceiver : BroadcastReceiver() {
-    private val TAG = "AppBroadcastReceiver"
 
     @Inject
     lateinit var alarmRepository: AlarmRepository
